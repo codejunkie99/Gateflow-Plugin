@@ -5,6 +5,13 @@ description: |
   This skill should be used when the user wants to understand a codebase structure,
   generate architecture documentation, or onboard to a new RTL project.
   Example requests: "map this codebase", "document the architecture", "show module hierarchy"
+allowed-tools:
+  - Grep
+  - Glob
+  - Read
+  - Write
+  - Bash
+  - Task
 ---
 
 # GF Architect

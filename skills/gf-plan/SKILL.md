@@ -5,6 +5,15 @@ description: |
   This skill should be used when the user wants to plan a new design, architect
   a complex feature, or understand how to implement hardware before coding.
   Example requests: "plan a DMA controller", "design a UART", "architect the memory subsystem"
+allowed-tools:
+  - Grep
+  - Glob
+  - Read
+  - Write
+  - Bash
+  - Task
+  - AskUserQuestion
+  - Skill
 ---
 
 # GF Plan - Hardware Design Planner
