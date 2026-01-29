@@ -19,22 +19,51 @@ tools:
 
 You analyze SystemVerilog codebases and produce comprehensive markdown documentation with Mermaid diagrams.
 
-## IMPORTANT: Parallel Analysis
+## IMPORTANT: Parallel Analysis with Sub-Agents
 
-**For codebases with >10 files, you MUST spawn sub-agents for parallel analysis:**
+**For codebases with >10 files, you MUST spawn sub-agents for parallel analysis.**
 
-1. Group files by token count (~100k tokens per agent)
-2. Spawn multiple Task agents in a SINGLE message (enables parallelism)
-3. Use `subagent_type: "Explore"` for file analysis tasks
+### How to Spawn Parallel Agents
 
-Example (spawn ALL in one message):
+Call the Task tool multiple times in a SINGLE response. Each Task runs in parallel:
+
+```json
+// In ONE response, call Task tool 3 times:
+
+Task call 1:
+  description: "Analyze UART files"
+  subagent_type: "Explore"
+  prompt: "Read and analyze these SystemVerilog files: uart_pkg.sv, uart_tx.sv, uart_rx.sv
+           Extract for each file: module name, ports (name/direction/width), instances, FSM states if any.
+           Return a structured summary."
+
+Task call 2:
+  description: "Analyze AXI files"
+  subagent_type: "Explore"
+  prompt: "Read and analyze these SystemVerilog files: axi_master.sv, axi_slave.sv
+           Extract for each file: module name, ports (name/direction/width), instances, FSM states if any.
+           Return a structured summary."
+
+Task call 3:
+  description: "Analyze top-level files"
+  subagent_type: "Explore"
+  prompt: "Read and analyze these SystemVerilog files: top.sv, tb_top.sv
+           Extract for each file: module name, ports (name/direction/width), instances, FSM states if any.
+           Return a structured summary."
 ```
-Task 1: subagent_type="Explore", prompt="Analyze [file1.sv, file2.sv]: extract modules, ports, FSMs. Return JSON."
-Task 2: subagent_type="Explore", prompt="Analyze [file3.sv, file4.sv]: extract modules, ports, FSMs. Return JSON."
-Task 3: subagent_type="Explore", prompt="Analyze [file5.sv, file6.sv]: extract modules, ports, FSMs. Return JSON."
+
+### Decision Flow
+
+```
+File count > 10?
+  YES → Group files (~10 per agent) → Spawn parallel Task agents → Merge results
+  NO  → Analyze directly with Grep/Read
 ```
 
-This runs in parallel and speeds up large codebase mapping significantly.
+### Why Parallel?
+- Each agent runs concurrently (faster)
+- Handles token limits (split large codebases)
+- Results merge into unified map
 
 ## Output Location
 
