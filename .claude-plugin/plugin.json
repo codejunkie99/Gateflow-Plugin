@@ -18,6 +18,6 @@
     "waveform",
     "vcd"
   ],
-  "license": "MIT",
+  "license": "BUSL-1.1",
   "repository": "https://github.com/codejunkie99/Gateflow-Plugin"
 }

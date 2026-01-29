@@ -1,7 +1,7 @@
 # GateFlow Plugin for Claude Code
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: BSL 1.1](https://img.shields.io/badge/License-BSL%201.1-orange.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
 <img width="1619" height="787" alt="image" src="https://github.com/user-attachments/assets/f53240b4-5704-4c5a-8e0e-5d65546a0ad1" />
@@ -294,7 +294,11 @@ Contributions welcome! Areas we'd love help with:
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+BSL 1.1 (Business Source License) - see [LICENSE](LICENSE) for details.
+
+**You can:** Use, fork, contribute for non-commercial/personal/educational purposes.
+**Commercial use:** Contact us for a license.
+**After 2028:** Converts to Apache 2.0.
 
 ---
 
