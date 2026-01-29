@@ -291,20 +291,22 @@ verible-verilog-syntax *.sv
 
 ## External References
 
-### SystemVerilog for Verification, 3rd ed. (Spear/Tumbush)
-> PDF ~500 pages | Verification-focused SV | [Download](https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf)
-
-| Ch | Topic | Page |
-|----|-------|------|
-| 1 | Verification Guidelines | 2 |
-| 2 | Data Types | 26 |
-| 3 | Procedural Statements and Routines | 70 |
-| 4 | Connecting Testbench and Design | 90 |
-| 5 | Basic OOP | 132 |
-| 6 | Randomization | 170 |
-| 7 | Threads and IPC | 266 |
-| 8 | Advanced OOP and TB Guidelines | 274 |
-| 9 | Functional Coverage | 324 |
-| 10 | Advanced Interfaces | 364 |
-| 11 | Complete SystemVerilog Testbench | 386 |
-| 12 | Interfacing with C/C++ (DPI) | 416 |
+```
+[SystemVerilog for Verification, 3rd ed. — Spear/Tumbush]
+|source: PDF (2012), ~500 pages
+|scope: verification-focused SV (OOP testbenches, randomization, coverage, DPI)
+|url: https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf
+|chapters:
+|1 Verification Guidelines (p.2)
+|2 Data Types (p.26)
+|3 Procedural Statements and Routines (p.70)
+|4 Connecting the Testbench and Design (p.90)
+|5 Basic OOP (p.132)
+|6 Randomization (p.170)
+|7 Threads and Interprocess Communication (p.266)
+|8 Advanced OOP and Testbench Guidelines (p.274)
+|9 Functional Coverage (p.324)
+|10 Advanced Interfaces (p.364)
+|11 A Complete SystemVerilog Testbench (p.386)
+|12 Interfacing with C/C++ (p.416)
+```
