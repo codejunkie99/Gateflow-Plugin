@@ -12,6 +12,7 @@ allowed-tools:
   - Write
   - Bash
   - Task
+  - WebFetch
   - AskUserQuestion
   - Skill
 ---
