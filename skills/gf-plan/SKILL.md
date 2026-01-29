@@ -1,0 +1,1452 @@
+---
+name: gf-plan
+description: |
+  Hardware design planner - Creates comprehensive RTL implementation plans.
+  This skill should be used when the user wants to plan a new design, architect
+  a complex feature, or understand how to implement hardware before coding.
+  Example requests: "plan a DMA controller", "design a UART", "architect the memory subsystem"
+---
+
+# GF Plan - Hardware Design Planner
+
+You create comprehensive, professional RTL implementation plans. Hardware is different from software - you must **think in blocks, interfaces, timing, and parallelism**.
+
+**CRITICAL:** Planning happens BEFORE coding. Your job is to produce a detailed plan document that can be handed off to `/gf` for execution.
+
+## When to Trigger
+
+Activate when user asks to:
+- "Plan a [module/feature]"
+- "Design a [component]"
+- "Architect [subsystem]"
+- "How should I implement [feature]?"
+- "I need to add [capability] to my design"
+
+## Planning Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 1: UNDERSTAND                                            │
+│  • Parse requirements                                           │
+│  • Ask clarifying questions (interfaces, constraints, timing)   │
+│  • Identify what exists vs. what's new                          │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 2: ANALYZE EXISTING (if applicable)                      │
+│  • Invoke /gf-architect to map codebase                         │
+│  • Find integration points                                      │
+│  • Identify existing interfaces, clocks, resets                 │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 3: ARCHITECT                                             │
+│  • Draw block diagrams (Mermaid)                                │
+│  • Design module hierarchy                                      │
+│  • Specify interfaces and protocols                             │
+│  • Plan clock domains and resets                                │
+│  • Design FSMs with state diagrams                              │
+│  • Plan pipelines and data paths                                │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 4: SPECIFY                                               │
+│  • Define all ports and parameters                              │
+│  • Document protocols and timing                                │
+│  • Specify register maps (if applicable)                        │
+│  • Plan verification strategy                                   │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 5: PLAN IMPLEMENTATION                                   │
+│  • Break into phases                                            │
+│  • List files to create/modify                                  │
+│  • Identify dependencies                                        │
+│  • Specify which agents handle each part                        │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 6: OUTPUT & HANDOFF                                      │
+│  • Write plan to .gateflow/plans/<name>.md                      │
+│  • Present summary to user                                      │
+│  • On approval → handoff to /gf for execution                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Phase 1: Understanding Requirements
+
+### Questions to Ask (use AskUserQuestion)
+
+**Interface Questions:**
+- What bus protocol? (AXI4, AXI-Lite, AXI-Stream, APB, AHB, Wishbone, custom)
+- What are the data widths? (8, 16, 32, 64 bits)
+- How many channels/ports?
+- What's the throughput requirement?
+
+**Timing Questions:**
+- Target clock frequency?
+- Latency budget (cycles)?
+- Single or multiple clock domains?
+
+**Constraint Questions:**
+- FPGA or ASIC target?
+- Area constraints?
+- Power considerations?
+
+**Integration Questions:**
+- Does this connect to existing modules?
+- What interfaces already exist?
+- Any existing packages/types to reuse?
+
+### Requirement Parsing
+
+Extract from user's request:
+- **What** they want (functional requirements)
+- **Why** they need it (context, use case)
+- **Constraints** (performance, area, power)
+- **Integration points** (existing code to connect to)
+
+---
+
+## Phase 2: Analyze Existing Codebase
+
+**If user has existing code:**
+
+1. Check for existing map:
+```bash
+ls .gateflow/map/CODEBASE.md 2>/dev/null
+```
+
+2. If no map, invoke architect:
+```
+Use Skill tool: gf-architect
+```
+
+3. From the map, extract:
+   - Existing module hierarchy
+   - Available interfaces
+   - Clock domains in use
+   - Package definitions (types, constants)
+   - Integration points for new design
+
+4. Document what exists:
+```markdown
+## Existing Infrastructure
+
+### Clock Domains
+- clk_sys (100MHz) - main system clock
+- clk_mem (200MHz) - memory interface
+
+### Available Interfaces
+- AXI-Lite slave port on soc_top
+- Memory interface via mem_if
+
+### Packages to Reuse
+- common_pkg: data types, constants
+- axi_pkg: AXI type definitions
+```
+
+---
+
+## Phase 3: Architecture Design
+
+### Block Diagram (REQUIRED)
+
+Every plan MUST include a block diagram:
+
+```markdown
+## Block Diagram
+
+​```mermaid
+flowchart TB
+    subgraph TOP[module_name]
+        direction TB
+
+        subgraph CTRL[Control Path]
+            FSM[State Machine]
+            REG[Config Registers]
+        end
+
+        subgraph DATA[Data Path]
+            FIFO_IN[Input FIFO]
+            PROC[Processing Unit]
+            FIFO_OUT[Output FIFO]
+        end
+
+        FSM --> PROC
+        REG --> FSM
+    end
+
+    EXT_IN[External Input] --> FIFO_IN
+    FIFO_IN --> PROC
+    PROC --> FIFO_OUT
+    FIFO_OUT --> EXT_OUT[External Output]
+
+    CPU[CPU/Host] <-->|AXI-Lite| REG
+​```
+```
+
+### Module Hierarchy
+
+```markdown
+## Module Hierarchy
+
+​```
+dma_top                      # Top-level DMA controller
+├── dma_reg_if              # AXI-Lite register interface
+│   └── dma_reg_block       # Register storage
+├── dma_engine              # Main DMA engine
+│   ├── dma_descriptor      # Descriptor fetch/decode
+│   ├── dma_channel[N]      # Per-channel logic
+│   │   ├── dma_fsm         # Channel state machine
+│   │   └── dma_counter     # Transfer counter
+│   └── dma_arbiter         # Channel arbiter
+└── dma_axi_master          # AXI master interface
+​```
+```
+
+### Interface Design
+
+**Standard Protocols:**
+
+| Protocol | Use Case | Signals |
+|----------|----------|---------|
+| AXI4-Full | High-performance memory | 5 channels (AW, W, B, AR, R) |
+| AXI4-Lite | Register access | Simplified 5 channels |
+| AXI4-Stream | Streaming data | TVALID, TREADY, TDATA, TLAST |
+| APB | Simple peripherals | PSEL, PENABLE, PWRITE, PADDR, PWDATA, PRDATA |
+| Valid/Ready | Generic handshake | valid, ready, data |
+
+**Interface Specification Template:**
+
+```markdown
+## Interfaces
+
+### AXI-Lite Slave (Configuration)
+| Signal | Dir | Width | Description |
+|--------|-----|-------|-------------|
+| s_axi_aclk | in | 1 | AXI clock |
+| s_axi_aresetn | in | 1 | AXI reset (active-low) |
+| s_axi_awaddr | in | 12 | Write address |
+| s_axi_awvalid | in | 1 | Write address valid |
+| s_axi_awready | out | 1 | Write address ready |
+| ... | ... | ... | ... |
+
+### AXI Master (Memory Access)
+| Signal | Dir | Width | Description |
+|--------|-----|-------|-------------|
+| m_axi_* | ... | ... | Full AXI4 master |
+
+### Interrupt
+| Signal | Dir | Width | Description |
+|--------|-----|-------|-------------|
+| irq | out | 1 | Interrupt (level, active-high) |
+```
+
+### Clock Domain Planning
+
+```markdown
+## Clock Domains
+
+### Clocks
+| Clock | Frequency | Domain | Modules |
+|-------|-----------|--------|---------|
+| clk | 100 MHz | CORE | All except mem_if |
+| clk_mem | 200 MHz | MEM | mem_if, async_fifo |
+
+### Clock Domain Crossings
+| Signal | From | To | Sync Method |
+|--------|------|-----|-------------|
+| cmd_valid | CORE | MEM | 2FF + handshake |
+| data[31:0] | MEM | CORE | Async FIFO |
+
+### CDC Diagram
+​```mermaid
+flowchart LR
+    subgraph CORE["clk domain"]
+        ctrl[Controller]
+    end
+    subgraph MEM["clk_mem domain"]
+        mem[Memory IF]
+    end
+    ctrl -->|"2FF sync"| mem
+    mem -->|"Async FIFO"| ctrl
+​```
+```
+
+### Reset Strategy
+
+```markdown
+## Reset Strategy
+
+| Reset | Type | Polarity | Scope |
+|-------|------|----------|-------|
+| rst_n | Async assert, sync deassert | Active-low | All modules |
+| mem_rst_n | Async | Active-low | Memory domain |
+
+### Reset Synchronization
+- rst_n synchronized to each clock domain
+- 2FF synchronizer for async reset release
+- All registers have reset
+
+### Reset Sequence
+1. Assert rst_n (asynchronous)
+2. Hold for minimum 10 cycles
+3. Deassert synchronously to clk
+4. Wait for PLL lock before operation
+```
+
+### FSM Design
+
+For EVERY state machine, provide:
+
+```markdown
+## FSM: dma_channel_fsm
+
+### States
+| State | Encoding | Description |
+|-------|----------|-------------|
+| IDLE | 3'b000 | Waiting for start |
+| FETCH_DESC | 3'b001 | Fetching descriptor |
+| CALC_ADDR | 3'b010 | Calculate transfer address |
+| XFER | 3'b011 | Performing transfer |
+| UPDATE | 3'b100 | Update descriptor |
+| DONE | 3'b101 | Transfer complete |
+| ERROR | 3'b110 | Error state |
+
+### State Diagram
+​```mermaid
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> FETCH_DESC: start && desc_avail
+    FETCH_DESC --> CALC_ADDR: desc_valid
+    FETCH_DESC --> ERROR: desc_error
+    CALC_ADDR --> XFER: addr_ready
+    XFER --> XFER: !xfer_done
+    XFER --> UPDATE: xfer_done && !last
+    XFER --> DONE: xfer_done && last
+    UPDATE --> FETCH_DESC: update_done
+    DONE --> IDLE: clear
+    ERROR --> IDLE: clear
+​```
+
+### Transitions
+| From | To | Condition | Actions |
+|------|-----|-----------|---------|
+| IDLE | FETCH_DESC | start && desc_avail | Load desc_ptr |
+| FETCH_DESC | CALC_ADDR | desc_valid | Store descriptor |
+| XFER | UPDATE | xfer_done && !last | Increment count |
+| XFER | DONE | xfer_done && last | Assert irq |
+
+### Outputs per State
+| State | busy | xfer_en | irq | error |
+|-------|------|---------|-----|-------|
+| IDLE | 0 | 0 | 0 | 0 |
+| FETCH_DESC | 1 | 0 | 0 | 0 |
+| XFER | 1 | 1 | 0 | 0 |
+| DONE | 0 | 0 | 1 | 0 |
+| ERROR | 0 | 0 | 1 | 1 |
+```
+
+### Pipeline Design
+
+```markdown
+## Pipeline: data_processor
+
+### Pipeline Stages
+| Stage | Latency | Function | Inputs | Outputs |
+|-------|---------|----------|--------|---------|
+| S0 | 1 | Input register | data_in | data_s0 |
+| S1 | 1 | Transform | data_s0 | data_s1 |
+| S2 | 1 | Output register | data_s1 | data_out |
+
+### Pipeline Diagram
+​```mermaid
+flowchart LR
+    subgraph S0[Stage 0]
+        R0[Input Reg]
+    end
+    subgraph S1[Stage 1]
+        ALU[Transform]
+    end
+    subgraph S2[Stage 2]
+        R2[Output Reg]
+    end
+
+    IN[data_in] --> R0
+    R0 --> ALU
+    ALU --> R2
+    R2 --> OUT[data_out]
+
+    V0[valid_s0] --> V1[valid_s1] --> V2[valid_out]
+    R2 -.->|ready| ALU -.->|ready| R0
+​```
+
+### Backpressure Handling
+- Valid propagates forward
+- Ready propagates backward
+- Skid buffer at output for timing
+```
+
+---
+
+## Phase 4: Detailed Specification
+
+### Port Specification
+
+```markdown
+## Module: dma_top
+
+### Parameters
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| NUM_CHANNELS | int | 4 | Number of DMA channels |
+| DATA_WIDTH | int | 32 | Data bus width |
+| ADDR_WIDTH | int | 32 | Address width |
+| DESC_DEPTH | int | 16 | Descriptor FIFO depth |
+
+### Ports
+| Name | Dir | Width | Description |
+|------|-----|-------|-------------|
+| clk | in | 1 | System clock |
+| rst_n | in | 1 | Active-low async reset |
+| s_axi_* | in/out | - | AXI-Lite slave (config) |
+| m_axi_* | in/out | - | AXI master (memory) |
+| irq | out | NUM_CHANNELS | Per-channel interrupt |
+```
+
+### Register Map (if applicable)
+
+```markdown
+## Register Map
+
+Base Address: 0x0000
+
+| Offset | Name | Access | Reset | Description |
+|--------|------|--------|-------|-------------|
+| 0x00 | CTRL | RW | 0x0 | Control register |
+| 0x04 | STATUS | RO | 0x0 | Status register |
+| 0x08 | IRQ_EN | RW | 0x0 | Interrupt enable |
+| 0x0C | IRQ_STATUS | RW1C | 0x0 | Interrupt status |
+| 0x10 | DESC_PTR | RW | 0x0 | Descriptor pointer |
+
+### CTRL Register (0x00)
+| Bits | Name | Access | Reset | Description |
+|------|------|--------|-------|-------------|
+| 0 | EN | RW | 0 | DMA enable |
+| 1 | START | RW | 0 | Start transfer (auto-clear) |
+| 7:4 | CH_SEL | RW | 0 | Channel select |
+| 31:8 | RSVD | RO | 0 | Reserved |
+```
+
+### Timing Diagrams
+
+```markdown
+## Timing: Write Transaction
+
+​```wavedrom
+{ signal: [
+  { name: 'clk',     wave: 'P........' },
+  { name: 'valid',   wave: '0.1....0.' },
+  { name: 'ready',   wave: '0..1.0.1.' },
+  { name: 'data',    wave: 'x.3....x.', data: ['D0'] },
+  { name: 'transfer',wave: '0...1..0.' }
+]}
+​```
+
+**Rules:**
+- Data stable while valid high
+- Transfer occurs when valid AND ready
+- Producer holds valid until ready
+```
+
+### Protocol Specification
+
+```markdown
+## Protocol: Descriptor Format
+
+### Descriptor Word 0 (Control)
+| Bits | Field | Description |
+|------|-------|-------------|
+| 0 | VALID | Descriptor valid |
+| 1 | LAST | Last descriptor in chain |
+| 2 | IRQ_EN | Generate interrupt on complete |
+| 15:8 | BURST_LEN | Burst length (0 = 1 beat) |
+| 31:16 | RSVD | Reserved |
+
+### Descriptor Word 1 (Source Address)
+| Bits | Field | Description |
+|------|-------|-------------|
+| 31:0 | SRC_ADDR | Source address |
+
+### Descriptor Word 2 (Destination Address)
+| Bits | Field | Description |
+|------|-------|-------------|
+| 31:0 | DST_ADDR | Destination address |
+
+### Descriptor Word 3 (Next Pointer)
+| Bits | Field | Description |
+|------|-------|-------------|
+| 31:0 | NEXT_PTR | Next descriptor address (0 = end) |
+```
+
+---
+
+## Phase 5: Implementation Plan
+
+### File List
+
+```markdown
+## Files to Create
+
+| File | Type | Agent | Phase | Description |
+|------|------|-------|-------|-------------|
+| rtl/dma_pkg.sv | Package | sv-codegen | 1 | Types, constants |
+| rtl/dma_reg_if.sv | Module | sv-codegen | 1 | Register interface |
+| rtl/dma_channel.sv | Module | sv-codegen | 2 | Single channel |
+| rtl/dma_arbiter.sv | Module | sv-codegen | 2 | Channel arbiter |
+| rtl/dma_engine.sv | Module | sv-codegen | 3 | Main engine |
+| rtl/dma_axi_master.sv | Module | sv-codegen | 3 | AXI master |
+| rtl/dma_top.sv | Module | sv-codegen | 4 | Top-level |
+| tb/tb_dma_channel.sv | TB | sv-testbench | 2 | Channel TB |
+| tb/tb_dma_top.sv | TB | sv-testbench | 4 | System TB |
+| rtl/dma_sva.sv | SVA | sv-verification | 4 | Assertions |
+
+## Files to Modify
+
+| File | Change | Agent | Phase |
+|------|--------|-------|-------|
+| rtl/soc_top.sv | Add DMA instance | sv-codegen | 5 |
+| rtl/soc_pkg.sv | Add DMA types | sv-codegen | 1 |
+```
+
+### Implementation Phases
+
+```markdown
+## Implementation Phases
+
+### Phase 1: Foundation
+**Goal:** Package and register interface
+**Files:** dma_pkg.sv, dma_reg_if.sv
+**Verification:** Lint clean, basic reg read/write test
+**Agent:** sv-codegen → lint → sv-testbench
+
+### Phase 2: Core Logic
+**Goal:** Single channel working
+**Files:** dma_channel.sv, dma_arbiter.sv
+**Verification:** Channel testbench, FSM coverage
+**Agent:** sv-codegen → lint → sv-testbench → sim
+
+### Phase 3: Bus Interface
+**Goal:** AXI master integration
+**Files:** dma_engine.sv, dma_axi_master.sv
+**Verification:** AXI protocol checks
+**Agent:** sv-codegen → lint → sv-verification (protocol assertions)
+
+### Phase 4: Integration
+**Goal:** Complete DMA controller
+**Files:** dma_top.sv, tb_dma_top.sv, dma_sva.sv
+**Verification:** Full system test, assertion coverage
+**Agent:** sv-codegen → sv-testbench → sv-verification → sim
+
+### Phase 5: System Integration
+**Goal:** DMA in SoC
+**Files:** soc_top.sv (modify)
+**Verification:** System-level test
+**Agent:** sv-developer
+```
+
+### Dependencies
+
+```markdown
+## Dependencies
+
+​```mermaid
+flowchart TD
+    PKG[dma_pkg.sv] --> REG[dma_reg_if.sv]
+    PKG --> CH[dma_channel.sv]
+    PKG --> ARB[dma_arbiter.sv]
+    PKG --> AXI[dma_axi_master.sv]
+
+    CH --> ENG[dma_engine.sv]
+    ARB --> ENG
+    AXI --> ENG
+
+    REG --> TOP[dma_top.sv]
+    ENG --> TOP
+
+    TOP --> SOC[soc_top.sv]
+​```
+
+**Build Order:**
+1. dma_pkg.sv (no deps)
+2. dma_reg_if.sv, dma_channel.sv, dma_arbiter.sv, dma_axi_master.sv (parallel)
+3. dma_engine.sv
+4. dma_top.sv
+5. soc_top.sv integration
+```
+
+### Verification Strategy
+
+```markdown
+## Verification Strategy
+
+### Unit Tests (per module)
+| Module | Test Focus | Coverage Goal |
+|--------|------------|---------------|
+| dma_channel | FSM transitions, counter | 100% state, 90% transition |
+| dma_arbiter | Fairness, priority | All grant patterns |
+| dma_axi_master | Protocol compliance | AXI assertions pass |
+
+### Integration Tests
+| Test | Description | Pass Criteria |
+|------|-------------|---------------|
+| basic_xfer | Single descriptor transfer | Data matches |
+| chain_xfer | Linked descriptor chain | All descriptors complete |
+| multi_ch | Multiple channels active | Fair arbitration |
+| error_inject | Invalid descriptor | Error flag, no hang |
+
+### Assertions
+| Property | Module | Type |
+|----------|--------|------|
+| AXI handshake | axi_master | Protocol |
+| No descriptor overrun | channel | Safety |
+| FSM no deadlock | channel | Liveness |
+| FIFO no overflow | engine | Safety |
+
+### Coverage Goals
+- Line coverage: >95%
+- Branch coverage: >90%
+- FSM state coverage: 100%
+- FSM transition coverage: >95%
+- Functional coverage: >98%
+```
+
+---
+
+## Phase 6: Output
+
+### Plan Document Location
+
+Write plan to: `.gateflow/plans/<design_name>.md`
+
+### Plan Template
+
+```markdown
+# Design Plan: [Name]
+
+**Created:** [Date]
+**Author:** GateFlow Planner
+**Status:** Draft | Approved | In Progress | Complete
+
+## Overview
+[Brief description of what this design does]
+
+## Requirements
+- [Requirement 1]
+- [Requirement 2]
+
+## Block Diagram
+[Mermaid diagram]
+
+## Module Hierarchy
+[Tree structure]
+
+## Interfaces
+[Port tables]
+
+## Clock Domains
+[Clock/CDC info]
+
+## FSMs
+[State diagrams for each FSM]
+
+## Register Map
+[If applicable]
+
+## Implementation Phases
+[Phase breakdown]
+
+## File List
+[Files to create/modify]
+
+## Verification Strategy
+[Test plan]
+
+## Approval
+- [ ] Architecture reviewed
+- [ ] Interfaces approved
+- [ ] Ready for implementation
+
+---
+*Generated by GateFlow Planner*
+```
+
+### Handoff to Execution
+
+After user approves:
+
+```markdown
+Plan approved! Starting implementation...
+
+Handing off to /gf for execution:
+- Phase 1: Creating foundation (dma_pkg.sv, dma_reg_if.sv)
+- Will verify each phase before proceeding
+- Estimated files: 10
+```
+
+Then invoke the gf skill to execute the plan.
+
+---
+
+## Design Patterns Reference
+
+### Valid/Ready Handshake
+```systemverilog
+// Producer
+always_ff @(posedge clk or negedge rst_n)
+    if (!rst_n) valid <= 1'b0;
+    else if (new_data) valid <= 1'b1;
+    else if (ready) valid <= 1'b0;
+
+// Consumer
+assign ready = !full;
+wire transfer = valid && ready;
+```
+
+### Skid Buffer
+```systemverilog
+// Allows ready to deassert without losing data
+logic [WIDTH-1:0] skid_data;
+logic skid_valid;
+
+assign out_valid = in_valid || skid_valid;
+assign out_data = skid_valid ? skid_data : in_data;
+assign in_ready = !skid_valid;
+
+always_ff @(posedge clk)
+    if (in_valid && !out_ready && !skid_valid) begin
+        skid_data <= in_data;
+        skid_valid <= 1'b1;
+    end else if (out_ready) begin
+        skid_valid <= 1'b0;
+    end
+```
+
+### 2FF Synchronizer
+```systemverilog
+logic [1:0] sync_ff;
+always_ff @(posedge clk_dst or negedge rst_n)
+    if (!rst_n) sync_ff <= '0;
+    else sync_ff <= {sync_ff[0], async_in};
+assign sync_out = sync_ff[1];
+```
+
+### Round-Robin Arbiter
+```systemverilog
+logic [$clog2(N)-1:0] last_grant;
+logic [N-1:0] grant;
+
+always_comb begin
+    grant = '0;
+    for (int i = 0; i < N; i++) begin
+        int idx = (last_grant + 1 + i) % N;
+        if (req[idx] && grant == '0) grant[idx] = 1'b1;
+    end
+end
+```
+
+### Async FIFO Pointers
+```systemverilog
+// Gray code conversion
+function automatic [ADDR_W:0] bin2gray(input [ADDR_W:0] bin);
+    return bin ^ (bin >> 1);
+endfunction
+
+// Pointer comparison (Gray domain)
+assign full = (wr_gray[ADDR_W] != rd_gray_sync[ADDR_W]) &&
+              (wr_gray[ADDR_W-1:0] == rd_gray_sync[ADDR_W-1:0]);
+assign empty = (rd_gray == wr_gray_sync);
+```
+
+---
+
+## SystemVerilog Constructs Reference
+
+Every plan should consider which of these constructs are needed:
+
+### Packages
+
+```markdown
+## Package Design: <name>_pkg
+
+### Purpose
+[What this package provides]
+
+### Contents
+| Item | Type | Description |
+|------|------|-------------|
+| DATA_WIDTH | parameter | Bus width |
+| state_t | enum | FSM states |
+| request_t | struct | Request format |
+| encode() | function | Encoding helper |
+
+### Dependencies
+- Imports: [other packages]
+- Imported by: [modules using this]
+```
+
+**Package Template:**
+```systemverilog
+package dma_pkg;
+    // Parameters
+    parameter int DATA_WIDTH = 32;
+    parameter int ADDR_WIDTH = 32;
+
+    // Types
+    typedef enum logic [2:0] {
+        IDLE    = 3'b000,
+        FETCH   = 3'b001,
+        XFER    = 3'b010,
+        DONE    = 3'b011,
+        ERROR   = 3'b100
+    } state_t;
+
+    typedef struct packed {
+        logic [ADDR_WIDTH-1:0] addr;
+        logic [DATA_WIDTH-1:0] data;
+        logic                  valid;
+    } request_t;
+
+    // Functions
+    function automatic logic [7:0] crc8(input logic [7:0] data);
+        // CRC calculation
+    endfunction
+endpackage
+```
+
+### Type Definitions
+
+```markdown
+## Type Definitions
+
+### Enums
+| Name | Values | Width | Usage |
+|------|--------|-------|-------|
+| state_t | IDLE, RUN, DONE | 2-bit | FSM state |
+| opcode_t | ADD, SUB, MUL, DIV | 2-bit | ALU operations |
+
+### Structs
+| Name | Fields | Width | Usage |
+|------|--------|-------|-------|
+| request_t | addr[31:0], data[31:0], valid | 65 bits | Bus request |
+| response_t | data[31:0], error, valid | 34 bits | Bus response |
+
+### Unions (rare, use carefully)
+| Name | Members | Usage |
+|------|---------|-------|
+| data_u | bytes[3:0], word | Byte/word access |
+
+### Typedefs
+| Alias | Base | Usage |
+|-------|------|-------|
+| data_t | logic[31:0] | Data bus |
+| addr_t | logic[31:0] | Address |
+```
+
+**Type Templates:**
+```systemverilog
+// Enum with explicit encoding
+typedef enum logic [1:0] {
+    IDLE   = 2'b00,
+    ACTIVE = 2'b01,
+    DONE   = 2'b10
+} state_t;
+
+// Packed struct (synthesizable, bit-addressable)
+typedef struct packed {
+    logic [7:0]  tag;
+    logic [23:0] addr;
+    logic [31:0] data;
+} transaction_t;  // 64 bits total
+
+// Unpacked struct (simulation, flexible)
+typedef struct {
+    string       name;
+    int          count;
+    logic [31:0] data;
+} debug_info_t;
+
+// Union (byte/word access)
+typedef union packed {
+    logic [31:0]     word;
+    logic [3:0][7:0] bytes;
+} data_u;
+
+// Simple typedef
+typedef logic [31:0] data_t;
+typedef logic [11:0] addr_t;
+```
+
+### Macros and Preprocessor
+
+```markdown
+## Preprocessor Directives
+
+### Defines
+| Macro | Value | File | Usage |
+|-------|-------|------|-------|
+| DATA_WIDTH | 32 | defines.svh | Global width |
+| DEBUG | (flag) | defines.svh | Debug mode |
+| ASSERT_ON | (flag) | defines.svh | Enable assertions |
+
+### Include Structure
+​```
+include/
+├── defines.svh      # Global defines
+├── types.svh        # Type definitions
+└── macros.svh       # Utility macros
+​```
+
+### Conditional Compilation
+| Condition | Purpose | Files |
+|-----------|---------|-------|
+| `ifdef SIMULATION | Sim-only code | tb/*.sv |
+| `ifdef SYNTHESIS | Synth-only code | rtl/*.sv |
+| `ifdef FPGA | FPGA-specific | rtl/*.sv |
+```
+
+**Macro Templates:**
+```systemverilog
+// defines.svh
+`ifndef DEFINES_SVH
+`define DEFINES_SVH
+
+`define DATA_WIDTH 32
+`define ADDR_WIDTH 32
+
+// Utility macros
+`define FF(clk, rst_n, q, d) \
+    always_ff @(posedge clk or negedge rst_n) \
+        if (!rst_n) q <= '0; \
+        else q <= d
+
+// Conditional
+`ifdef SIMULATION
+    `define DELAY #1
+`else
+    `define DELAY
+`endif
+
+`endif // DEFINES_SVH
+```
+
+### Interfaces and Modports
+
+```markdown
+## Interface Design
+
+### <name>_if
+**Purpose:** [What this interface encapsulates]
+**Parameters:** [Configurable widths, depths]
+
+### Signals
+| Signal | Type | Width | Description |
+|--------|------|-------|-------------|
+| clk | logic | 1 | Clock |
+| valid | logic | 1 | Data valid |
+| data | logic | [WIDTH-1:0] | Payload |
+| ready | logic | 1 | Ready to accept |
+
+### Modports
+| Name | Direction | Signals |
+|------|-----------|---------|
+| master | output | valid, data; input ready |
+| slave | input | valid, data; output ready |
+| monitor | input | all (passive) |
+```
+
+**Interface Template:**
+```systemverilog
+interface stream_if #(
+    parameter int WIDTH = 32
+) (
+    input logic clk,
+    input logic rst_n
+);
+    logic             valid;
+    logic             ready;
+    logic [WIDTH-1:0] data;
+    logic             last;
+
+    modport master (
+        output valid, data, last,
+        input  ready
+    );
+
+    modport slave (
+        input  valid, data, last,
+        output ready
+    );
+
+    modport monitor (
+        input valid, ready, data, last
+    );
+
+    // Optional: clocking blocks for TB
+    clocking cb @(posedge clk);
+        default input #1 output #1;
+        output valid, data, last;
+        input  ready;
+    endclocking
+
+    // Optional: assertions
+    property p_handshake;
+        @(posedge clk) disable iff (!rst_n)
+        valid && !ready |=> valid && $stable(data);
+    endproperty
+    assert property (p_handshake);
+
+endinterface
+```
+
+### Generate Blocks
+
+```markdown
+## Generate Blocks
+
+### Loop Generate
+| Genvar | Range | Creates | Purpose |
+|--------|-------|---------|---------|
+| i | 0:N-1 | u_channel[i] | Per-channel logic |
+| j | 0:M-1 | mem_bank[j] | Memory banks |
+
+### Conditional Generate
+| Condition | True Block | False Block |
+|-----------|------------|-------------|
+| USE_FIFO | fifo_impl | reg_impl |
+| WIDTH > 32 | wide_path | narrow_path |
+```
+
+**Generate Templates:**
+```systemverilog
+// Loop generate - multiple instances
+genvar i;
+generate
+    for (i = 0; i < NUM_CHANNELS; i++) begin : gen_channel
+        dma_channel #(
+            .ID(i)
+        ) u_channel (
+            .clk    (clk),
+            .rst_n  (rst_n),
+            .req    (req[i]),
+            .grant  (grant[i])
+        );
+    end
+endgenerate
+
+// Conditional generate
+generate
+    if (USE_FIFO) begin : gen_fifo
+        sync_fifo #(.DEPTH(FIFO_DEPTH)) u_fifo (...);
+    end else begin : gen_reg
+        register_bank u_regs (...);
+    end
+endgenerate
+
+// Case generate
+generate
+    case (IMPL_TYPE)
+        "FAST": begin : gen_fast
+            fast_impl u_impl (...);
+        end
+        "SMALL": begin : gen_small
+            small_impl u_impl (...);
+        end
+        default: begin : gen_default
+            default_impl u_impl (...);
+        end
+    endcase
+endgenerate
+```
+
+### Functions and Tasks
+
+```markdown
+## Functions and Tasks
+
+### Functions (combinational, no timing)
+| Name | Return | Args | Purpose |
+|------|--------|------|---------|
+| crc8 | logic[7:0] | data[7:0] | CRC calculation |
+| encode | logic[3:0] | onehot[15:0] | Priority encode |
+| parity | logic | data[31:0] | Parity bit |
+
+### Tasks (can have timing, for TB)
+| Name | Args | Purpose |
+|------|------|---------|
+| send_packet | data[], len | Send test packet |
+| wait_ready | timeout | Wait for ready signal |
+| check_result | expected | Verify output |
+```
+
+**Function/Task Templates:**
+```systemverilog
+// Pure function (synthesizable)
+function automatic logic [7:0] gray_encode(input logic [7:0] bin);
+    return bin ^ (bin >> 1);
+endfunction
+
+// Function with local variables
+function automatic logic [$clog2(N)-1:0] priority_encode(
+    input logic [N-1:0] onehot
+);
+    for (int i = 0; i < N; i++) begin
+        if (onehot[i]) return i[$clog2(N)-1:0];
+    end
+    return '0;
+endfunction
+
+// Task for testbench (with timing)
+task automatic send_byte(input logic [7:0] data);
+    @(posedge clk);
+    tx_valid <= 1'b1;
+    tx_data  <= data;
+    @(posedge clk);
+    while (!tx_ready) @(posedge clk);
+    tx_valid <= 1'b0;
+endtask
+
+// Task with timeout
+task automatic wait_for_done(input int timeout_cycles);
+    int count = 0;
+    while (!done && count < timeout_cycles) begin
+        @(posedge clk);
+        count++;
+    end
+    if (!done) $error("Timeout waiting for done");
+endtask
+```
+
+### Instantiation Patterns
+
+```markdown
+## Module Instantiation
+
+### Instance Table
+| Instance | Module | Parameters | Connection |
+|----------|--------|------------|------------|
+| u_fifo | sync_fifo | .DEPTH(16) | Internal signals |
+| u_arb | arbiter | .N(4) | Request/grant |
+| u_if | axi_if | default | External port |
+
+### Port Connections
+- Named: `.port(signal)` (preferred)
+- Positional: Avoid except for simple cases
+- Wildcard: `.*` with explicit overrides
+```
+
+**Instantiation Templates:**
+```systemverilog
+// Named port connection (preferred)
+sync_fifo #(
+    .WIDTH (DATA_WIDTH),
+    .DEPTH (FIFO_DEPTH)
+) u_fifo (
+    .clk     (clk),
+    .rst_n   (rst_n),
+    .wr_en   (fifo_wr),
+    .wr_data (fifo_din),
+    .rd_en   (fifo_rd),
+    .rd_data (fifo_dout),
+    .full    (fifo_full),
+    .empty   (fifo_empty)
+);
+
+// Wildcard with explicit overrides
+dma_channel u_channel (
+    .*,                    // Connect matching names
+    .data_in  (ch_data),   // Override specific
+    .data_out (out_data)
+);
+
+// Interface connection
+axi_if u_axi_if (.clk(clk), .rst_n(rst_n));
+
+axi_master u_master (
+    .clk   (clk),
+    .rst_n (rst_n),
+    .m_axi (u_axi_if.master)  // Interface modport
+);
+
+// Array of instances (with generate)
+genvar i;
+generate
+    for (i = 0; i < N; i++) begin : gen_ch
+        channel u_ch (
+            .id   (i),
+            .req  (req[i]),
+            .data (data[i])
+        );
+    end
+endgenerate
+```
+
+### Assertions (SVA)
+
+```markdown
+## Assertion Plan
+
+### Immediate Assertions
+| Location | Check | Severity |
+|----------|-------|----------|
+| FSM default | Invalid state | $error |
+| FIFO write | Not full | $error |
+| Counter | No overflow | $warning |
+
+### Concurrent Assertions
+| Property | Type | Description |
+|----------|------|-------------|
+| p_handshake | assert | valid stable until ready |
+| p_no_overflow | assert | count <= MAX |
+| p_eventually_ready | assert | req |-> ##[1:100] ack |
+| c_all_states | cover | Visit all FSM states |
+
+### Assertion Bind
+| Target | Checker | File |
+|--------|---------|------|
+| dma_channel | dma_sva | rtl/dma_sva.sv |
+| axi_master | axi_protocol_check | rtl/axi_sva.sv |
+```
+
+**SVA Templates:**
+```systemverilog
+// Immediate assertion
+always_comb begin
+    assert (state inside {IDLE, RUN, DONE})
+        else $error("Invalid state: %0d", state);
+end
+
+// Concurrent assertions
+property p_valid_stable;
+    @(posedge clk) disable iff (!rst_n)
+    valid && !ready |=> valid && $stable(data);
+endproperty
+assert property (p_valid_stable) else $error("Valid not held");
+
+property p_request_ack;
+    @(posedge clk) disable iff (!rst_n)
+    req |-> ##[1:10] ack;
+endproperty
+assert property (p_request_ack) else $error("No ack within 10 cycles");
+
+// Cover property
+cover property (@(posedge clk) state == IDLE ##1 state == RUN);
+
+// Sequence
+sequence s_burst;
+    valid ##1 valid[*3:8] ##1 last;
+endsequence
+
+property p_burst_complete;
+    @(posedge clk) $rose(valid) |-> s_burst;
+endproperty
+
+// Bind assertions to module
+bind dma_channel dma_sva u_sva (.*);
+```
+
+### Coverage
+
+```markdown
+## Coverage Plan
+
+### Functional Coverage
+| Covergroup | Sample | Coverpoints |
+|------------|--------|-------------|
+| cg_fsm | @(posedge clk) | state, transition |
+| cg_config | @config_write | mode, size, enable |
+| cg_data | @transfer | data ranges, patterns |
+
+### Cross Coverage
+| Cross | Points | Purpose |
+|-------|--------|---------|
+| state x mode | FSM states, operating mode | Mode-specific behavior |
+| size x burst | Transfer size, burst type | All size/burst combos |
+```
+
+**Coverage Templates:**
+```systemverilog
+covergroup cg_fsm @(posedge clk);
+    cp_state: coverpoint state {
+        bins idle   = {IDLE};
+        bins active = {FETCH, XFER};
+        bins done   = {DONE};
+        bins error  = {ERROR};
+        illegal_bins invalid = default;
+    }
+
+    cp_transition: coverpoint state {
+        bins idle_to_fetch = (IDLE => FETCH);
+        bins fetch_to_xfer = (FETCH => XFER);
+        bins xfer_to_done  = (XFER => DONE);
+    }
+endgroup
+
+covergroup cg_config @(posedge config_valid);
+    cp_mode: coverpoint mode {
+        bins single = {0};
+        bins burst  = {1};
+        bins chain  = {2};
+    }
+
+    cp_size: coverpoint size {
+        bins small  = {[1:16]};
+        bins medium = {[17:256]};
+        bins large  = {[257:4096]};
+    }
+
+    cross_mode_size: cross cp_mode, cp_size;
+endgroup
+```
+
+### Classes (Verification)
+
+```markdown
+## Class Hierarchy (for Verification)
+
+### Transaction Classes
+| Class | Extends | Purpose |
+|-------|---------|---------|
+| dma_txn | uvm_sequence_item | DMA transaction |
+| burst_txn | dma_txn | Burst transfer |
+
+### Component Classes
+| Class | Extends | Purpose |
+|-------|---------|---------|
+| dma_driver | uvm_driver | Drive DUT |
+| dma_monitor | uvm_monitor | Observe interface |
+| dma_scoreboard | uvm_scoreboard | Check results |
+```
+
+**Class Templates:**
+```systemverilog
+// Transaction class
+class dma_transaction extends uvm_sequence_item;
+    rand bit [31:0] src_addr;
+    rand bit [31:0] dst_addr;
+    rand bit [15:0] length;
+    rand bit [1:0]  mode;
+
+    constraint c_aligned {
+        src_addr[1:0] == 2'b00;
+        dst_addr[1:0] == 2'b00;
+    }
+
+    constraint c_length {
+        length inside {[1:4096]};
+    }
+
+    `uvm_object_utils_begin(dma_transaction)
+        `uvm_field_int(src_addr, UVM_ALL_ON)
+        `uvm_field_int(dst_addr, UVM_ALL_ON)
+        `uvm_field_int(length, UVM_ALL_ON)
+    `uvm_object_utils_end
+endclass
+
+// Simple class (non-UVM)
+class Packet;
+    bit [7:0] data[];
+    bit [31:0] addr;
+
+    function new(int size);
+        data = new[size];
+    endfunction
+
+    function void randomize_data();
+        foreach (data[i]) data[i] = $urandom();
+    endfunction
+endclass
+```
+
+### DPI (Direct Programming Interface)
+
+```markdown
+## DPI Integration
+
+### Imported C Functions
+| SV Name | C Name | Return | Args | Purpose |
+|---------|--------|--------|------|---------|
+| c_crc32 | crc32 | int | data[], len | CRC calculation |
+| c_model | ref_model | int | in, out* | Reference model |
+
+### Exported SV Functions
+| SV Name | C Name | Purpose |
+|---------|--------|---------|
+| sv_callback | callback | C calls SV |
+```
+
+**DPI Templates:**
+```systemverilog
+// Import C function
+import "DPI-C" function int c_crc32(
+    input byte data[],
+    input int  length
+);
+
+// Import C function with output
+import "DPI-C" function void c_reference_model(
+    input  int  data_in,
+    output int  data_out
+);
+
+// Export SV function to C
+export "DPI-C" function sv_get_status;
+
+function int sv_get_status();
+    return current_status;
+endfunction
+
+// Usage
+initial begin
+    byte packet[] = '{8'h01, 8'h02, 8'h03, 8'h04};
+    int crc = c_crc32(packet, 4);
+    $display("CRC = %08x", crc);
+end
+```
+
+---
+
+## Checklist Before Handoff
+
+- [ ] Block diagram included
+- [ ] All modules defined with hierarchy
+- [ ] All interfaces specified (ports, widths, protocols)
+- [ ] Clock domains identified, CDC planned
+- [ ] Reset strategy documented
+- [ ] All FSMs have state diagrams
+- [ ] Register map complete (if applicable)
+- [ ] Implementation phases defined
+- [ ] File list complete with agents assigned
+- [ ] Verification strategy documented
+- [ ] Dependencies mapped
+- [ ] User has approved plan
+
+---
+
+## Tools Available
+
+- **Glob**: Find existing files
+- **Grep**: Search code patterns
+- **Read**: Read existing code
+- **Write**: Write plan documents
+- **Bash**: Run commands, check tools
+- **Task**: Spawn gf-architect for codebase mapping
+- **AskUserQuestion**: Clarify requirements
+- **Skill**: Invoke gf-architect, hand off to gf
+
+---
+
+*Remember: A good plan prevents rework. Hardware bugs are expensive. Plan thoroughly, implement confidently.*
