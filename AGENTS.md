@@ -1,58 +1,40 @@
-# GateFlow Agent Knowledge Sources
+# GateFlow Docs Index
 
-## Primary References
+IMPORTANT: Prefer retrieval-led reasoning over pre-training-led reasoning.
+Read the referenced files before answering SystemVerilog questions.
 
-### SystemVerilog for Verification, 3rd ed. — Spear/Tumbush
-- **Source:** PDF (2012), ~500 pages
-- **Scope:** Verification-focused SystemVerilog (OOP testbenches, randomization, coverage, DPI)
-- **URL:** https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf
+## Index
 
-#### Chapter Index
-| Ch | Title | Page |
-|----|-------|------|
-| 1 | Verification Guidelines | 2 |
-| 2 | Data Types | 26 |
-| 3 | Procedural Statements and Routines | 70 |
-| 4 | Connecting the Testbench and Design | 90 |
-| 5 | Basic OOP | 132 |
-| 6 | Randomization | 170 |
-| 7 | Threads and Interprocess Communication | 266 |
-| 8 | Advanced OOP and Testbench Guidelines | 274 |
-| 9 | Functional Coverage | 324 |
-| 10 | Advanced Interfaces | 364 |
-| 11 | A Complete SystemVerilog Testbench | 386 |
-| 12 | Interfacing with C/C++ | 416 |
+```
+[Gateflow]|root: .
+|primary:{CLAUDE.md}
+|readme:{README.md}
+|commands:{commands/gf-doctor.md,commands/gf-fix.md,commands/gf-gen.md,commands/gf-lint.md,commands/gf-map.md,commands/gf-scan.md,commands/gf-sim.md}
+|skills:{skills/gf/SKILL.md,skills/gf-plan/SKILL.md,skills/gf-architect/SKILL.md}
+|agents:{agents/sv-codegen.md,agents/sv-testbench.md,agents/sv-debug.md,agents/sv-verification.md,agents/sv-understanding.md,agents/sv-refactor.md,agents/sv-developer.md}
+|hooks:{hooks/hooks.json}
+```
 
-#### Agent Mapping
-| Agent | Relevant Chapters |
-|-------|-------------------|
-| `sv-testbench` | 1, 4, 5, 7, 8, 11 |
-| `sv-verification` | 1, 6, 9 |
-| `sv-codegen` | 2, 3, 10 |
-| `sv-debug` | 3, 7, 11 |
-| `sv-developer` | All |
+## File Purposes
 
----
+| Path | Purpose |
+|------|---------|
+| `CLAUDE.md` | SystemVerilog patterns, lint fixes, coding conventions |
+| `skills/gf/SKILL.md` | Main orchestrator - routes tasks, runs verification loops |
+| `skills/gf-plan/SKILL.md` | Hardware design planner with Mermaid diagrams |
+| `skills/gf-architect/SKILL.md` | Codebase mapping and analysis |
+| `agents/sv-*.md` | Specialized agents (codegen, testbench, debug, etc.) |
+| `commands/gf-*.md` | Slash commands for specific actions |
 
-## Quick Reference
+## Retrieval Order
 
-### Verification Constructs
-- **Randomization:** Ch 6 (p.170) — `rand`, `randc`, constraints, `randomize()`
-- **Coverage:** Ch 9 (p.324) — covergroups, coverpoints, cross coverage
-- **OOP:** Ch 5 (p.132), Ch 8 (p.274) — classes, inheritance, polymorphism
-- **Threads:** Ch 7 (p.266) — `fork/join`, mailboxes, semaphores, events
-- **DPI:** Ch 12 (p.416) — C/C++ integration, import/export
+1. Check `CLAUDE.md` for SV syntax/patterns
+2. Check relevant `agents/*.md` for task-specific guidance
+3. Check `skills/*/SKILL.md` for workflow orchestration
+4. Check `commands/*.md` for command implementations
 
-### Design Constructs
-- **Data Types:** Ch 2 (p.26) — logic, structs, enums, arrays, queues
-- **Interfaces:** Ch 4 (p.90), Ch 10 (p.364) — modports, clocking blocks
-- **Routines:** Ch 3 (p.70) — functions, tasks, automatic/static
+## External References
 
----
-
-## Usage Notes
-
-When agents need verification guidance:
-1. Reference specific chapter for methodology
-2. Use book patterns for testbench architecture
-3. Follow Spear/Tumbush conventions for OOP verification
+| Resource | Scope |
+|----------|-------|
+| [Spear/Tumbush SV Verification 3rd ed.](https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf) | OOP testbenches, randomization, coverage, DPI |

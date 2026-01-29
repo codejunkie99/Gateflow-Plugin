@@ -1,0 +1,30 @@
+# GateFlow Compressed Index
+# Format: category|file|description
+# Use: Agent retrieval, codebase navigation
+
+primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes
+primary|README.md|Installation, usage, features
+
+commands|commands/gf-doctor.md|Environment check
+commands|commands/gf-fix.md|Auto-fix lint errors
+commands|commands/gf-gen.md|Generate module scaffolds
+commands|commands/gf-lint.md|Run lint checks
+commands|commands/gf-map.md|Generate codebase map
+commands|commands/gf-scan.md|Index project structure
+commands|commands/gf-sim.md|Run simulation
+
+skills|skills/gf/SKILL.md|Main orchestrator, verification loops
+skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
+skills|skills/gf-architect/SKILL.md|Codebase mapping, hierarchy analysis
+
+agents|agents/sv-codegen.md|RTL generation, modules, FSMs, FIFOs
+agents|agents/sv-testbench.md|Testbench creation, stimulus, self-checking
+agents|agents/sv-debug.md|Simulation failures, X-values, timing
+agents|agents/sv-verification.md|SVA assertions, coverage, formal
+agents|agents/sv-understanding.md|Code explanation, signal tracing
+agents|agents/sv-refactor.md|Lint fixes, cleanup, optimization
+agents|agents/sv-developer.md|Multi-file development, complex features
+
+hooks|hooks/hooks.json|Automation hooks configuration
+
+external|https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf|Spear/Tumbush SV Verification 3rd ed

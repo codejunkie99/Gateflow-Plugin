@@ -228,9 +228,21 @@ Gateflow-Plugin/
 │   ├── gf-plan/           # Design planner
 │   └── gf-architect/      # Codebase mapper
 ├── hooks/                 # Automation hooks
-├── CLAUDE.md              # SystemVerilog reference
+├── docs/
+│   └── gateflow.index     # Compressed docs index
+├── AGENTS.md              # Docs index for non-Claude agents
+├── CLAUDE.md              # SystemVerilog reference (Claude Code)
 └── README.md
 ```
+
+### Agent Compatibility
+
+| File | For |
+|------|-----|
+| `CLAUDE.md` | Claude Code (primary reference) |
+| `AGENTS.md` | Other AI agents (Cursor, Copilot, etc.) |
+
+`AGENTS.md` provides a compressed docs index so non-Claude agents can discover GateFlow's knowledge base.
 
 ---
 
