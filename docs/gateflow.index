@@ -2,7 +2,7 @@
 # Format: category|file|description
 # Use: Agent retrieval, codebase navigation
 
-primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes
+primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes, Spear/Tumbush book index
 primary|README.md|Installation, usage, features
 
 commands|commands/gf-doctor.md|Environment check
@@ -27,4 +27,4 @@ agents|agents/sv-developer.md|Multi-file development, complex features
 
 hooks|hooks/hooks.json|Automation hooks configuration
 
-external|https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf|Spear/Tumbush SV Verification 3rd ed
+reference|CLAUDE.md#external-references|Spear/Tumbush SV Verification 3rd ed (ch 1-12)
