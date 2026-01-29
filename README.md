@@ -2,7 +2,7 @@
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://claude.ai/claude-code)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
 <img width="1619" height="787" alt="image" src="https://github.com/user-attachments/assets/f53240b4-5704-4c5a-8e0e-5d65546a0ad1" />
 
@@ -64,7 +64,7 @@ Add to `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
 
 | Tool | Required | macOS | Linux |
 |------|----------|-------|-------|
-| [Claude Code](https://claude.ai/claude-code) | Yes | See website | See website |
+| [Claude Code](https://code.claude.com/) | Yes | See website | See website |
 | [Verilator](https://verilator.org/) | Yes | `brew install verilator` | `sudo apt install verilator` |
 | Verible | Optional | `brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
 
@@ -300,7 +300,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [Claude Code Documentation](https://docs.anthropic.com/claude-code)
+- [Claude Code Documentation](https://code.claude.com/docs)
 - [Verilator](https://verilator.org/)
 - [SystemVerilog LRM](https://ieeexplore.ieee.org/document/8299595)
 
