@@ -1,5 +1,5 @@
 # GateFlow Plugin for Claude Code
-> AI-powered SystemVerilog development assistant — lint, generate, simulate, and debug HDL code with natural language.
+> AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://claude.ai/claude-code)
@@ -10,13 +10,13 @@
 
 ## What is GateFlow?
 
-GateFlow brings professional SystemVerilog tooling to Claude Code. Ask questions about your RTL, generate modules with best practices, auto-fix lint errors, and analyze simulation waveforms — all through natural conversation.
+GateFlow brings professional SystemVerilog tooling to Claude Code. Design RTL modules, generate testbenches, debug simulation failures, and get lint-clean code — all through natural conversation.
 
 **Perfect for:**
 - FPGA/ASIC engineers wanting AI-assisted RTL development
-- Verification engineers creating testbenches
+- Verification engineers creating testbenches and assertions
 - Students learning SystemVerilog
-- Anyone tired of manually fixing width mismatches
+- Anyone who wants working code, not just generated code
 
 ---
 
@@ -28,48 +28,45 @@ GateFlow was built with love to break down the barriers that keep people away fr
 
 No more cryptic error messages. No more hunting through documentation for the right syntax. Just describe what you want to build, and let's make it happen together.
 
+**The GateFlow difference:** We don't just generate code — we deliver *working* code. Lint-checked, simulated, verified.
+
 We can't wait to see what you create. ❤️
 
 ---
 
 ## Quick Start
 
-### One-Line Install (macOS/Linux)
+### Installation
 
+**Option 1: Run directly from GitHub**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin-/main/install.sh | bash
+claude --plugin-dir https://github.com/codejunkie99/Gateflow-Plugin
 ```
 
-This automatically installs Verilator (if missing) and sets up the plugin.
+**Option 2: Clone locally**
+```bash
+git clone https://github.com/codejunkie99/Gateflow-Plugin.git
+claude --plugin-dir ./Gateflow-Plugin
+```
 
-### Manual Installation
+**Option 3: Add to settings (persistent)**
 
-#### Prerequisites
+Add to `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
+```json
+{
+  "plugins": [
+    "https://github.com/codejunkie99/Gateflow-Plugin"
+  ]
+}
+```
+
+### Prerequisites
 
 | Tool | Required | macOS | Linux |
 |------|----------|-------|-------|
 | [Claude Code](https://claude.ai/claude-code) | Yes | See website | See website |
-| [Node.js](https://nodejs.org/) >= 18 | Yes | `brew install node` or [nvm](https://github.com/nvm-sh/nvm) | `sudo apt install nodejs npm` or [nvm](https://github.com/nvm-sh/nvm) |
 | [Verilator](https://verilator.org/) | Yes | `brew install verilator` | `sudo apt install verilator` |
 | Verible | Optional | `brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
-| Slang | Optional | Build from source | Build from source |
-
-#### Steps
-
-```bash
-# 1. Clone the plugin
-git clone https://github.com/codejunkie99/Gateflow-Plugin-.git
-cd Gateflow-Plugin-
-
-# 2. Build the MCP server
-cd servers/gateflow-mcp
-npm install
-npm run build
-cd ../..
-
-# 3. Run Claude Code with the plugin
-claude --plugin-dir $(pwd)
-```
 
 ### Verify Installation
 
@@ -78,122 +75,160 @@ claude --plugin-dir $(pwd)
 /gf-doctor
 ```
 
-You should see:
-```
-GateFlow Environment Check
-==========================
-[OK] Verilator 5.x
-[OK] Node.js v20.x
-[OK] Plugin loaded
-```
-
 ---
 
 ## Usage
 
-### Slash Commands
+### Skills (Auto-Activating)
 
-| Command | Description | Example |
-|---------|-------------|---------|
-| `/gf-scan` | Index your project | `/gf-scan` |
-| `/gf-lint` | Check for errors | `/gf-lint src/*.sv` |
-| `/gf-fix` | Auto-fix lint errors | `/gf-fix counter.sv` |
-| `/gf-gen` | Generate code | `/gf-gen module alu` |
-| `/gf-wave` | Analyze waveforms | `/gf-wave sim.vcd` |
-| `/gf-doctor` | Check environment | `/gf-doctor` |
+Skills activate automatically based on context. Just ask naturally:
+
+| Skill | Trigger | What It Does |
+|-------|---------|--------------|
+| `/gf` | Any SV task | **Main orchestrator** — routes to agents, runs verification, iterates until working |
+| `/gf-plan` | "plan", "design", "architect" | Creates comprehensive RTL implementation plans with diagrams |
+| `/gf-architect` | "map codebase", "analyze project" | Generates codebase map with hierarchy, FSMs, clocks, CDC |
+
+### Commands (Slash Commands)
+
+| Command | Description |
+|---------|-------------|
+| `/gf-scan` | Index your project structure |
+| `/gf-map` | Generate comprehensive codebase map |
+| `/gf-lint` | Run lint checks on files |
+| `/gf-fix` | Auto-fix lint errors |
+| `/gf-gen` | Generate module scaffolds |
+| `/gf-sim` | Run simulation |
+| `/gf-doctor` | Check environment setup |
 
 ### Natural Language (Just Ask)
 
-GateFlow understands context. Just describe what you need:
+GateFlow understands context. Describe what you need:
 
 ```
-"Create a parameterized FIFO with configurable depth"
+"Create a FIFO and test it"
+→ Generates FIFO, creates testbench, runs simulation, fixes issues, delivers working code
 
-"Why is Verilator complaining about line 42?"
+"Why is my output X?"
+→ Analyzes code, traces signal path, identifies root cause
 
-"Write a testbench for the counter module"
+"Plan a DMA controller"
+→ Creates detailed design plan with block diagrams, FSMs, interfaces, verification strategy
 
-"Explain how the state machine in fsm.sv works"
+"Add assertions to check the handshake protocol"
+→ Generates SVA properties for valid/ready handshake
 
-"Modernize this Verilog-95 code to SystemVerilog"
+"Explain how the FSM in uart_tx.sv works"
+→ Analyzes state machine, explains transitions, creates state diagram
 ```
 
 ### Example Session
 
 ```
-$ claude --plugin-dir /path/to/Gateflow-Plugin-
+$ claude --plugin-dir https://github.com/codejunkie99/Gateflow-Plugin
 
-You: /gf-scan
-Claude: Found 8 modules, 2 packages in ./src
+You: Create a parameterized counter with enable and test it
 
-You: /gf-lint
-Claude:
-  counter.sv:15 - Width mismatch (8 vs 16 bits)
-  fsm.sv:42 - Inferred latch for 'state_next'
+Claude: Creating counter module...
+✓ Created counter.sv
 
-You: Fix all the lint errors
-Claude: [Analyzes code, applies fixes]
-  ✓ counter.sv - Added explicit width cast
-  ✓ fsm.sv - Added default assignment
-  All errors fixed.
+Running lint check...
+✓ Lint clean
 
-You: Generate a testbench for counter
-Claude: [Creates tb_counter.sv with clock, reset, stimulus]
+Creating testbench...
+✓ Created tb_counter.sv
+
+Running simulation...
+✓ All tests pass (12 checks)
+
+Done! Created:
+- rtl/counter.sv (8-bit parameterized counter with enable)
+- tb/tb_counter.sv (Self-checking testbench)
 ```
+
+---
+
+## Agents
+
+GateFlow includes specialized agents for different tasks:
+
+| Agent | Expertise | Use Case |
+|-------|-----------|----------|
+| `sv-codegen` | RTL architect | Creating new modules, FSMs, FIFOs, arbiters |
+| `sv-testbench` | Verification engineer | Writing testbenches, stimulus, self-checking logic |
+| `sv-debug` | Debug specialist | Simulation failures, X-values, timing issues |
+| `sv-verification` | Verification methodologist | SVA assertions, coverage, formal properties |
+| `sv-understanding` | RTL analyst | Explaining code, tracing signals, architecture docs |
+| `sv-refactor` | Code quality engineer | Fixing lint, cleanup, optimization |
+| `sv-developer` | Full-stack RTL | Complex multi-file features |
+
+Agents are automatically invoked by the `/gf` orchestrator based on your request.
 
 ---
 
 ## Features
 
-### 🔍 Smart Analysis
-- Understand module hierarchy and dependencies
-- Trace signal paths through your design
-- Identify FSMs, pipelines, and common patterns
+### 🎯 Working Code, Not Just Generated Code
+The `/gf` orchestrator doesn't just generate — it verifies:
+```
+Create → Lint → Fix → Test → Fix → Deliver
+```
 
-### 🛠 Auto-Fix
-- Fix width mismatches automatically
-- Resolve inferred latches
-- Clean up unused signals
-- Iterative fixing until lint-clean
+### 📐 Hardware Design Planning
+`/gf-plan` creates professional design documents:
+- Block diagrams (Mermaid)
+- Module hierarchy
+- Interface specifications
+- FSM state diagrams
+- Clock domain analysis
+- Verification strategy
+- Implementation phases
 
-### ⚡ Code Generation
-- Generate synthesizable modules with best practices
-- Create comprehensive testbenches
-- Scaffold packages with types and utilities
+### 🗺️ Codebase Intelligence
+`/gf-architect` maps your entire project:
+- Module hierarchy and dependencies
+- Signal flow analysis
+- FSM extraction
+- Clock domain crossing detection
+- Package and type definitions
 
-### 📊 Waveform Analysis
-- Parse VCD files from simulation
-- Detect clock frequencies
-- Identify timing anomalies
-- Trace signal behavior
-
----
-
-## Available Tools (MCP)
-
-The plugin exposes 20+ tools that Claude can use:
-
-| Category | Tools |
-|----------|-------|
-| **File Ops** | `gf_read_file`, `gf_write_file`, `gf_edit_lines`, `gf_search_code` |
-| **Analysis** | `gf_find_module`, `gf_get_dependencies`, `gf_lint_file`, `gf_get_project_stats` |
-| **Simulation** | `gf_run_simulation`, `gf_analyze_waveform`, `gf_find_vcd_files` |
-| **Setup** | `gf_check_tool_status`, `gf_setup_verible`, `gf_setup_slang` |
+### 🔧 Comprehensive Coverage
+- **Memory patterns**: FIFOs, dual-port RAM, register files
+- **Error handling**: ECC, watchdogs, TMR
+- **DFT**: Scan chains, JTAG, BIST
+- **Timing closure**: Retiming, pipelining, SDC
+- **Verification**: SVA, coverage, formal
 
 ---
 
 ## Project Structure
 
 ```
-Gateflow-Plugin-/
+Gateflow-Plugin/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin manifest
-├── commands/                 # Slash commands (/gf-*)
-├── agents/                   # Specialized AI agents
-├── skills/                   # Auto-activating knowledge
-├── hooks/                    # Automation hooks
-├── servers/
-│   └── gateflow-mcp/        # MCP tool server
+│   └── plugin.json        # Plugin manifest
+├── agents/                # Specialized AI agents
+│   ├── sv-codegen.md      # RTL generation
+│   ├── sv-testbench.md    # Testbench creation
+│   ├── sv-debug.md        # Debug & analysis
+│   ├── sv-verification.md # Assertions & coverage
+│   ├── sv-understanding.md# Code explanation
+│   ├── sv-refactor.md     # Code cleanup
+│   └── sv-developer.md    # Multi-file development
+├── commands/              # Slash commands
+│   ├── gf-doctor.md       # Environment check
+│   ├── gf-scan.md         # Project indexing
+│   ├── gf-map.md          # Codebase mapping
+│   ├── gf-lint.md         # Lint checking
+│   ├── gf-fix.md          # Auto-fix
+│   ├── gf-gen.md          # Code generation
+│   └── gf-sim.md          # Simulation
+├── skills/                # Auto-activating skills
+│   ├── gf/                # Main orchestrator
+│   ├── gf-plan/           # Design planner
+│   └── gf-architect/      # Codebase mapper
+├── hooks/                 # Automation hooks
+├── CLAUDE.md              # SystemVerilog reference
 └── README.md
 ```
 
@@ -201,17 +236,18 @@ Gateflow-Plugin-/
 
 ## Configuration (Optional)
 
-Create `.claude/gateflow.local.md` in your project:
+Create `.claude/gateflow.local.md` in your project for project-specific settings:
 
 ```yaml
 ---
 verilator_flags: ["-Wall", "-Wno-UNUSED"]
-auto_lint: true
+top_module: chip_top
+clock_freq: 100MHz
 ---
 
-# Project-specific notes
-- Top module: chip_top
-- Clock: 100MHz
+# Project Notes
+- Memory mapped registers at 0x1000
+- AXI4-Lite interface for config
 ```
 
 ---
@@ -228,27 +264,31 @@ brew install verilator      # macOS
 sudo apt install verilator  # Linux (Debian/Ubuntu)
 ```
 
-### "MCP server not responding"
-```bash
-# Rebuild the server
-cd servers/gateflow-mcp
-npm run build
-```
-
 ### "Plugin not loading"
 ```bash
-# Verify plugin structure
-ls -la .claude-plugin/plugin.json  # Should exist
+# Verify plugin loads
+claude --plugin-dir /path/to/Gateflow-Plugin
 
-# Run with debug
-claude --plugin-dir /path/to/plugin --debug
+# Check plugin.json exists
+ls .claude-plugin/plugin.json
+```
+
+### "Agent not found"
+Make sure you're using the correct agent names with the `gateflow:` prefix when spawning manually:
+```
+gateflow:sv-codegen
+gateflow:sv-testbench
 ```
 
 ---
 
 ## Contributing
 
-Contributions welcome! Please read our contributing guidelines before submitting PRs.
+Contributions welcome! Areas we'd love help with:
+- Additional protocol support (AXI4, PCIe, USB)
+- More design patterns
+- Tool integrations (Yosys, Vivado, Quartus)
+- Documentation and examples
 
 ---
 
@@ -267,5 +307,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  <b>Built for hardware engineers who want to move faster.</b>
+  <b>Built for hardware engineers who want to move faster.</b><br>
+  <i>Design. Verify. Ship.</i>
 </p>
