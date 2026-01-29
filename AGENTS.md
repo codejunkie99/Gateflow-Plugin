@@ -36,8 +36,22 @@ Read the referenced files before answering SystemVerilog questions.
 
 ## External References
 
-See `CLAUDE.md` for full book chapter index.
-
-| Resource | Location |
-|----------|----------|
-| Spear/Tumbush SV Verification 3rd ed. | `CLAUDE.md` > External References |
+```
+[SystemVerilog for Verification, 3rd ed. — Spear/Tumbush]
+|source: PDF (2012), ~500 pages
+|scope: verification-focused SV (OOP testbenches, randomization, coverage, DPI)
+|url: https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf
+|chapters:
+|1 Verification Guidelines (p.2)
+|2 Data Types (p.26)
+|3 Procedural Statements and Routines (p.70)
+|4 Connecting the Testbench and Design (p.90)
+|5 Basic OOP (p.132)
+|6 Randomization (p.170)
+|7 Threads and Interprocess Communication (p.266)
+|8 Advanced OOP and Testbench Guidelines (p.274)
+|9 Functional Coverage (p.324)
+|10 Advanced Interfaces (p.364)
+|11 A Complete SystemVerilog Testbench (p.386)
+|12 Interfacing with C/C++ (p.416)
+```
