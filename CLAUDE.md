@@ -175,6 +175,23 @@ Use specialized agents for complex SystemVerilog tasks:
 
 **Handle directly:** Quick fixes, simple questions, running lint/sim commands.
 
+### Codebase Map Handoff
+
+Before routing to `sv-understanding` or `sv-developer` for **codebase-wide** tasks, check if a map exists:
+
+```bash
+ls .gateflow/map/CODEBASE.md 2>/dev/null
+```
+
+| Map Exists? | Action |
+|-------------|--------|
+| Yes | Route to agent normally, map provides context |
+| No | Run `/sv-cartographer` first, then route to agent |
+
+**Codebase-wide tasks** (need map): "understand this project", "how does X connect to Y", "implement feature across modules"
+
+**Single-file tasks** (no map needed): "explain this module", "fix this bug", "add assertion here"
+
 ### Agent Handoff Pattern
 
 After an agent creates SV files, run verification via Bash:
