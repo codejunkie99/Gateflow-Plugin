@@ -11,7 +11,7 @@ Read the referenced files before answering SystemVerilog questions.
 |readme:{README.md}
 |index:{docs/gateflow.index}|compressed file listing
 |commands:{commands/gf-*.md}|slash commands
-|skills:{skills/*/SKILL.md}|orchestrator, planner, architect
+|skills:{skills/*/SKILL.md}|orchestrator, planner, architect, tb-best-practices
 |agents:{agents/sv-*.md}|codegen, testbench, debug, verification, understanding, refactor, developer
 |hooks:{hooks/hooks.json}
 ```
