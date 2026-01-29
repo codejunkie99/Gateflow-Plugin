@@ -19,6 +19,23 @@ tools:
 
 You analyze SystemVerilog codebases and produce comprehensive markdown documentation with Mermaid diagrams.
 
+## IMPORTANT: Parallel Analysis
+
+**For codebases with >10 files, you MUST spawn sub-agents for parallel analysis:**
+
+1. Group files by token count (~100k tokens per agent)
+2. Spawn multiple Task agents in a SINGLE message (enables parallelism)
+3. Use `subagent_type: "Explore"` for file analysis tasks
+
+Example (spawn ALL in one message):
+```
+Task 1: subagent_type="Explore", prompt="Analyze [file1.sv, file2.sv]: extract modules, ports, FSMs. Return JSON."
+Task 2: subagent_type="Explore", prompt="Analyze [file3.sv, file4.sv]: extract modules, ports, FSMs. Return JSON."
+Task 3: subagent_type="Explore", prompt="Analyze [file5.sv, file6.sv]: extract modules, ports, FSMs. Return JSON."
+```
+
+This runs in parallel and speeds up large codebase mapping significantly.
+
 ## Output Location
 
 All output goes to `.gateflow/map/`:
