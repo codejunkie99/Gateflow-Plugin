@@ -288,3 +288,23 @@ verible-verilog-syntax *.sv
 | Clocks | clk prefix | `clk`, `clk_100mhz` |
 | Registers | _q or _reg suffix | `data_q`, `count_reg` |
 | Next-state | _next or _d suffix | `state_next`, `data_d` |
+
+## External References
+
+### SystemVerilog for Verification, 3rd ed. (Spear/Tumbush)
+> PDF ~500 pages | Verification-focused SV | [Download](https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf)
+
+| Ch | Topic | Page |
+|----|-------|------|
+| 1 | Verification Guidelines | 2 |
+| 2 | Data Types | 26 |
+| 3 | Procedural Statements and Routines | 70 |
+| 4 | Connecting Testbench and Design | 90 |
+| 5 | Basic OOP | 132 |
+| 6 | Randomization | 170 |
+| 7 | Threads and IPC | 266 |
+| 8 | Advanced OOP and TB Guidelines | 274 |
+| 9 | Functional Coverage | 324 |
+| 10 | Advanced Interfaces | 364 |
+| 11 | Complete SystemVerilog Testbench | 386 |
+| 12 | Interfacing with C/C++ (DPI) | 416 |

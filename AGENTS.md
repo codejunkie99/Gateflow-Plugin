@@ -7,11 +7,12 @@ Read the referenced files before answering SystemVerilog questions.
 
 ```
 [Gateflow]|root: .
-|primary:{CLAUDE.md}
+|primary:{CLAUDE.md}|SV patterns, lint fixes, Spear/Tumbush book index
 |readme:{README.md}
-|commands:{commands/gf-doctor.md,commands/gf-fix.md,commands/gf-gen.md,commands/gf-lint.md,commands/gf-map.md,commands/gf-scan.md,commands/gf-sim.md}
-|skills:{skills/gf/SKILL.md,skills/gf-plan/SKILL.md,skills/gf-architect/SKILL.md}
-|agents:{agents/sv-codegen.md,agents/sv-testbench.md,agents/sv-debug.md,agents/sv-verification.md,agents/sv-understanding.md,agents/sv-refactor.md,agents/sv-developer.md}
+|index:{docs/gateflow.index}|compressed file listing
+|commands:{commands/gf-*.md}|slash commands
+|skills:{skills/*/SKILL.md}|orchestrator, planner, architect
+|agents:{agents/sv-*.md}|codegen, testbench, debug, verification, understanding, refactor, developer
 |hooks:{hooks/hooks.json}
 ```
 
@@ -19,7 +20,7 @@ Read the referenced files before answering SystemVerilog questions.
 
 | Path | Purpose |
 |------|---------|
-| `CLAUDE.md` | SystemVerilog patterns, lint fixes, coding conventions |
+| `CLAUDE.md` | SV patterns, lint fixes, conventions, Spear/Tumbush book index |
 | `skills/gf/SKILL.md` | Main orchestrator - routes tasks, runs verification loops |
 | `skills/gf-plan/SKILL.md` | Hardware design planner with Mermaid diagrams |
 | `skills/gf-architect/SKILL.md` | Codebase mapping and analysis |
@@ -35,6 +36,8 @@ Read the referenced files before answering SystemVerilog questions.
 
 ## External References
 
-| Resource | Scope |
-|----------|-------|
-| [Spear/Tumbush SV Verification 3rd ed.](https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf) | OOP testbenches, randomization, coverage, DPI |
+See `CLAUDE.md` for full book chapter index.
+
+| Resource | Location |
+|----------|----------|
+| Spear/Tumbush SV Verification 3rd ed. | `CLAUDE.md` > External References |
