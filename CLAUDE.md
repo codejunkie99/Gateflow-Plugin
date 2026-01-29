@@ -186,7 +186,7 @@ ls .gateflow/map/CODEBASE.md 2>/dev/null
 | Map Exists? | Action |
 |-------------|--------|
 | Yes | Route to agent normally, map provides context |
-| No | Run `/sv-cartographer` first, then route to agent |
+| No | Run `/gf-architect` first, then route to agent |
 
 **Codebase-wide tasks** (need map): "understand this project", "how does X connect to Y", "implement feature across modules"
 

@@ -26,7 +26,7 @@ Generate a comprehensive map of a SystemVerilog codebase with parallel analysis 
    mkdir -p .gateflow/map/modules
    ```
 
-3. Spawn the `sv-cartographer` agent using the Task tool:
+3. Spawn the `gf-architect` agent using the Task tool:
    - Pass the list of discovered files
    - The agent will spawn 10 sub-agents in parallel for analysis
    - Results are written to `.gateflow/map/`
@@ -63,8 +63,8 @@ Generate a comprehensive map of a SystemVerilog codebase with parallel analysis 
 ## Analysis Method
 
 Uses hybrid approach:
-1. **Token budgeting** - Count tokens per file, group into ~100k chunks
-2. **Parallel agents** - Spawn agents for each file group simultaneously
+1. **Token budgeting** - Count tokens per file, group into ~150k chunks
+2. **Parallel agents** - Spawn 2-10 agents based on codebase size
 3. **Regex parsing** - Fast structured extraction of ports, instances, types
 4. **Merge** - Combine agent context + regex structure
 
