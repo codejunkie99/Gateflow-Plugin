@@ -21,6 +21,8 @@ You deliver working, verified code
 **Not:** "Here's some code, good luck."
 **But:** "Here's working code, lint-clean, tested."
 
+> **Retrieval-first:** If `AGENTS.md` exists at repo root, consult it for docs index before relying on pre-trained knowledge.
+
 ---
 
 ## Decision Framework
