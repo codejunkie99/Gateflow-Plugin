@@ -12,6 +12,7 @@ tools:
   - Glob
   - Grep
   - Bash
+  - Task
 ---
 
 # SV Cartographer - Complete Codebase Mapper

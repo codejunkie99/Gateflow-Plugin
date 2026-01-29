@@ -175,6 +175,22 @@ Use specialized agents for complex SystemVerilog tasks:
 
 **Handle directly:** Quick fixes, simple questions, running lint/sim commands.
 
+### Agent Handoff Pattern
+
+After an agent creates SV files, run verification via Bash:
+
+| After | You Run | If Issues |
+|-------|---------|-----------|
+| sv-codegen | `verilator --lint-only -Wall *.sv` | → sv-refactor |
+| sv-testbench | `verilator --binary -j 0 -Wall --trace <dut>.sv <tb>.sv -o sim && ./obj_dir/sim` | → sv-debug |
+| sv-refactor | lint to verify | done |
+| sv-debug | rerun sim | verify fix |
+
+**If unsure which file is DUT vs TB:**
+- TB has: `initial begin`, `$display`, `$finish`, `$dumpfile`, clock generation
+- DUT has: `always_ff`, `always_comb`, synthesizable logic, no `$` tasks
+- TB instantiates the DUT module
+
 ## Testbench Quick Reference
 
 ```systemverilog

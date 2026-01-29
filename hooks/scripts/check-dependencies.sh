@@ -155,3 +155,4 @@ fi
 
 touch "$MARKER_FILE"
 show_complete
+exit 0
