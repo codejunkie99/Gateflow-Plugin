@@ -5,6 +5,15 @@ description: |
   This skill should be used when the user needs testbench architecture guidance,
   verification methodology, or wants to write professional-quality testbenches.
   Example requests: "testbench best practices", "how to structure TB", "verification patterns"
+allowed-tools:
+  - Grep
+  - Glob
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - WebFetch
+  - Task
 ---
 
 # Testbench Best Practices
