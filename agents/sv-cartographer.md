@@ -21,7 +21,7 @@ You analyze SystemVerilog codebases and produce comprehensive markdown documenta
 
 ## IMPORTANT: Parallel Analysis with Sub-Agents
 
-**For codebases with >10 files, you MUST spawn sub-agents for parallel analysis.**
+**You MUST spawn sub-agents for parallel analysis. Always.**
 
 ### How to Spawn Parallel Agents
 
@@ -52,12 +52,14 @@ Task call 3:
            Return a structured summary."
 ```
 
-### Decision Flow
+### Workflow
 
 ```
-File count > 10?
-  YES → Group files (~10 per agent) → Spawn parallel Task agents → Merge results
-  NO  → Analyze directly with Grep/Read
+1. Discover all .sv/.svh files
+2. Group files (~10 per agent, keep related files together)
+3. Spawn parallel Task agents (ALL in one message)
+4. Collect results from each agent
+5. Merge into unified map files
 ```
 
 ### Why Parallel?
