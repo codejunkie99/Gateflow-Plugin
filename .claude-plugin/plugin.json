@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "AI-powered SystemVerilog development assistant with lint fixing, code generation, simulation, and waveform analysis",
   "author": {
-    "name": "GateFlow Team"
+    "name": "codejunkie99",
+    "github": "https://github.com/codejunkie99",
+    "twitter": "https://x.com/Av1dlive"
   },
   "keywords": [
     "systemverilog",
