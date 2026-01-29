@@ -16,6 +16,7 @@ commands|commands/gf-sim.md|Run simulation
 skills|skills/gf/SKILL.md|Main orchestrator, verification loops
 skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
 skills|skills/gf-architect/SKILL.md|Codebase mapping, hierarchy analysis
+skills|skills/tb-best-practices/SKILL.md|Testbench best practices, layered TB, randomization, coverage, OOP patterns
 
 agents|agents/sv-codegen.md|RTL generation, modules, FSMs, FIFOs
 agents|agents/sv-testbench.md|Testbench creation, stimulus, self-checking
