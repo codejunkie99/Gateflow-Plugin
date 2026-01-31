@@ -32,6 +32,16 @@ Activate when user asks to:
 - "How should I implement [feature]?"
 - "I need to add [capability] to my design"
 
+## Optional Intake Agent
+
+If requirements are unclear or you need a structured intake (response language + 3 clarifying questions),
+spawn the planning agent and use its output as the final plan:
+
+```
+Use Task tool:
+  subagent_type: "gateflow:sv-planner"
+```
+
 ## Planning Workflow
 
 ```

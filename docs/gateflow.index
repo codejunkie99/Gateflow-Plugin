@@ -23,6 +23,7 @@ agents|agents/sv-testbench.md|Testbench creation, stimulus, self-checking
 agents|agents/sv-debug.md|Simulation failures, X-values, timing
 agents|agents/sv-verification.md|SVA assertions, coverage, formal
 agents|agents/sv-understanding.md|Code explanation, signal tracing
+agents|agents/sv-planner.md|Architecture planning, design plans, diagrams
 agents|agents/sv-refactor.md|Lint fixes, cleanup, optimization
 agents|agents/sv-developer.md|Multi-file development, complex features
 

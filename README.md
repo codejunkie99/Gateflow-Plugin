@@ -164,6 +164,7 @@ GateFlow includes specialized agents for different tasks:
 | `sv-debug` | Debug specialist | Simulation failures, X-values, timing issues |
 | `sv-verification` | Verification methodologist | SVA assertions, coverage, formal properties |
 | `sv-understanding` | RTL analyst | Explaining code, tracing signals, architecture docs |
+| `sv-planner` | Architecture planner | Design planning, block diagrams, implementation phases |
 | `sv-refactor` | Code quality engineer | Fixing lint, cleanup, optimization |
 | `sv-developer` | Full-stack RTL | Complex multi-file features |
 

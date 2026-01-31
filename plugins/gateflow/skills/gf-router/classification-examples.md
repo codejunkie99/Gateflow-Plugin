@@ -157,17 +157,17 @@ Reasoning: "Working" implies verification, multiple outputs
 ```
 Query: "How should I design a DMA controller?"
 Intent: PLAN | Confidence: 0.91
-Target: gf-plan
+Target: gateflow:sv-planner
 Reasoning: "How should I design" = architecture question
 
 Query: "Plan out a cache subsystem for me"
 Intent: PLAN | Confidence: 0.94
-Target: gf-plan
+Target: gateflow:sv-planner
 Reasoning: Explicit "plan out" request
 
 Query: "What's the best architecture for a crossbar?"
 Intent: PLAN | Confidence: 0.87
-Target: gf-plan
+Target: gateflow:sv-planner
 Reasoning: Architecture question before implementation
 ```
 

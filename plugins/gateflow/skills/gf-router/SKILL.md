@@ -81,7 +81,6 @@ else:
 | ORCHESTRATE | End-to-end development (create + verify) | gf |
 | LINT | Code quality check, static analysis | gf-lint |
 | SIMULATE | Run simulation, check behavior | gf-sim |
-| PLAN | Design/architect before coding | gf-plan |
 | MAP | Codebase analysis, documentation | gf-architect |
 | LEARN | Practice, exercises, learning | gf-learn |
 | SUMMARIZE | Format/summarize output | gf-summary |
@@ -96,6 +95,7 @@ else:
 | EXPLAIN | Understand existing code | gateflow:sv-understanding |
 | REFACTOR | Improve/fix/cleanup code | gateflow:sv-refactor |
 | DEVELOP | Complex multi-file changes | gateflow:sv-developer |
+| PLAN | Design/architect before coding | gateflow:sv-planner |
 | TUTOR | Learning review, hints, feedback | gateflow:sv-tutor |
 
 ### Meta Intents
@@ -320,7 +320,7 @@ NEXT_TARGET: [if handoff]
 | Add assertions/coverage | VERIFY | sv-verification |
 | Explain/what does/how | EXPLAIN | sv-understanding |
 | Refactor/clean up/lint | REFACTOR | sv-refactor |
-| Plan/design/architect | PLAN | gf-plan |
+| Plan/design/architect | PLAN | gateflow:sv-planner |
 | Map/analyze codebase | MAP | gf-architect |
 | Lint/check quality | LINT | gf-lint |
 | Simulate/run/test | SIMULATE | gf-sim |
