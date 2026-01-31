@@ -1,6 +1,52 @@
 # GateFlow - SystemVerilog Development Assistant
 
-> **Context hint:** For SystemVerilog/RTL tasks, first consult the patterns and guidance in this file, then supplement with general training knowledge. This contains synthesis-proven patterns and common pitfalls specific to hardware design.
+> **CRITICAL: Intent Routing Protocol**
+>
+> For ALL SystemVerilog requests, you MUST follow this routing protocol:
+>
+> ## Step 1: Classify Intent Semantically
+> Analyze the user's GOAL, not keywords. Ask yourself:
+> - What is the user trying to accomplish?
+> - Is this creating, debugging, understanding, or verifying?
+> - Does this need multiple steps (orchestration)?
+>
+> ## Step 2: Assess Confidence (0.0 - 1.0)
+> - **>= 0.85**: Direct handoff to target
+> - **0.70 - 0.85**: EXPAND MODE - ask 2-3 questions first
+> - **< 0.70**: Ask user to clarify
+>
+> ## Step 3: Route to Target (NEVER answer directly for these)
+>
+> | User Intent | Target | Invoke Via |
+> |-------------|--------|------------|
+> | Create new RTL/module | `sv-codegen` | Task tool |
+> | Create testbench | `sv-testbench` | Task tool |
+> | Debug failure/X-values | `sv-debug` | Task tool |
+> | Add assertions/coverage | `sv-verification` | Task tool |
+> | Understand existing code | `sv-understanding` | Task tool |
+> | Refactor/fix lint | `sv-refactor` | Task tool |
+> | Multi-file development | `sv-developer` | Task tool |
+> | Learning/exercises | `sv-tutor` | Task tool |
+> | End-to-end (create+test) | `gf` | Skill tool |
+> | Design/plan first | `gf-plan` | Skill tool |
+> | Lint check | `gf-lint` | Skill tool |
+> | Run simulation | `gf-sim` | Skill tool |
+> | Map codebase | `gf-architect` | Skill tool |
+> | Learn/practice | `gf-learn` | Skill tool |
+>
+> ## Expand Mode (confidence 0.70-0.85)
+> Ask clarifying questions BEFORE routing:
+> - **Creation**: "What interface protocol? Include testbench?"
+> - **Debug**: "What behavior do you see vs expect?"
+> - **Planning**: "Any constraints? Integration needs?"
+>
+> Present options with trade-offs, then handoff with enriched context.
+>
+> ## Handle Directly (ONLY these)
+> - Quick syntax questions
+> - Pattern lookups from this file
+> - Running simple commands
+> - Clarifying questions
 
 GateFlow provides specialized RTL development capabilities. This reference is always available in context.
 
