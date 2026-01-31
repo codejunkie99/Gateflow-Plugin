@@ -27,7 +27,9 @@
 > | Refactor/fix lint | `sv-refactor` | Task tool |
 > | Multi-file development | `sv-developer` | Task tool |
 > | Learning/exercises | `sv-tutor` | Task tool |
+> | **Complex multi-component** | `sv-orchestrator` | Task tool |
 > | End-to-end (create+test) | `gf` | Skill tool |
+> | **Parallel component build** | `gf-build` | Skill tool |
 > | Design/plan first | `gf-plan` | Skill tool |
 > | Lint check | `gf-lint` | Skill tool |
 > | Run simulation | `gf-sim` | Skill tool |
@@ -219,6 +221,7 @@ Use specialized agents for complex SystemVerilog tasks:
 | `gateflow:sv-planner` | Architecture planner | "plan", "design", "architect" |
 | `gateflow:sv-refactor` | Code quality | "fix lint", "refactor", "clean up" |
 | `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file change" |
+| `gateflow:sv-orchestrator` | Parallel builder | "build CPU", "create SoC", "multi-component" |
 
 **Handle directly:** Quick fixes, simple questions, running lint/sim commands.
 
