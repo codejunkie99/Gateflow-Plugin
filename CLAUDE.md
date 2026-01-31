@@ -170,6 +170,7 @@ Use specialized agents for complex SystemVerilog tasks:
 | `gateflow:sv-debug` | Debug specialist | "why X values", "debug", "not working" |
 | `gateflow:sv-verification` | Verification methodologist | "add assertions", "SVA", "coverage" |
 | `gateflow:sv-understanding` | RTL analyst | "explain this", "how does it work" |
+| `gateflow:sv-planner` | Architecture planner | "plan", "design", "architect" |
 | `gateflow:sv-refactor` | Code quality | "fix lint", "refactor", "clean up" |
 | `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file change" |
 

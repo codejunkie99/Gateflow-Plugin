@@ -54,4 +54,9 @@ Read the referenced files before answering SystemVerilog questions.
 |10 Advanced Interfaces (p.364)
 |11 A Complete SystemVerilog Testbench (p.386)
 |12 Interfacing with C/C++ (p.416)
+
+[SystemVerilog for Design, 2nd ed. — Sutherland, Davidmann, Flake, Moorby]
+|source: PDF (2nd ed.)
+|scope: design-focused SystemVerilog for hardware design and modeling
+|url: https://www.embedic.com/uploads/files/20201009/SystemVerilog%20for%20Design%20Second%20Edition%20A%20Guide%20to%20Using%20SystemVerilog%20for%20Hardware%20Design%20and%20Modeling%20by%20Stuart%20Sutherland,%20Simon%20Davidmann,%20Peter%20Flake,%20P.%20Moorby%20(z-lib.org).pdf?srsltid=AfmBOoqo8WKljRwnv1WRMn6kvrUYSP5dba8nj-XLrlWIk5KkqLNTg-OY
 ```
