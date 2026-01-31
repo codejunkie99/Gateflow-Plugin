@@ -18,3 +18,11 @@ obj_dir/
 # IDE
 .vscode/
 .idea/
+
+# Example project files (not part of plugin)
+rtl/
+tb/
+Makefile
+*_README.md
+!README.md
+DELIVERY_SUMMARY.txt

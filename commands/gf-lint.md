@@ -12,6 +12,10 @@ allowed-tools:
 
 Run Verilator lint checks to find errors and warnings in SystemVerilog code.
 
+> **Note:** The `/gf` orchestrator uses `skills/gf-lint` internally, which provides
+> structured output (GATEFLOW-RESULT blocks) for automated processing. This command
+> version is for direct user invocation and provides human-friendly output.
+
 ## Instructions
 
 1. If specific files are provided, lint those files:

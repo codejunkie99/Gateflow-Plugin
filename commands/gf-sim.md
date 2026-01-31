@@ -12,6 +12,10 @@ allowed-tools:
 
 Compile and run a SystemVerilog simulation using Verilator.
 
+> **Note:** The `/gf` orchestrator uses `skills/gf-sim` internally, which provides
+> structured output (GATEFLOW-RESULT blocks) for automated processing. This command
+> version is for direct user invocation and provides human-friendly output.
+
 ## Instructions
 
 1. **Identify files**:

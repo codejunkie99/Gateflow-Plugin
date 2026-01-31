@@ -82,15 +82,16 @@ When user wants something created AND verified:
 │  └──────────────────────────────────────────────────┘   │
 │                          ↓                               │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │ 2. VERIFY                                         │   │
-│  │    Run lint: verilator --lint-only -Wall          │   │
-│  │    Run sim: verilator --binary ... && ./sim       │   │
+│  │ 2. VERIFY (via Skills)                            │   │
+│  │    Skill: gf-lint → structured result             │   │
+│  │    Skill: gf-sim  → structured result             │   │
 │  └──────────────────────────────────────────────────┘   │
 │                          ↓                               │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │ 3. ASSESS                                         │   │
-│  │    Clean? → Next phase or DONE                    │   │
-│  │    Issues? → Analyze, spawn appropriate agent     │   │
+│  │ 3. ASSESS (parse GATEFLOW-RESULT block)           │   │
+│  │    STATUS: PASS  → Next phase or DONE             │   │
+│  │    STATUS: FAIL  → Spawn appropriate agent        │   │
+│  │    STATUS: ERROR → Report to user                 │   │
 │  └──────────────────────────────────────────────────┘   │
 │                          ↓                               │
 │                    (loop until done)                     │
@@ -148,31 +149,60 @@ Use Task tool:
 ## Verification Commands
 
 ### Lint Check
-```bash
-verilator --lint-only -Wall *.sv
+
+**Invoke skill:** `gf-lint`
+**Args:** `[files...]` or empty for auto-detect
+
+```
+Use Skill tool:
+  skill: "gf-lint"
+  args: "<files or empty>"
 ```
 
-### Compile + Simulate (Verilator)
-```bash
-# Find DUT and TB
-# DUT: has always_ff, always_comb, synthesizable logic
-# TB: has initial, $display, $finish, $dumpfile
-
-verilator --binary -j 0 -Wall --trace <dut>.sv <tb>.sv -o sim
-./obj_dir/sim
+**Parse result block:**
+```
+---GATEFLOW-RESULT---
+STATUS: PASS|FAIL|ERROR
+ERRORS: <count>
+WARNINGS: <count>
+FILES: <list>
+DETAILS: <summary>
+---END-GATEFLOW-RESULT---
 ```
 
-### Compile + Simulate (Icarus)
-```bash
-iverilog -g2012 -o sim.vvp *.sv && vvp sim.vvp
+| STATUS | Action |
+|--------|--------|
+| PASS | Proceed to next step |
+| FAIL | Spawn sv-refactor with error context |
+| ERROR | Report issue to user |
+
+### Compile + Simulate
+
+**Invoke skill:** `gf-sim`
+**Args:** `<testbench> [dut-files...]` or empty for auto-detect
+
+```
+Use Skill tool:
+  skill: "gf-sim"
+  args: "<files or empty>"
 ```
 
-### Check Results
-```bash
-# Look for pass/fail in output
-# Check for "Error", "FAIL", "X" values
-# Verify $finish reached (not timeout)
+**Parse result block:**
 ```
+---GATEFLOW-RESULT---
+STATUS: PASS|FAIL|ERROR
+ERRORS: <count>
+WARNINGS: <count>
+FILES: <list>
+DETAILS: <summary>
+---END-GATEFLOW-RESULT---
+```
+
+| STATUS | Action |
+|--------|--------|
+| PASS | Report success, done |
+| FAIL | Spawn sv-debug with failure context |
+| ERROR | Report setup issue to user |
 
 ---
 
@@ -367,9 +397,13 @@ When a `/gf-plan` plan exists:
 - **Read**: Read files
 - **Write**: Write files
 - **Edit**: Modify files
-- **Bash**: Run lint, simulation, commands
-- **Task**: Spawn agents
-- **Skill**: Invoke gf-plan, gf-architect
+- **Bash**: Run miscellaneous commands
+- **Task**: Spawn agents (sv-codegen, sv-debug, etc.)
+- **Skill**: Invoke skills:
+  - `gf-lint` - Lint with structured output
+  - `gf-sim` - Simulation with structured output
+  - `gf-plan` - Planning for complex tasks
+  - `gf-architect` - Codebase mapping
 - **AskUserQuestion**: Clarify when stuck
 
 ---
