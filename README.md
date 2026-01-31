@@ -38,24 +38,29 @@ We can't wait to see what you create. ❤️
 
 ### Installation
 
-**Option 1: Run directly from GitHub**
+**Option 1: One-command install (recommended)**
 ```bash
-claude --plugin-dir https://github.com/codejunkie99/Gateflow-Plugin
+claude plugin marketplace add codejunkie99/Gateflow-Plugin
+claude plugin install gateflow
 ```
 
-**Option 2: Clone locally**
+**Option 2: Clone and run directly**
 ```bash
 git clone https://github.com/codejunkie99/Gateflow-Plugin.git
-claude --plugin-dir ./Gateflow-Plugin
+claude --plugin-dir ./Gateflow-Plugin/plugins/gateflow
 ```
 
 **Option 3: Add to settings (persistent)**
+```bash
+# Clone to a permanent location
+git clone https://github.com/codejunkie99/Gateflow-Plugin.git ~/.claude-plugins/gateflow-marketplace
+```
 
-Add to `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
+Then add to `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
 ```json
 {
   "plugins": [
-    "https://github.com/codejunkie99/Gateflow-Plugin"
+    "~/.claude-plugins/gateflow-marketplace/plugins/gateflow"
   ]
 }
 ```
@@ -206,32 +211,37 @@ Create → Lint → Fix → Test → Fix → Deliver
 ```
 Gateflow-Plugin/
 ├── .claude-plugin/
-│   └── plugin.json        # Plugin manifest
-├── agents/                # Specialized AI agents
-│   ├── sv-codegen.md      # RTL generation
-│   ├── sv-testbench.md    # Testbench creation
-│   ├── sv-debug.md        # Debug & analysis
-│   ├── sv-verification.md # Assertions & coverage
-│   ├── sv-understanding.md# Code explanation
-│   ├── sv-refactor.md     # Code cleanup
-│   └── sv-developer.md    # Multi-file development
-├── commands/              # Slash commands
-│   ├── gf-doctor.md       # Environment check
-│   ├── gf-scan.md         # Project indexing
-│   ├── gf-map.md          # Codebase mapping
-│   ├── gf-lint.md         # Lint checking
-│   ├── gf-fix.md          # Auto-fix
-│   ├── gf-gen.md          # Code generation
-│   └── gf-sim.md          # Simulation
-├── skills/                # Auto-activating skills
-│   ├── gf/                # Main orchestrator
-│   ├── gf-plan/           # Design planner
-│   └── gf-architect/      # Codebase mapper
-├── hooks/                 # Automation hooks
+│   └── marketplace.json      # Marketplace manifest
+├── plugins/
+│   └── gateflow/             # Main plugin
+│       ├── .claude-plugin/
+│       │   └── plugin.json   # Plugin manifest
+│       ├── agents/           # Specialized AI agents
+│       │   ├── sv-codegen.md
+│       │   ├── sv-testbench.md
+│       │   ├── sv-debug.md
+│       │   ├── sv-verification.md
+│       │   ├── sv-understanding.md
+│       │   ├── sv-refactor.md
+│       │   └── sv-developer.md
+│       ├── commands/         # Slash commands
+│       │   ├── gf-doctor.md
+│       │   ├── gf-scan.md
+│       │   ├── gf-map.md
+│       │   ├── gf-lint.md
+│       │   ├── gf-fix.md
+│       │   ├── gf-gen.md
+│       │   └── gf-sim.md
+│       ├── skills/           # Auto-activating skills
+│       │   ├── gf/
+│       │   ├── gf-plan/
+│       │   └── gf-architect/
+│       ├── hooks/            # Automation hooks
+│       └── CLAUDE.md         # SystemVerilog reference
 ├── docs/
-│   └── gateflow.index     # Compressed docs index
-├── AGENTS.md              # Docs index for non-Claude agents
-├── CLAUDE.md              # SystemVerilog reference (Claude Code)
+│   └── gateflow.index        # Compressed docs index
+├── AGENTS.md                 # Docs index for non-Claude agents
+├── CLAUDE.md                 # SystemVerilog reference
 └── README.md
 ```
 

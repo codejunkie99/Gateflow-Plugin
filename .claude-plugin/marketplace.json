@@ -1,10 +1,10 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "gateflow-local",
-  "description": "Local GateFlow plugin for SystemVerilog development",
+  "name": "gateflow",
+  "description": "AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.",
   "owner": {
-    "name": "GateFlow Team",
-    "email": "gateflow@example.com"
+    "name": "codejunkie99",
+    "github": "https://github.com/codejunkie99"
   },
   "plugins": [
     {
@@ -12,9 +12,9 @@
       "description": "AI-powered SystemVerilog development assistant with lint fixing, code generation, simulation, and waveform analysis",
       "version": "1.0.0",
       "author": {
-        "name": "GateFlow Team"
+        "name": "codejunkie99"
       },
-      "source": ".",
+      "source": "./plugins/gateflow",
       "category": "development"
     }
   ]
