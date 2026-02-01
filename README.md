@@ -82,6 +82,21 @@ Then add to `~/.claude/settings.json` (global) or `.claude/settings.json` (proje
 
 ---
 
+## Updating GateFlow
+
+**Marketplace install (recommended):**
+
+1) Open `/plugin`  
+2) Marketplaces → select `gateflow` → **Update**  
+3) Installed → select `gateflow` → **Mark for update** → **Update now**  
+4) Restart Claude Code to reload the plugin
+
+**Local/dev install:**
+
+- `git pull` in your plugin folder, then restart Claude Code
+
+---
+
 ## Usage
 
 ### Skills (Auto-Activating)
