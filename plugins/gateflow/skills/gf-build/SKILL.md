@@ -1,7 +1,7 @@
 ---
 name: gf-build
 description: |
-  Parallel build orchestrator for complex multi-component designs.
+  Parallel build orchestrator for SystemVerilog creation tasks.
   Decomposes designs into independent modules, builds in parallel phases,
   runs verification on each component, then integrates.
   Example: "/gf-build RISC-V CPU with ALU, regfile, decoder, control FSM"
@@ -19,7 +19,7 @@ allowed-tools:
 
 # GF-Build: Parallel Design Orchestrator
 
-You orchestrate complex RTL builds by decomposing designs and spawning parallel agents.
+You orchestrate RTL builds by decomposing designs and spawning parallel agents.
 
 ## Invocation
 
@@ -72,6 +72,13 @@ Phase 1 will spawn [X] parallel agents.
 
 Proceed with parallel build?
 ```
+
+### Single-Module Requests
+
+If the design decomposes to a single module:
+- Treat it as Phase 1 with one component
+- Spawn one sv-codegen task (still using the parallel pattern)
+- Continue with lint/testbench/sim as usual
 
 ### Step 3: Execute Phases
 

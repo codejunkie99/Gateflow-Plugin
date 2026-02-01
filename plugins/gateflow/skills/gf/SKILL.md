@@ -57,6 +57,11 @@ You deliver working, verified code
 - Present options with trade-offs
 - Then route with enriched context
 
+### Rule 5: ALWAYS Build in Parallel (Creation Tasks)
+- After planning, use **sv-orchestrator** to decompose and build in parallel
+- Do **not** call sv-codegen directly for creation tasks; it should be spawned by sv-orchestrator
+- **Exception:** If the user explicitly asks for single-threaded/sequential build, honor it
+
 ---
 
 ## Decision Framework
@@ -90,6 +95,7 @@ For Planning requests:
 ### Step 3: Plan First (for creation tasks)
 
 After gathering requirements, spawn sv-planner BEFORE any codegen:
+This is the same planning phase exposed by `/gf-plan`.
 
 ```
 Use Task tool:
@@ -101,9 +107,12 @@ Use Task tool:
     Create a detailed plan before any code is written.
 ```
 
-### Step 4: Execute with Agents
+### Step 4: Build in Parallel (for creation tasks)
 
-Only after planning, spawn implementation agents.
+Only after planning, spawn sv-orchestrator to decompose and build in parallel.
+If the user selected **Single-threaded** build mode, skip sv-orchestrator and
+spawn sv-codegen (and sv-testbench if requested) sequentially.
+This is the same build phase exposed by `/gf-build`.
 
 ---
 
@@ -124,8 +133,8 @@ Only after planning, spawn implementation agents.
 │  └──────────────────────────────────────────────────────────┘   │
 │                          ↓                                       │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │ 2. SPAWN AGENT                                            │   │
-│  │    sv-codegen / sv-testbench / sv-refactor / etc         │   │
+│  │ 2. BUILD (parallel for creation tasks)                    │   │
+│  │    Spawn sv-orchestrator to decompose + build             │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                          ↓                                       │
 │  ┌──────────────────────────────────────────────────────────┐   │
@@ -153,16 +162,16 @@ User: "Create a FIFO and test it"
 1. ASK: "What depth and width? Interface style? Self-checking TB?"
 2. User answers: "8-deep, 32-bit, valid/ready, yes self-checking"
 3. Spawn sv-planner → creates implementation plan
-4. Spawn sv-codegen → creates fifo.sv
+4. Spawn sv-orchestrator → decomposes + builds FIFO + TB in parallel
+   (If user chose single-threaded: spawn sv-codegen, then sv-testbench)
 5. Run lint → 2 warnings
 6. Spawn sv-refactor → fixes warnings
 7. Run lint → clean ✓
-8. Spawn sv-testbench → creates tb_fifo.sv
-9. Run sim → test fails
-10. Spawn sv-debug → identifies issue
-11. Spawn sv-refactor → fixes RTL
-12. Run sim → passes ✓
-13. Report: "Created fifo.sv, tb_fifo.sv. All tests pass."
+8. Run sim → test fails
+9. Spawn sv-debug → identifies issue
+10. Spawn sv-refactor → fixes RTL
+11. Run sim → passes ✓
+12. Report: "Created fifo.sv, tb_fifo.sv. All tests pass."
 ```
 
 ---
@@ -174,7 +183,8 @@ User: "Create a FIFO and test it"
 | Agent | Spawn When | Context to Provide |
 |-------|------------|-------------------|
 | `sv-planner` | **FIRST** for any creation task | User requirements, constraints |
-| `sv-codegen` | Creating new module, RTL design | Plan output, interfaces, constraints |
+| `sv-orchestrator` | **DEFAULT** build engine for all creation tasks | Plan output, component list, constraints |
+| `sv-codegen` | Component-level generation (invoked by sv-orchestrator or single-threaded mode) | Component spec, interfaces |
 | `sv-testbench` | Creating testbench, stimulus | DUT file, ports, test scenarios |
 | `sv-debug` | **ANY** simulation failure | Error message, failing test, code |
 | `sv-verification` | Adding assertions, coverage | Module, properties to check |
@@ -186,12 +196,23 @@ User: "Create a FIFO and test it"
 
 ```
 Use Task tool:
-  subagent_type: "gateflow:sv-codegen"  (or other agent)
+  subagent_type: "gateflow:sv-orchestrator"  (for creation tasks)
   prompt: |
-    [Clear description of what to create]
-    [Relevant context from conversation]
-    [Constraints or requirements]
-    [File paths if applicable]
+    Build the design in parallel based on this plan:
+    [Plan output or key excerpts]
+    Requirements:
+    - [answers from AskUserQuestion]
+    Constraints:
+    - [timing/area/power/verification]
+
+If build mode is single-threaded:
+Use Task tool:
+  subagent_type: "gateflow:sv-codegen"
+  prompt: |
+    Create the module described in the plan:
+    [Plan output or key excerpts]
+    Requirements:
+    - [answers from AskUserQuestion]
 ```
 
 ---
@@ -238,6 +259,15 @@ Use AskUserQuestion:
           description: "Stimulus only, manual checking"
         - label: "No"
           description: "RTL only"
+      multiSelect: false
+
+    - question: "Build mode?"
+      header: "Build Mode"
+      options:
+        - label: "Parallel (default)"
+          description: "Decompose and build components concurrently"
+        - label: "Single-threaded"
+          description: "Sequential build (no parallel agents)"
       multiSelect: false
 ```
 
@@ -352,8 +382,8 @@ Gathering requirements...
 Planning implementation...
 ✓ Created plan with sv-planner
 
-Creating FIFO module...
-✓ Created fifo.sv (using sv-codegen)
+Building components in parallel...
+✓ sv-orchestrator spawned component agents
 
 Running lint check...
 ⚠ 2 warnings found
@@ -361,7 +391,7 @@ Running lint check...
 ✓ Lint clean
 
 Creating testbench...
-✓ Created tb_fifo.sv (using sv-testbench)
+✓ Created tb_fifo.sv (via sv-orchestrator)
 
 Running simulation...
 ✗ Test failed: read data mismatch
@@ -384,7 +414,8 @@ Done! Created:
 ```
 1. ASK questions about requirements
 2. Spawn sv-planner
-3. Spawn sv-codegen
+3. Spawn sv-orchestrator (decompose + parallel build)
+   If single-threaded, spawn sv-codegen instead
 4. Lint
 5. If issues → spawn sv-refactor
 6. Done (offer to create testbench)
@@ -394,11 +425,11 @@ Done! Created:
 ```
 1. ASK questions about requirements
 2. Spawn sv-planner
-3. Spawn sv-codegen → create module
+3. Spawn sv-orchestrator → create module + TB in parallel
+   If single-threaded, spawn sv-codegen → then sv-testbench
 4. Lint → if issues, spawn sv-refactor
-5. Spawn sv-testbench → create TB
-6. Simulate → if fails, spawn sv-debug, then sv-refactor
-7. Report results
+5. Simulate → if fails, spawn sv-debug, then sv-refactor
+6. Report results
 ```
 
 ### "Fix this" / "Debug this"
@@ -430,8 +461,9 @@ Done! Created:
 ```
 1. ASK about scope and constraints
 2. Spawn sv-planner
-3. Spawn sv-developer for autonomous handling
-4. Verify each phase
+3. Spawn sv-orchestrator for parallel component build
+4. Use sv-developer only for cross-cutting edits or deep refactors
+5. Verify each phase
 ```
 
 ---
