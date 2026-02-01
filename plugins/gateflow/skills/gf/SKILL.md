@@ -43,9 +43,9 @@ You deliver working, verified code
 - Even for "trivial" fixes, use sv-debug → sv-refactor flow
 - No exceptions - agents provide audit trail and consistency
 
-### Rule 2: ALWAYS Use Opus Model
-- When spawning agents, ALWAYS use `model: "opus"`
-- Never use sonnet or haiku for GateFlow agents
+### Rule 2: Inherit the User's Session Model
+- Do NOT set a model in Task calls unless the user explicitly requests one
+- By default, agents should inherit the model the user selected for this session
 
 ### Rule 3: ALWAYS Plan First
 - For ANY SystemVerilog creation task, spawn `sv-planner` FIRST
@@ -93,7 +93,6 @@ After gathering requirements, spawn sv-planner BEFORE any codegen:
 ```
 Use Task tool:
   subagent_type: "gateflow:sv-planner"
-  model: "opus"
   prompt: |
     Plan the implementation for: [user request]
     Requirements gathered:
@@ -126,7 +125,6 @@ Only after planning, spawn implementation agents.
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │ 2. SPAWN AGENT                                            │   │
 │  │    sv-codegen / sv-testbench / sv-refactor / etc         │   │
-│  │    ALWAYS use model: "opus"                               │   │
 │  └──────────────────────────────────────────────────────────┘   │
 │                          ↓                                       │
 │  ┌──────────────────────────────────────────────────────────┐   │
@@ -154,14 +152,14 @@ User: "Create a FIFO and test it"
 1. ASK: "What depth and width? Interface style? Self-checking TB?"
 2. User answers: "8-deep, 32-bit, valid/ready, yes self-checking"
 3. Spawn sv-planner → creates implementation plan
-4. Spawn sv-codegen (model: opus) → creates fifo.sv
+4. Spawn sv-codegen → creates fifo.sv
 5. Run lint → 2 warnings
-6. Spawn sv-refactor (model: opus) → fixes warnings
+6. Spawn sv-refactor → fixes warnings
 7. Run lint → clean ✓
-8. Spawn sv-testbench (model: opus) → creates tb_fifo.sv
+8. Spawn sv-testbench → creates tb_fifo.sv
 9. Run sim → test fails
-10. Spawn sv-debug (model: opus) → identifies issue
-11. Spawn sv-refactor (model: opus) → fixes RTL
+10. Spawn sv-debug → identifies issue
+11. Spawn sv-refactor → fixes RTL
 12. Run sim → passes ✓
 13. Report: "Created fifo.sv, tb_fifo.sv. All tests pass."
 ```
@@ -183,12 +181,11 @@ User: "Create a FIFO and test it"
 | `sv-refactor` | **ANY** code fix needed | Lint output, code to fix |
 | `sv-developer` | Complex multi-file changes | Full context, multiple files |
 
-### Spawning Pattern - ALWAYS USE OPUS
+### Spawning Pattern - Inherit Session Model
 
 ```
 Use Task tool:
   subagent_type: "gateflow:sv-codegen"  (or other agent)
-  model: "opus"                          ← MANDATORY: Always opus
   prompt: |
     [Clear description of what to create]
     [Relevant context from conversation]
@@ -279,7 +276,7 @@ Use Skill tool:
 | STATUS | Action |
 |--------|--------|
 | PASS | Proceed to next step |
-| FAIL | Spawn sv-refactor (model: opus) with error context |
+| FAIL | Spawn sv-refactor with error context |
 | ERROR | Report issue to user |
 
 ### Compile + Simulate
@@ -295,7 +292,7 @@ Use Skill tool:
 | STATUS | Action |
 |--------|--------|
 | PASS | Report success, done |
-| FAIL | Spawn sv-debug (model: opus) - NEVER fix directly |
+| FAIL | Spawn sv-debug - NEVER fix directly |
 | ERROR | Report setup issue to user |
 
 ---
@@ -306,7 +303,7 @@ Use Skill tool:
 
 ```
 1. Read lint output
-2. Spawn sv-refactor (model: opus) with error context
+2. Spawn sv-refactor with error context
    - NEVER fix directly, even for trivial issues
 3. Re-run lint to verify
 ```
@@ -315,13 +312,13 @@ Use Skill tool:
 
 ```
 1. Read simulation output
-2. Spawn sv-debug (model: opus) with:
+2. Spawn sv-debug with:
    - Error message
    - Test that failed
    - Relevant code sections
    - NEVER analyze and fix directly
 3. sv-debug returns analysis
-4. Spawn sv-refactor (model: opus) to fix
+4. Spawn sv-refactor to fix
 5. Re-run simulation
 ```
 
@@ -385,21 +382,21 @@ Done! Created:
 ### "Create X"
 ```
 1. ASK questions about requirements
-2. Spawn sv-planner (model: opus)
-3. Spawn sv-codegen (model: opus)
+2. Spawn sv-planner
+3. Spawn sv-codegen
 4. Lint
-5. If issues → spawn sv-refactor (model: opus)
+5. If issues → spawn sv-refactor
 6. Done (offer to create testbench)
 ```
 
 ### "Create X and test it"
 ```
 1. ASK questions about requirements
-2. Spawn sv-planner (model: opus)
-3. Spawn sv-codegen (model: opus) → create module
-4. Lint → if issues, spawn sv-refactor (model: opus)
-5. Spawn sv-testbench (model: opus) → create TB
-6. Simulate → if fails, spawn sv-debug (model: opus), then sv-refactor
+2. Spawn sv-planner
+3. Spawn sv-codegen → create module
+4. Lint → if issues, spawn sv-refactor
+5. Spawn sv-testbench → create TB
+6. Simulate → if fails, spawn sv-debug, then sv-refactor
 7. Report results
 ```
 
@@ -407,15 +404,15 @@ Done! Created:
 ```
 1. ASK about symptoms
 2. Read the code
-3. If lint issue → spawn sv-refactor (model: opus)
-4. If sim issue → spawn sv-debug (model: opus) first, then sv-refactor
+3. If lint issue → spawn sv-refactor
+4. If sim issue → spawn sv-debug first, then sv-refactor
 5. Verify fix
 ```
 
 ### "Explain this"
 ```
 1. Check for codebase map
-2. Spawn sv-understanding (model: opus)
+2. Spawn sv-understanding
 3. Return explanation
 ```
 
@@ -423,7 +420,7 @@ Done! Created:
 ```
 1. ASK about what properties to verify
 2. Read the module
-3. Spawn sv-verification (model: opus)
+3. Spawn sv-verification
 4. Lint to verify syntax
 5. Done
 ```
@@ -431,8 +428,8 @@ Done! Created:
 ### Complex / Multi-file
 ```
 1. ASK about scope and constraints
-2. Spawn sv-planner (model: opus)
-3. Spawn sv-developer (model: opus) for autonomous handling
+2. Spawn sv-planner
+3. Spawn sv-developer for autonomous handling
 4. Verify each phase
 ```
 
@@ -478,9 +475,9 @@ When a `/gf-plan` plan exists:
 ```
 1. Read .gateflow/plans/<name>.md
 2. For each phase:
-   a. Spawn appropriate agent (model: opus)
+   a. Spawn appropriate agent
    b. Run verification specified
-   c. If issues, spawn sv-refactor (model: opus)
+   c. If issues, spawn sv-refactor
    d. Update progress
 3. Report completion
 ```
@@ -495,7 +492,6 @@ When a `/gf-plan` plan exists:
 - **Write**: Write files
 - **Edit**: Modify files
 - **Bash**: Run miscellaneous commands
-- **Task**: Spawn agents (ALWAYS with model: "opus")
 - **Skill**: Invoke skills:
   - `gf-lint` - Lint with structured output
   - `gf-sim` - Simulation with structured output
@@ -515,7 +511,7 @@ When a `/gf-plan` plan exists:
 - Don't skip the verification step
 - Don't loop forever - ask user after 3 attempts
 - **Don't fix code directly - ALWAYS use agents**
-- **Don't use sonnet - ALWAYS use opus**
+- **Don't hard-pin models unless the user requests it**
 - **Don't skip planning - ALWAYS plan first for creation tasks**
 - **Don't skip questions - ALWAYS ask before routing**
 
@@ -525,7 +521,7 @@ When a `/gf-plan` plan exists:
 
 ```
 You are the orchestrator.
-Agents are specialists (ALWAYS use them, ALWAYS with opus).
+Agents are specialists (ALWAYS use them, inherit session model).
 Your job:
   1. ASK questions to understand requirements
   2. PLAN first with sv-planner
@@ -535,6 +531,6 @@ Your job:
 **User experience:**
 - Asked about requirements first
 - Get a plan before implementation
-- All work done by specialized agents (opus model)
+- All work done by specialized agents (session model)
 - Continuous progress updates
 - Delivered result, not just attempt

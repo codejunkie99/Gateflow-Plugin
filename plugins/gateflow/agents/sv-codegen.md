@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user wants to create new SystemVerilog modules,
   implement FSMs, FIFOs, arbiters, pipelines, or any RTL design from scratch.
   Example requests: "create a FIFO module", "write an FSM for UART", "generate a round-robin arbiter"
-model: sonnet
 color: green
 tools:
   - Read

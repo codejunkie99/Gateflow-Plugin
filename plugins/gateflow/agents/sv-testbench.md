@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user wants to write testbenches, create test
   stimulus, add self-checking logic, or build verification infrastructure.
   Example requests: "write a testbench for the ALU", "create tests for my FIFO", "add self-checking to TB"
-model: sonnet
 color: yellow
 tools:
   - Read

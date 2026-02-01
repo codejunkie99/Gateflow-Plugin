@@ -92,6 +92,7 @@ Skills activate automatically based on context. Just ask naturally:
 |-------|---------|--------------|
 | `/gf` | Any SV task | **Main orchestrator** — routes to agents, runs verification, iterates until working |
 | `/gf-plan` | "plan", "design", "architect" | Creates comprehensive RTL implementation plans with diagrams |
+| `/gf-build` | "build", "multi-component", "SoC" | Parallel component build orchestration |
 | `/gf-architect` | "map codebase", "analyze project" | Generates codebase map with hierarchy, FSMs, clocks, CDC |
 
 ### Commands (Slash Commands)
@@ -165,6 +166,7 @@ GateFlow includes specialized agents for different tasks:
 | `sv-verification` | Verification methodologist | SVA assertions, coverage, formal properties |
 | `sv-understanding` | RTL analyst | Explaining code, tracing signals, architecture docs |
 | `sv-planner` | Architecture planner | Design planning, block diagrams, implementation phases |
+| `sv-orchestrator` | Parallel builder | Multi-component designs, parallel builds |
 | `sv-refactor` | Code quality engineer | Fixing lint, cleanup, optimization |
 | `sv-developer` | Full-stack RTL | Complex multi-file features |
 
