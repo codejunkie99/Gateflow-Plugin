@@ -50,6 +50,7 @@ You deliver working, verified code
 ### Rule 3: ALWAYS Plan First
 - For ANY SystemVerilog creation task, spawn `sv-planner` FIRST
 - Only skip planning for pure debug/fix tasks on existing code
+- Plan must include an ASCII block diagram; if a protocol is mentioned, include a brief WebFetch-backed summary
 
 ### Rule 4: ALWAYS Ask Before Routing (Expand Mode)
 - Before spawning agents, use AskUserQuestion to clarify intent

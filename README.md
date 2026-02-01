@@ -185,6 +185,7 @@ Create → Lint → Fix → Test → Fix → Deliver
 ### 📐 Hardware Design Planning
 `/gf-plan` creates professional design documents:
 - Block diagrams (Mermaid)
+- ASCII block diagrams for quick copy/paste
 - Module hierarchy
 - Interface specifications
 - FSM state diagrams
