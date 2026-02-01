@@ -101,13 +101,13 @@ By default, `/gf` uses parallel builds after planning. If you want a sequential 
 
 | Command | Description |
 |---------|-------------|
-| `/gf-scan` | Index your project structure |
-| `/gf-map` | Generate comprehensive codebase map |
-| `/gf-lint` | Run lint checks on files |
-| `/gf-fix` | Auto-fix lint errors |
-| `/gf-gen` | Generate module scaffolds |
-| `/gf-sim` | Run simulation |
-| `/gf-doctor` | Check environment setup |
+| `/gf-scan` | Index project |
+| `/gf-map` | Map codebase |
+| `/gf-lint` | Run lint |
+| `/gf-fix` | Fix lint |
+| `/gf-gen` | Generate scaffolds |
+| `/gf-sim` | Run sim |
+| `/gf-doctor` | Env check |
 
 ### Natural Language (Just Ask)
 

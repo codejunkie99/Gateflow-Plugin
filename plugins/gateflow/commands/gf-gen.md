@@ -1,6 +1,6 @@
 ---
 name: gf-gen
-description: Generate SystemVerilog modules, testbenches, or packages
+description: Generate scaffolds
 argument-hint: "<type> <name> [options]"
 allowed-tools:
   - Bash

@@ -1,6 +1,6 @@
 ---
 name: gf-map
-description: Generate comprehensive codebase map with hierarchy, signals, FSMs, clocks, and dependencies
+description: Map codebase
 allowed-tools:
   - Glob
   - Read

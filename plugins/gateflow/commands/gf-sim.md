@@ -1,6 +1,6 @@
 ---
 name: gf-sim
-description: Compile and run SystemVerilog simulation with Verilator
+description: Run sim
 argument-hint: "<testbench> [dut-files...]"
 allowed-tools:
   - Bash
