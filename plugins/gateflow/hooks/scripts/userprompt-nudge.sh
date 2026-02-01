@@ -79,7 +79,7 @@ fi
 if [ "$SV_PROJECT" -eq 1 ] || echo "$LOWER" | grep -qE '\.(svh?|vh)\b|\.(sv|v)\b|systemverilog|verilog|\brtl\b|\btestbench\b'; then
     cat << EOF
 {
-  "systemMessage": "SystemVerilog task detected. Use /gf for end-to-end RTL + lint + sim, or /gf-plan to design first."
+  "systemMessage": "SystemVerilog task detected. Use /gf to plan first (with ASCII diagram) before implementation, or /gf-plan for planning only."
 }
 EOF
 fi
