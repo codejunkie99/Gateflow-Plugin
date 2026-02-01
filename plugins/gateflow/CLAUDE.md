@@ -9,9 +9,9 @@
 > - No exceptions, even for "trivial" tasks
 > - Quick syntax questions → still use sv-understanding agent
 >
-> ### Rule 2: ALWAYS Use Opus Model
-> - All GateFlow agents MUST use `model: "opus"`
-> - Never use sonnet or haiku for GateFlow work
+> ### Rule 2: Inherit the User's Session Model
+> - Do NOT set a model in Task calls unless the user explicitly requests one
+> - By default, agents should inherit the model the user selected for this session
 >
 > ### Rule 3: ALWAYS Ask Questions First (Expand Mode)
 > - Before delegating, use AskUserQuestion to clarify requirements
@@ -31,8 +31,8 @@ When a SystemVerilog task is confirmed, spawn TWO agents in parallel to maximize
 ### For Creation Tasks:
 ```
 Spawn in parallel:
-1. sv-planner (model: opus) → Creates implementation plan
-2. sv-understanding (model: opus) → Analyzes existing codebase patterns
+1. sv-planner → Creates implementation plan
+2. sv-understanding → Analyzes existing codebase patterns
 
 Then combine insights before spawning sv-codegen
 ```
@@ -40,8 +40,8 @@ Then combine insights before spawning sv-codegen
 ### For Debug Tasks:
 ```
 Spawn in parallel:
-1. sv-debug (model: opus) → Analyzes the failure
-2. sv-understanding (model: opus) → Understands intended behavior
+1. sv-debug → Analyzes the failure
+2. sv-understanding → Understands intended behavior
 
 Then combine insights before spawning sv-refactor
 ```
@@ -49,8 +49,8 @@ Then combine insights before spawning sv-refactor
 ### For Complex Tasks:
 ```
 Spawn in parallel:
-1. sv-planner (model: opus) → Architecture plan
-2. sv-developer (model: opus) → Implementation strategy
+1. sv-planner → Architecture plan
+2. sv-developer → Implementation strategy
 
 Then orchestrate with sv-orchestrator if multi-component
 ```
@@ -96,22 +96,22 @@ For Understanding:
 
 | User Intent | Primary Agent | Secondary Agent (parallel) | Model |
 |-------------|---------------|---------------------------|-------|
-| Create new RTL/module | `sv-planner` first, then `sv-codegen` | `sv-understanding` | opus |
-| Create testbench | `sv-testbench` | `sv-understanding` | opus |
-| Debug failure/X-values | `sv-debug` | `sv-understanding` | opus |
-| Add assertions/coverage | `sv-verification` | `sv-understanding` | opus |
-| Understand existing code | `sv-understanding` | - | opus |
-| Refactor/fix lint | `sv-refactor` | `sv-understanding` | opus |
-| Multi-file development | `sv-developer` | `sv-planner` | opus |
-| Learning/exercises | `sv-tutor` | - | opus |
-| Complex multi-component | `sv-orchestrator` | `sv-planner` | opus |
-| End-to-end (create+test) | `/gf` skill | - | opus |
-| Parallel component build | `/gf-build` skill | - | opus |
-| Design/plan first | `/gf-plan` skill | - | opus |
+| Create new RTL/module | `sv-planner` first, then `sv-codegen` | `sv-understanding` | session |
+| Create testbench | `sv-testbench` | `sv-understanding` | session |
+| Debug failure/X-values | `sv-debug` | `sv-understanding` | session |
+| Add assertions/coverage | `sv-verification` | `sv-understanding` | session |
+| Understand existing code | `sv-understanding` | - | session |
+| Refactor/fix lint | `sv-refactor` | `sv-understanding` | session |
+| Multi-file development | `sv-developer` | `sv-planner` | session |
+| Learning/exercises | `sv-tutor` | - | session |
+| Complex multi-component | `sv-orchestrator` | `sv-planner` | session |
+| End-to-end (create+test) | `/gf` skill | - | session |
+| Parallel component build | `/gf-build` skill | - | session |
+| Design/plan first | `/gf-plan` skill | - | session |
 | Lint check | `/gf-lint` skill | - | - |
 | Run simulation | `/gf-sim` skill | - | - |
-| Map codebase | `/gf-architect` skill | - | opus |
-| Learn/practice | `/gf-learn` skill | - | opus |
+| Map codebase | `/gf-architect` skill | - | session |
+| Learn/practice | `/gf-learn` skill | - | session |
 
 ### Step 4: NEVER Handle These Directly
 
@@ -127,12 +127,11 @@ Even these "simple" tasks should go to agents:
 
 ---
 
-## Spawning Pattern - ALWAYS OPUS
+## Spawning Pattern - Inherit Session Model
 
 ```
 Use Task tool:
   subagent_type: "gateflow:sv-codegen"  (or other agent)
-  model: "opus"                          ← MANDATORY
   prompt: |
     [Clear description]
     [Context from user answers]
@@ -145,12 +144,10 @@ Use Task tool:
 ```
 Use Task tool (call 1):
   subagent_type: "gateflow:sv-planner"
-  model: "opus"
   prompt: "Plan implementation for FIFO with..."
 
 Use Task tool (call 2 - same message, parallel):
   subagent_type: "gateflow:sv-understanding"
-  model: "opus"
   prompt: "Analyze existing codebase for FIFO patterns..."
 ```
 
@@ -179,9 +176,9 @@ After any agent creates/modifies code:
 
 ```
 1. Run gf-lint skill
-2. If FAIL → spawn sv-refactor (model: opus)
+2. If FAIL → spawn sv-refactor
 3. Run gf-sim skill
-4. If FAIL → spawn sv-debug (model: opus), then sv-refactor
+4. If FAIL → spawn sv-debug, then sv-refactor
 5. Repeat until PASS
 ```
 

@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user has a large design requiring multiple independent modules
   that can be developed and verified concurrently.
   Example requests: "build a RISC-V CPU", "create a complete SoC", "implement a multi-module subsystem"
-model: sonnet
 color: cyan
 tools:
   - Read

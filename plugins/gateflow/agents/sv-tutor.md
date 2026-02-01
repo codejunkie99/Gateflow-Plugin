@@ -1,7 +1,6 @@
 ---
 name: sv-tutor
 description: SystemVerilog tutor - reviews solutions, gives hints, teaches concepts
-model: sonnet
 allowed-tools:
   - Read
   - Bash

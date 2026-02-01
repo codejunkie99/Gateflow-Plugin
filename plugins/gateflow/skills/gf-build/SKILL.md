@@ -79,7 +79,7 @@ Proceed with parallel build?
 ```bash
 mkdir -p rtl tb
 ```
-Write shared package directly (simple, no agent needed).
+Spawn sv-codegen to create shared package (stay consistent with agent-only rule).
 
 #### Phase 1: Parallel Component Build
 

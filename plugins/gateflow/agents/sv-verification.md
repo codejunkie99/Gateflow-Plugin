@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user wants to add SVA assertions, functional
   coverage, cover properties, or formal verification constraints.
   Example requests: "add assertions for the handshake", "create coverage for FSM states", "write SVA properties"
-model: sonnet
 color: blue
 tools:
   - Read

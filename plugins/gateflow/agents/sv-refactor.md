@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user wants to clean up code, fix lint warnings,
   improve coding style, or optimize existing RTL.
   Example requests: "fix these lint errors", "refactor this module", "clean up the code style"
-model: sonnet
 color: magenta
 tools:
   - Read

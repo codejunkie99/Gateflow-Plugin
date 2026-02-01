@@ -16,6 +16,7 @@ commands|commands/gf-sim.md|Run simulation
 skills|skills/gf/SKILL.md|Main orchestrator, verification loops
 skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
 skills|skills/gf-architect/SKILL.md|Codebase mapping, hierarchy analysis
+skills|skills/gf-build/SKILL.md|Parallel multi-component build orchestrator
 skills|skills/tb-best-practices/SKILL.md|Testbench best practices, layered TB, randomization, coverage, OOP patterns
 
 agents|agents/sv-codegen.md|RTL generation, modules, FSMs, FIFOs
@@ -24,6 +25,7 @@ agents|agents/sv-debug.md|Simulation failures, X-values, timing
 agents|agents/sv-verification.md|SVA assertions, coverage, formal
 agents|agents/sv-understanding.md|Code explanation, signal tracing
 agents|agents/sv-planner.md|Architecture planning, design plans, diagrams
+agents|agents/sv-orchestrator.md|Parallel component orchestration, multi-module builds
 agents|agents/sv-refactor.md|Lint fixes, cleanup, optimization
 agents|agents/sv-developer.md|Multi-file development, complex features
 

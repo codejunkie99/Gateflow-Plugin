@@ -16,7 +16,7 @@ allowed-tools:
 
 # GF Architect
 
-Maps SystemVerilog codebases using parallel Sonnet subagents.
+Maps SystemVerilog codebases using parallel subagents.
 
 **CRITICAL: You orchestrate, Sonnet reads.** Never read codebase files directly. Always delegate file reading to Sonnet subagents - even for small codebases. You plan the work, spawn subagents, and synthesize their reports.
 
@@ -141,7 +141,7 @@ Read file with offset=500, limit=500 (logic section 1)
 
 Use Task tool with:
 - `subagent_type: "Explore"`
-- `model: "sonnet"`
+- (omit model to inherit the user’s session model)
 
 **Example - spawn 3 agents in ONE message:**
 
@@ -149,7 +149,6 @@ Use Task tool with:
 Task 1:
   description: "Analyze UART files"
   subagent_type: "Explore"
-  model: "sonnet"
   prompt: |
     Read and analyze these SystemVerilog files:
     - rtl/uart_pkg.sv
@@ -171,7 +170,6 @@ Task 1:
 Task 2:
   description: "Analyze SHA files"
   subagent_type: "Explore"
-  model: "sonnet"
   prompt: |
     Read and analyze these SystemVerilog files:
     - rtl/sha2_pad.sv
@@ -182,7 +180,6 @@ Task 2:
 Task 3:
   description: "Analyze large file with Grep"
   subagent_type: "Explore"
-  model: "sonnet"
   prompt: |
     This file is large. Use Grep to extract structure first:
     - rtl/hmac_core.sv (120k tokens)

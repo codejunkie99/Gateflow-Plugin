@@ -5,7 +5,6 @@ description: |
   This agent should be used when the user has simulation issues, X-value propagation,
   timing problems, or code that doesn't work as expected.
   Example requests: "why is my output X", "simulation is stuck", "debug this failure"
-model: sonnet
 color: red
 tools:
   - Read
