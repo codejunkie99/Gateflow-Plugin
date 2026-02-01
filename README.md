@@ -90,10 +90,12 @@ Skills activate automatically based on context. Just ask naturally:
 
 | Skill | Trigger | What It Does |
 |-------|---------|--------------|
-| `/gf` | Any SV task | **Main orchestrator** — routes to agents, runs verification, iterates until working |
+| `/gf` | Any SV task | **Main orchestrator** — plan-first, parallel build, verify until working |
 | `/gf-plan` | "plan", "design", "architect" | Creates comprehensive RTL implementation plans with diagrams |
 | `/gf-build` | "build", "multi-component", "SoC" | Parallel component build orchestration |
 | `/gf-architect` | "map codebase", "analyze project" | Generates codebase map with hierarchy, FSMs, clocks, CDC |
+
+By default, `/gf` uses parallel builds after planning. If you want a sequential flow, say "single-threaded" or "sequential build."
 
 ### Commands (Slash Commands)
 
