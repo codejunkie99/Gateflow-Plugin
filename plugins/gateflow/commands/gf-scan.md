@@ -1,6 +1,6 @@
 ---
 name: gf-scan
-description: Index and scan SystemVerilog files in the project
+description: Index project
 allowed-tools:
   - Bash
   - Read

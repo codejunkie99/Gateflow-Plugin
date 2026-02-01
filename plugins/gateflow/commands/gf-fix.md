@@ -1,6 +1,6 @@
 ---
 name: gf-fix
-description: Auto-fix lint errors in a SystemVerilog file
+description: Fix lint
 argument-hint: "<file>"
 allowed-tools:
   - Bash

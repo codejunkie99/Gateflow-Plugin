@@ -1,6 +1,6 @@
 ---
 name: gf-lint
-description: Run Verilator lint checks on SystemVerilog files
+description: Run lint
 argument-hint: "[files...]"
 allowed-tools:
   - Bash

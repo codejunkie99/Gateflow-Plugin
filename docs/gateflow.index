@@ -5,13 +5,13 @@
 primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes, Spear/Tumbush book index
 primary|README.md|Installation, usage, features
 
-commands|commands/gf-doctor.md|Environment check
-commands|commands/gf-fix.md|Auto-fix lint errors
-commands|commands/gf-gen.md|Generate module scaffolds
-commands|commands/gf-lint.md|Run lint checks
-commands|commands/gf-map.md|Generate codebase map
-commands|commands/gf-scan.md|Index project structure
-commands|commands/gf-sim.md|Run simulation
+commands|commands/gf-doctor.md|Env check
+commands|commands/gf-fix.md|Fix lint
+commands|commands/gf-gen.md|Generate scaffolds
+commands|commands/gf-lint.md|Run lint
+commands|commands/gf-map.md|Map codebase
+commands|commands/gf-scan.md|Index project
+commands|commands/gf-sim.md|Run sim
 
 skills|skills/gf/SKILL.md|Main orchestrator, verification loops
 skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design

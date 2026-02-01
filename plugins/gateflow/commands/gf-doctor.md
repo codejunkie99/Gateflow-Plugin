@@ -1,6 +1,6 @@
 ---
 name: gf-doctor
-description: Check GateFlow environment and dependencies
+description: Env check
 allowed-tools:
   - Bash
 ---
@@ -53,8 +53,8 @@ sudo apt-get install verilator
 ## Available Commands
 
 After verification, list the available GateFlow commands:
-- `/gf-lint` - Run Verilator lint checks
-- `/gf-sim` - Compile and simulate
-- `/gf-gen` - Generate modules/testbenches
-- `/gf-wave` - Analyze waveforms
-- `/gf-scan` - Index project files
+- `/gf-lint` - Run lint
+- `/gf-sim` - Run sim
+- `/gf-gen` - Generate scaffolds
+- `/gf-wave` - Waveforms
+- `/gf-scan` - Index project
