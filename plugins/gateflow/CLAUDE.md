@@ -1,56 +1,191 @@
 # GateFlow - SystemVerilog Development Assistant
 
-> **CRITICAL: Intent Routing Protocol**
+> ## CRITICAL: AGGRESSIVE GATEFLOW DELEGATION
 >
-> For ALL SystemVerilog requests, you MUST follow this routing protocol:
+> **The moment a request is confirmed as SystemVerilog-related, delegate EVERYTHING to GateFlow agents.**
 >
-> ## Step 1: Classify Intent Semantically
-> Analyze the user's GOAL, not keywords. Ask yourself:
-> - What is the user trying to accomplish?
-> - Is this creating, debugging, understanding, or verifying?
-> - Does this need multiple steps (orchestration)?
+> ### Rule 1: NEVER Handle SV Tasks Directly
+> - If it involves SystemVerilog → delegate to GateFlow agent
+> - No exceptions, even for "trivial" tasks
+> - Quick syntax questions → still use sv-understanding agent
 >
-> ## Step 2: Assess Confidence (0.0 - 1.0)
-> - **>= 0.85**: Direct handoff to target
-> - **0.70 - 0.85**: EXPAND MODE - ask 2-3 questions first
-> - **< 0.70**: Ask user to clarify
+> ### Rule 2: ALWAYS Use Opus Model
+> - All GateFlow agents MUST use `model: "opus"`
+> - Never use sonnet or haiku for GateFlow work
 >
-> ## Step 3: Route to Target (NEVER answer directly for these)
+> ### Rule 3: ALWAYS Ask Questions First (Expand Mode)
+> - Before delegating, use AskUserQuestion to clarify requirements
+> - Gather context to route to the right agent
+> - Present options with trade-offs
 >
-> | User Intent | Target | Invoke Via |
-> |-------------|--------|------------|
-> | Create new RTL/module | `sv-codegen` | Task tool |
-> | Create testbench | `sv-testbench` | Task tool |
-> | Debug failure/X-values | `sv-debug` | Task tool |
-> | Add assertions/coverage | `sv-verification` | Task tool |
-> | Understand existing code | `sv-understanding` | Task tool |
-> | Refactor/fix lint | `sv-refactor` | Task tool |
-> | Multi-file development | `sv-developer` | Task tool |
-> | Learning/exercises | `sv-tutor` | Task tool |
-> | **Complex multi-component** | `sv-orchestrator` | Task tool |
-> | End-to-end (create+test) | `gf` | Skill tool |
-> | **Parallel component build** | `gf-build` | Skill tool |
-> | Design/plan first | `gf-plan` | Skill tool |
-> | Lint check | `gf-lint` | Skill tool |
-> | Run simulation | `gf-sim` | Skill tool |
-> | Map codebase | `gf-architect` | Skill tool |
-> | Learn/practice | `gf-learn` | Skill tool |
->
-> ## Expand Mode (confidence 0.70-0.85)
-> Ask clarifying questions BEFORE routing:
-> - **Creation**: "What interface protocol? Include testbench?"
-> - **Debug**: "What behavior do you see vs expect?"
-> - **Planning**: "Any constraints? Integration needs?"
->
-> Present options with trade-offs, then handoff with enriched context.
->
-> ## Handle Directly (ONLY these)
-> - Quick syntax questions
-> - Pattern lookups from this file
-> - Running simple commands
-> - Clarifying questions
+> ### Rule 4: ALWAYS Plan First for Creation Tasks
+> - Spawn `sv-planner` BEFORE any codegen agent
+> - Planning ensures quality and proper architecture
 
-GateFlow provides specialized RTL development capabilities. This reference is always available in context.
+---
+
+## DUAL-AGENT THINKING PROTOCOL
+
+When a SystemVerilog task is confirmed, spawn TWO agents in parallel to maximize quality:
+
+### For Creation Tasks:
+```
+Spawn in parallel:
+1. sv-planner (model: opus) → Creates implementation plan
+2. sv-understanding (model: opus) → Analyzes existing codebase patterns
+
+Then combine insights before spawning sv-codegen
+```
+
+### For Debug Tasks:
+```
+Spawn in parallel:
+1. sv-debug (model: opus) → Analyzes the failure
+2. sv-understanding (model: opus) → Understands intended behavior
+
+Then combine insights before spawning sv-refactor
+```
+
+### For Complex Tasks:
+```
+Spawn in parallel:
+1. sv-planner (model: opus) → Architecture plan
+2. sv-developer (model: opus) → Implementation strategy
+
+Then orchestrate with sv-orchestrator if multi-component
+```
+
+---
+
+## Intent Routing Protocol
+
+### Step 1: Detect SystemVerilog Request
+
+Keywords/patterns that indicate SV work:
+- Module, RTL, HDL, Verilog, SystemVerilog
+- FIFO, FSM, counter, ALU, UART, SPI, I2C
+- Testbench, TB, simulation, lint, synthesis
+- Clock, reset, register, flip-flop
+- always_ff, always_comb, logic, wire
+- Verilator, Verible, VCS, Questa
+
+**If ANY of these detected → Confirm with user, then delegate to GateFlow**
+
+### Step 2: Ask Clarifying Questions (MANDATORY)
+
+Before routing, ALWAYS use AskUserQuestion:
+
+```
+For Creation:
+- "What size/width/depth?"
+- "What interface protocol?"
+- "Include testbench?"
+- "Any constraints (area, timing, power)?"
+
+For Debug:
+- "What symptom do you see?"
+- "What's the expected behavior?"
+- "Any specific signals to check?"
+
+For Understanding:
+- "Which aspect to focus on?"
+- "How deep should the analysis go?"
+```
+
+### Step 3: Route to Target (ALWAYS delegate, NEVER handle directly)
+
+| User Intent | Primary Agent | Secondary Agent (parallel) | Model |
+|-------------|---------------|---------------------------|-------|
+| Create new RTL/module | `sv-planner` first, then `sv-codegen` | `sv-understanding` | opus |
+| Create testbench | `sv-testbench` | `sv-understanding` | opus |
+| Debug failure/X-values | `sv-debug` | `sv-understanding` | opus |
+| Add assertions/coverage | `sv-verification` | `sv-understanding` | opus |
+| Understand existing code | `sv-understanding` | - | opus |
+| Refactor/fix lint | `sv-refactor` | `sv-understanding` | opus |
+| Multi-file development | `sv-developer` | `sv-planner` | opus |
+| Learning/exercises | `sv-tutor` | - | opus |
+| Complex multi-component | `sv-orchestrator` | `sv-planner` | opus |
+| End-to-end (create+test) | `/gf` skill | - | opus |
+| Parallel component build | `/gf-build` skill | - | opus |
+| Design/plan first | `/gf-plan` skill | - | opus |
+| Lint check | `/gf-lint` skill | - | - |
+| Run simulation | `/gf-sim` skill | - | - |
+| Map codebase | `/gf-architect` skill | - | opus |
+| Learn/practice | `/gf-learn` skill | - | opus |
+
+### Step 4: NEVER Handle These Directly
+
+Even these "simple" tasks should go to agents:
+
+| Task | Agent |
+|------|-------|
+| Syntax question | sv-understanding |
+| Quick fix | sv-refactor |
+| One-line change | sv-refactor |
+| Explain a line | sv-understanding |
+| Check if valid SV | sv-understanding |
+
+---
+
+## Spawning Pattern - ALWAYS OPUS
+
+```
+Use Task tool:
+  subagent_type: "gateflow:sv-codegen"  (or other agent)
+  model: "opus"                          ← MANDATORY
+  prompt: |
+    [Clear description]
+    [Context from user answers]
+    [Constraints]
+    [File paths]
+```
+
+### Parallel Spawning Example
+
+```
+Use Task tool (call 1):
+  subagent_type: "gateflow:sv-planner"
+  model: "opus"
+  prompt: "Plan implementation for FIFO with..."
+
+Use Task tool (call 2 - same message, parallel):
+  subagent_type: "gateflow:sv-understanding"
+  model: "opus"
+  prompt: "Analyze existing codebase for FIFO patterns..."
+```
+
+---
+
+## GateFlow Agents Reference
+
+| Agent | Expertise | Trigger Phrases |
+|-------|-----------|-----------------|
+| `gateflow:sv-codegen` | RTL architect | "create", "write", "generate", "implement module" |
+| `gateflow:sv-testbench` | Verification engineer | "testbench", "TB", "test this", "verify" |
+| `gateflow:sv-debug` | Debug specialist | "X values", "debug", "not working", "fails" |
+| `gateflow:sv-verification` | Verification methodologist | "assertions", "SVA", "coverage", "formal" |
+| `gateflow:sv-understanding` | RTL analyst | "explain", "how does", "understand", "analyze" |
+| `gateflow:sv-planner` | Architecture planner | "plan", "design", "architect", "strategy" |
+| `gateflow:sv-refactor` | Code quality | "fix", "refactor", "clean up", "lint" |
+| `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file", "large change" |
+| `gateflow:sv-orchestrator` | Parallel builder | "build CPU", "create SoC", "multi-component" |
+| `gateflow:sv-tutor` | Teacher | "teach", "learn", "exercise", "practice" |
+
+---
+
+## Verification Loop
+
+After any agent creates/modifies code:
+
+```
+1. Run gf-lint skill
+2. If FAIL → spawn sv-refactor (model: opus)
+3. Run gf-sim skill
+4. If FAIL → spawn sv-debug (model: opus), then sv-refactor
+5. Repeat until PASS
+```
+
+---
 
 ## Quick Reference
 
@@ -207,25 +342,7 @@ end
 | `LATCH` | Complete all branches |
 | `BLKSEQ` | Use `<=` in `always_ff` |
 
-## GateFlow Agents
-
-Use specialized agents for complex SystemVerilog tasks:
-
-| Agent | Expertise | Use When User Says |
-|-------|-----------|-------------------|
-| `gateflow:sv-codegen` | RTL architect | "create module", "write FSM", "generate FIFO" |
-| `gateflow:sv-testbench` | Verification engineer | "write testbench", "create TB", "test this" |
-| `gateflow:sv-debug` | Debug specialist | "why X values", "debug", "not working" |
-| `gateflow:sv-verification` | Verification methodologist | "add assertions", "SVA", "coverage" |
-| `gateflow:sv-understanding` | RTL analyst | "explain this", "how does it work" |
-| `gateflow:sv-planner` | Architecture planner | "plan", "design", "architect" |
-| `gateflow:sv-refactor` | Code quality | "fix lint", "refactor", "clean up" |
-| `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file change" |
-| `gateflow:sv-orchestrator` | Parallel builder | "build CPU", "create SoC", "multi-component" |
-
-**Handle directly:** Quick fixes, simple questions, running lint/sim commands.
-
-### Codebase Map Handoff
+## Codebase Map Handoff
 
 Before routing to `sv-understanding` or `sv-developer` for **codebase-wide** tasks, check if a map exists:
 
@@ -237,26 +354,6 @@ ls .gateflow/map/CODEBASE.md 2>/dev/null
 |-------------|--------|
 | Yes | Route to agent normally, map provides context |
 | No | Run `/gf-architect` first, then route to agent |
-
-**Codebase-wide tasks** (need map): "understand this project", "how does X connect to Y", "implement feature across modules"
-
-**Single-file tasks** (no map needed): "explain this module", "fix this bug", "add assertion here"
-
-### Agent Handoff Pattern
-
-After an agent creates SV files, run verification via Bash:
-
-| After | You Run | If Issues |
-|-------|---------|-----------|
-| sv-codegen | `verilator --lint-only -Wall *.sv` | → sv-refactor |
-| sv-testbench | `verilator --binary -j 0 -Wall --trace <dut>.sv <tb>.sv -o sim && ./obj_dir/sim` | → sv-debug |
-| sv-refactor | lint to verify | done |
-| sv-debug | rerun sim | verify fix |
-
-**If unsure which file is DUT vs TB:**
-- TB has: `initial begin`, `$display`, `$finish`, `$dumpfile`, clock generation
-- DUT has: `always_ff`, `always_comb`, synthesizable logic, no `$` tasks
-- TB instantiates the DUT module
 
 ## Testbench Quick Reference
 
