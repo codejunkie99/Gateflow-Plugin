@@ -1,6 +1,6 @@
 #!/bin/bash
-# GateFlow dependency check and auto-install
-# Runs on SessionStart - installs missing deps automatically
+# GateFlow dependency check (no auto-install)
+# Runs on SessionStart - reports missing deps with manual guidance
 
 PLUGIN_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MARKER_FILE="$PLUGIN_ROOT/.deps-installed"
@@ -36,14 +36,6 @@ show_welcome() {
 EOF
 }
 
-show_installing() {
-    cat << 'EOF'
-    ┌─────────────────────────────────────────────────────┐
-    │  ⚡ Setting up your hardware development environment │
-    └─────────────────────────────────────────────────────┘
-EOF
-}
-
 show_complete() {
     cat << 'EOF'
 
@@ -74,9 +66,8 @@ if ! command -v verible-verilog-syntax &> /dev/null; then
     MISSING+=("verible")
 fi
 
-# All good - silent on subsequent runs
+# All tools present - silent on subsequent runs
 if [ ${#MISSING[@]} -eq 0 ]; then
-    # First successful run - show welcome
     if [ ! -f "$MARKER_FILE" ]; then
         show_welcome
         show_complete
@@ -85,74 +76,22 @@ if [ ${#MISSING[@]} -eq 0 ]; then
     exit 0
 fi
 
-# Already tried to install once - brief warning
-if [ -f "$MARKER_FILE" ]; then
-    echo "⚠ GateFlow: Missing tools: ${MISSING[*]}"
-    echo "  Install manually or delete .deps-installed to retry"
-    exit 0
-fi
-
-# First run - show welcome and install
+# Required dependency missing → report and exit without installing or marking success
 show_welcome
-show_installing
-echo ""
-
-# Auto-install
+echo "⚠ GateFlow: Required tools missing: ${MISSING[*]}"
 if [ "$OS" = "Darwin" ]; then
-    if ! command -v brew &> /dev/null; then
-        echo "    ✗ Homebrew not found"
-        echo "      Install from https://brew.sh then restart Claude"
-        touch "$MARKER_FILE"
-        exit 0
-    fi
-
-    for dep in "${MISSING[@]}"; do
-        case "$dep" in
-            verilator)
-                echo "    → Installing Verilator..."
-                if brew install verilator &> /dev/null; then
-                    echo "    ✓ Verilator installed"
-                else
-                    echo "    ✗ Verilator install failed"
-                fi
-                ;;
-            verible)
-                echo "    → Installing Verible..."
-                brew tap chipsalliance/verible &> /dev/null || true
-                if brew install verible &> /dev/null; then
-                    echo "    ✓ Verible installed"
-                else
-                    echo "    ✗ Verible install failed"
-                fi
-                ;;
-        esac
-    done
-
+    echo "   Install Verilator: brew install verilator"
+    echo "   Install Verible: brew tap chipsalliance/verible && brew install verible"
 elif [ "$OS" = "Linux" ]; then
     if command -v apt-get &> /dev/null; then
-        for dep in "${MISSING[@]}"; do
-            case "$dep" in
-                verilator)
-                    echo "    → Installing Verilator..."
-                    if sudo apt-get update -qq && sudo apt-get install -y verilator &> /dev/null; then
-                        echo "    ✓ Verilator installed"
-                    else
-                        echo "    ✗ Verilator install failed"
-                    fi
-                    ;;
-                verible)
-                    echo "    ℹ Verible: Download from GitHub releases"
-                    echo "      https://github.com/chipsalliance/verible/releases"
-                    ;;
-            esac
-        done
+        echo "   Install Verilator: sudo apt-get update && sudo apt-get install -y verilator"
     else
-        echo "    ℹ Auto-install not supported on this system"
-        echo "      Verilator: https://verilator.org/guide/latest/install.html"
-        echo "      Verible: https://github.com/chipsalliance/verible/releases"
+        echo "   Install Verilator: https://verilator.org/guide/latest/install.html"
     fi
+    echo "   Install Verible: https://github.com/chipsalliance/verible/releases"
+else
+    echo "   Install Verilator from https://verilator.org"
+    echo "   Install Verible from https://github.com/chipsalliance/verible/releases"
 fi
 
-touch "$MARKER_FILE"
-show_complete
 exit 0

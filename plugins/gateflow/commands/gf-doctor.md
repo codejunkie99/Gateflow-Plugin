@@ -36,7 +36,7 @@ Present a summary table:
 
 ## Missing Dependencies
 
-If any tools are missing, inform the user they will be auto-installed on next session start, or they can install manually:
+If tools are missing, provide manual install steps:
 
 **Manual install (macOS):**
 ```bash
@@ -56,5 +56,4 @@ After verification, list the available GateFlow commands:
 - `/gf-lint` - Run lint
 - `/gf-sim` - Run sim
 - `/gf-gen` - Generate scaffolds
-- `/gf-wave` - Waveforms
 - `/gf-scan` - Index project

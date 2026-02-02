@@ -71,7 +71,7 @@ Then add to `~/.claude/settings.json` (global) or `.claude/settings.json` (proje
 |------|----------|-------|-------|
 | [Claude Code](https://code.claude.com/) | Yes | See website | See website |
 | [Verilator](https://verilator.org/) | Yes | `brew install verilator` | `sudo apt install verilator` |
-| Verible | Optional | `brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
+| Verible | Yes | `brew tap chipsalliance/verible && brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
 
 ### Verify Installation
 
