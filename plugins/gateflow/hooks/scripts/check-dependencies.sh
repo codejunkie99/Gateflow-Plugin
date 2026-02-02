@@ -1,13 +1,13 @@
 #!/bin/bash
-# GateFlow dependency check and auto-install
-# Runs on SessionStart - installs missing deps automatically
+# GateFlow dependency check (no auto-install)
+# Runs on SessionStart - reports missing deps with manual guidance
 
 PLUGIN_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MARKER_FILE="$PLUGIN_ROOT/.deps-installed"
 OS="$(uname -s)"
 
 show_welcome() {
-    cat << 'EOF'
+    cat << 'BANNER'
 
     ╔═══════════════════════════════════════════════════════════════╗
     ║                                                               ║
@@ -30,22 +30,13 @@ show_welcome() {
     ║                                                               ║
     ║                   made with love of hardware <3               ║
     ║                            by Avid                            ║
-    ║                                                               ║
     ╚═══════════════════════════════════════════════════════════════╝
 
-EOF
-}
-
-show_installing() {
-    cat << 'EOF'
-    ┌─────────────────────────────────────────────────────┐
-    │  ⚡ Setting up your hardware development environment │
-    └─────────────────────────────────────────────────────┘
-EOF
+BANNER
 }
 
 show_complete() {
-    cat << 'EOF'
+    cat << 'DONE'
 
     ┌─────────────────────────────────────────────────────┐
     │  ✓ GateFlow ready! Your RTL workflow awaits.        │
@@ -59,7 +50,7 @@ show_complete() {
     │  Happy synthesizing! ⚡                              │
     └─────────────────────────────────────────────────────┘
 
-EOF
+DONE
 }
 
 REQUIRED_MISSING=()
@@ -75,9 +66,8 @@ if ! command -v verible-verilog-syntax &> /dev/null; then
     OPTIONAL_MISSING+=("verible")
 fi
 
-# All good (required + optional)
+# All tools present - silent on subsequent runs
 if [ ${#REQUIRED_MISSING[@]} -eq 0 ] && [ ${#OPTIONAL_MISSING[@]} -eq 0 ]; then
-    # First successful run - show welcome
     if [ ! -f "$MARKER_FILE" ]; then
         show_welcome
         show_complete
@@ -86,103 +76,44 @@ if [ ${#REQUIRED_MISSING[@]} -eq 0 ] && [ ${#OPTIONAL_MISSING[@]} -eq 0 ]; then
     exit 0
 fi
 
-# Already tried to install once - brief warning
-if [ -f "$MARKER_FILE" ]; then
-    if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
-        echo "⚠ GateFlow: Missing required tools: ${REQUIRED_MISSING[*]}"
-    fi
+# Required dependency missing → report and exit without marking success
+if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
+    show_welcome
+    echo "⚠ GateFlow: Missing required tools: ${REQUIRED_MISSING[*]}"
     if [ ${#OPTIONAL_MISSING[@]} -ne 0 ]; then
-        echo "ℹ GateFlow: Missing optional tools: ${OPTIONAL_MISSING[*]}"
+        echo "ℹ GateFlow: Optional tools missing: ${OPTIONAL_MISSING[*]}"
     fi
-    echo "  Install manually or delete .deps-installed to retry"
-    exit 0
-fi
-
-# First run - show welcome and install
-show_welcome
-if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
-    show_installing
-    echo ""
-fi
-
-# If only optional tools are missing, don't auto-install
-if [ ${#REQUIRED_MISSING[@]} -eq 0 ] && [ ${#OPTIONAL_MISSING[@]} -ne 0 ]; then
-    echo "    ℹ Optional tools missing: ${OPTIONAL_MISSING[*]}"
-    show_complete
-    touch "$MARKER_FILE"
-    exit 0
-fi
-
-# Auto-install
-if [ "$OS" = "Darwin" ]; then
-    if ! command -v brew &> /dev/null; then
-        echo "    ✗ Homebrew not found"
-        echo "      Install from https://brew.sh then restart Claude"
-        echo "      (Delete .deps-installed to retry auto-install)"
-        touch "$MARKER_FILE"
-        exit 0
-    fi
-
-    for dep in "${REQUIRED_MISSING[@]}"; do
-        case "$dep" in
-            verilator)
-                echo "    → Installing Verilator..."
-                if brew install verilator &> /dev/null; then
-                    echo "    ✓ Verilator installed"
-                else
-                    echo "    ✗ Verilator install failed"
-                fi
-                ;;
-            verible)
-                echo "    → Installing Verible..."
-                brew tap chipsalliance/verible &> /dev/null || true
-                if brew install verible &> /dev/null; then
-                    echo "    ✓ Verible installed"
-                else
-                    echo "    ✗ Verible install failed"
-                fi
-                ;;
-        esac
-    done
-
-elif [ "$OS" = "Linux" ]; then
-    if command -v apt-get &> /dev/null; then
-        for dep in "${REQUIRED_MISSING[@]}"; do
-            case "$dep" in
-                verilator)
-                    echo "    → Installing Verilator..."
-                    if sudo apt-get update -qq && sudo apt-get install -y verilator &> /dev/null; then
-                        echo "    ✓ Verilator installed"
-                    else
-                        echo "    ✗ Verilator install failed"
-                    fi
-                    ;;
-            esac
-        done
+    if [ "$OS" = "Darwin" ]; then
+        echo "   Install Verilator: brew install verilator"
+        echo "   Install Verible: brew tap chipsalliance/verible && brew install verible"
+    elif [ "$OS" = "Linux" ]; then
+        if command -v apt-get &> /dev/null; then
+            echo "   Install Verilator: sudo apt-get update && sudo apt-get install -y verilator"
+        else
+            echo "   Install Verilator: https://verilator.org/guide/latest/install.html"
+        fi
+        echo "   Install Verible: https://github.com/chipsalliance/verible/releases"
     else
-        echo "    ℹ Auto-install not supported on this system"
-        echo "      Verilator: https://verilator.org/guide/latest/install.html"
-        echo "      Verible: https://github.com/chipsalliance/verible/releases"
+        echo "   Install Verilator from https://verilator.org"
+        echo "   Install Verible from https://github.com/chipsalliance/verible/releases"
     fi
-fi
-
-# Re-check required tools after install attempt
-REQUIRED_MISSING=()
-if ! command -v verilator &> /dev/null; then
-    REQUIRED_MISSING+=("verilator")
-fi
-
-if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
-    echo "    ✗ GateFlow setup incomplete. Missing required tools: ${REQUIRED_MISSING[*]}"
-    echo "      Install manually or delete .deps-installed to retry"
-    touch "$MARKER_FILE"
     exit 0
 fi
 
-if [ ${#OPTIONAL_MISSING[@]} -ne 0 ]; then
-    echo "    ℹ Optional tools missing: ${OPTIONAL_MISSING[*]}"
+# Optional tools missing only
+if [ ! -f "$MARKER_FILE" ]; then
+    show_welcome
 fi
 
-touch "$MARKER_FILE"
+echo "ℹ GateFlow: Optional tools missing: ${OPTIONAL_MISSING[*]}"
+if [ "$OS" = "Darwin" ]; then
+    echo "   Install Verible: brew tap chipsalliance/verible && brew install verible"
+elif [ "$OS" = "Linux" ]; then
+    echo "   Install Verible: https://github.com/chipsalliance/verible/releases"
+else
+    echo "   Install Verible: https://github.com/chipsalliance/verible/releases"
+fi
+
 show_complete
+touch "$MARKER_FILE"
 exit 0
