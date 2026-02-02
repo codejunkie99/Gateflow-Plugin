@@ -20,11 +20,11 @@ verilator --version
 - Required for linting and simulation
 - Minimum version: 5.0
 
-### 2. Verible (required)
+### 2. Verible (optional)
 ```bash
 verible-verilog-syntax --version 2>/dev/null || echo "Not installed"
 ```
-- Required for parsing and formatting
+- Optional (formatting and syntax checks)
 
 ## Report Format
 
@@ -32,11 +32,11 @@ Present a summary table:
 | Tool | Status | Version |
 |------|--------|---------|
 | Verilator | ✅ OK | 5.x |
-| Verible | ✅ OK | v0.0-xxxx |
+| Verible (optional) | ✅ OK | v0.0-xxxx |
 
 ## Missing Dependencies
 
-If any tools are missing, inform the user they will be auto-installed on next session start, or they can install manually:
+If required tools are missing, inform the user they will be auto-installed on next session start (when supported), or they can install manually. If optional tools are missing, note they can be installed manually:
 
 **Manual install (macOS):**
 ```bash
@@ -56,5 +56,4 @@ After verification, list the available GateFlow commands:
 - `/gf-lint` - Run lint
 - `/gf-sim` - Run sim
 - `/gf-gen` - Generate scaffolds
-- `/gf-wave` - Waveforms
 - `/gf-scan` - Index project
