@@ -1,8 +1,6 @@
 ---
 name: gf-expand
-description: |
-  Expand mode - asks clarifying questions, presents options with trade-offs,
-  then hands off to appropriate skill/agent with enriched context.
+description: Expand mode - asks clarifying questions, presents options with trade-offs, then hands off to appropriate skill/agent with enriched context.
 user-invocable: false
 allowed-tools:
   - Read

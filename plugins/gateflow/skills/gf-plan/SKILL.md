@@ -1,10 +1,6 @@
 ---
 name: gf-plan
-description: |
-  Hardware design planner - Creates comprehensive RTL implementation plans.
-  This skill should be used when the user wants to plan a new design, architect
-  a complex feature, or understand how to implement hardware before coding.
-  Example requests: "plan a DMA controller", "design a UART", "architect the memory subsystem"
+description: Hardware design planner - creates comprehensive RTL implementation plans before coding. This skill should be used when planning new designs, architecting complex features, or understanding how to implement hardware. Examples: "plan a DMA controller", "design a UART", "architect memory subsystem"
 allowed-tools:
   - Grep
   - Glob
