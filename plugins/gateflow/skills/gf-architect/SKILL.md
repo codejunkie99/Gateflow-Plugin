@@ -1,10 +1,6 @@
 ---
 name: gf-architect
-description: |
-  Codebase architect - Maps and documents SystemVerilog projects.
-  This skill should be used when the user wants to understand a codebase structure,
-  generate architecture documentation, or onboard to a new RTL project.
-  Example requests: "map this codebase", "document the architecture", "show module hierarchy"
+description: Codebase architect - maps and documents SystemVerilog projects. This skill should be used when the user wants to understand a codebase structure, generate architecture documentation, or onboard to a new RTL project. Examples: "map this codebase", "document the architecture", "show module hierarchy"
 allowed-tools:
   - Grep
   - Glob

@@ -1,9 +1,6 @@
 ---
 name: gf-router
-description: |
-  Intent router and expand mode orchestrator for GateFlow.
-  Classifies user intent semantically, determines confidence, triggers expand mode
-  for ambiguous requests, and hands off to appropriate skill/agent.
+description: Intent router and expand mode orchestrator for GateFlow. Classifies user intent semantically, determines confidence, triggers expand mode for ambiguous requests, and hands off to appropriate skill/agent.
 user-invocable: false
 allowed-tools:
   - Read

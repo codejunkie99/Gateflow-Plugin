@@ -1,10 +1,6 @@
 ---
 name: tb-best-practices
-description: |
-  Testbench verification best practices and patterns.
-  This skill should be used when the user needs testbench architecture guidance,
-  verification methodology, or wants to write professional-quality testbenches.
-  Example requests: "testbench best practices", "how to structure TB", "verification patterns"
+description: Testbench verification best practices and patterns. This skill provides architecture guidance, verification methodology, and examples for writing professional-quality testbenches. Examples: "testbench best practices", "how to structure TB", "verification patterns"
 allowed-tools:
   - Grep
   - Glob
