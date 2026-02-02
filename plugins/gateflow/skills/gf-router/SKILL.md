@@ -91,6 +91,7 @@ else:
 | CREATE_RTL | Create new module/RTL code | gateflow:sv-codegen |
 | CREATE_TB | Create testbench/stimulus | gateflow:sv-testbench |
 | DEBUG | Diagnose failures, X-values, issues | gateflow:sv-debug |
+| BUG_REPORT | User reports specific bug behavior | gf (test-first flow) |
 | VERIFY | Add assertions, coverage, properties | gateflow:sv-verification |
 | EXPLAIN | Understand existing code | gateflow:sv-understanding |
 | REFACTOR | Improve/fix/cleanup code | gateflow:sv-refactor |
@@ -117,6 +118,16 @@ else:
 **Query:** "My simulation is stuck, nothing happens after reset"
 **Intent:** DEBUG
 **Reasoning:** Describes failure symptom, needs diagnosis
+
+### Bug Report (confidence: 0.95)
+**Query:** "Bug: output goes X when valid deasserts early"
+**Intent:** BUG_REPORT
+**Reasoning:** User reports specific reproducible bug with trigger condition. Use test-first flow.
+
+### Bug Report variant (confidence: 0.90)
+**Query:** "There's a bug where the counter wraps incorrectly at 255"
+**Intent:** BUG_REPORT
+**Reasoning:** Describes specific incorrect behavior. Write test first, then fix.
 
 ### End-to-End Request (confidence: 0.90)
 **Query:** "Create a FIFO and make sure it works"
@@ -316,6 +327,7 @@ NEXT_TARGET: [if handoff]
 | Create/build/generate/need X | CREATE_RTL | sv-codegen |
 | Create X and test it | ORCHESTRATE | gf |
 | Write testbench/TB for | CREATE_TB | sv-testbench |
+| Bug:/bug where/there's a bug | BUG_REPORT | gf (test-first) |
 | Why is/debug/fix/broken | DEBUG | sv-debug |
 | Add assertions/coverage | VERIFY | sv-verification |
 | Explain/what does/how | EXPLAIN | sv-understanding |
@@ -325,6 +337,20 @@ NEXT_TARGET: [if handoff]
 | Lint/check quality | LINT | gf-lint |
 | Simulate/run/test | SIMULATE | gf-sim |
 | Learn/practice/exercise | LEARN | gf-learn |
+
+### BUG_REPORT vs DEBUG
+
+**BUG_REPORT** (test-first flow):
+- User describes specific incorrect behavior with trigger
+- "Bug: X happens when Y"
+- "There's a bug where..."
+- User knows what's wrong and can describe it
+
+**DEBUG** (diagnosis flow):
+- User doesn't know what's wrong
+- "Why is my output X?"
+- "Simulation is stuck"
+- Needs investigation to find the issue
 
 ---
 
