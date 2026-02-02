@@ -71,7 +71,7 @@ Then add to `~/.claude/settings.json` (global) or `.claude/settings.json` (proje
 |------|----------|-------|-------|
 | [Claude Code](https://code.claude.com/) | Yes | See website | See website |
 | [Verilator](https://verilator.org/) | Yes | `brew install verilator` | `sudo apt install verilator` |
-| Verible | Yes | `brew tap chipsalliance/verible && brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
+| Verible (formatting/syntax) | Optional | `brew tap chipsalliance/verible && brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
 
 ### Verify Installation
 
@@ -148,7 +148,7 @@ GateFlow understands context. Describe what you need:
 ### Example Session
 
 ```
-$ claude --plugin-dir https://github.com/codejunkie99/Gateflow-Plugin
+$ claude --plugin-dir ./Gateflow-Plugin/plugins/gateflow
 
 You: Create a parameterized counter with enable and test it
 
@@ -310,10 +310,10 @@ sudo apt install verilator  # Linux (Debian/Ubuntu)
 ### "Plugin not loading"
 ```bash
 # Verify plugin loads
-claude --plugin-dir /path/to/Gateflow-Plugin
+claude --plugin-dir /path/to/Gateflow-Plugin/plugins/gateflow
 
 # Check plugin.json exists
-ls .claude-plugin/plugin.json
+ls /path/to/Gateflow-Plugin/plugins/gateflow/.claude-plugin/plugin.json
 ```
 
 ### "Agent not found"
