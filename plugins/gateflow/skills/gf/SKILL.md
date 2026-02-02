@@ -290,6 +290,36 @@ Use AskUserQuestion:
       multiSelect: false
 ```
 
+### For Bug Reports (Test-First Flow)
+
+```
+Use AskUserQuestion:
+  questions:
+    - question: "What is the expected behavior?"
+      header: "Expected"
+      options:
+        - label: "I'll describe it"
+          description: "Let me explain what should happen"
+        - label: "Follow spec/docs"
+          description: "Behavior defined in documentation"
+        - label: "Match reference"
+          description: "Should match another implementation"
+      multiSelect: false
+
+    - question: "Can you describe how to trigger the bug?"
+      header: "Trigger"
+      options:
+        - label: "Specific sequence"
+          description: "I know the exact steps"
+        - label: "Certain input values"
+          description: "Happens with specific data"
+        - label: "Timing-dependent"
+          description: "Race condition or edge case"
+        - label: "Random/intermittent"
+          description: "Hard to reproduce reliably"
+      multiSelect: false
+```
+
 ---
 
 ## Verification Commands
@@ -439,6 +469,62 @@ Done! Created:
 3. If lint issue → spawn sv-refactor
 4. If sim issue → spawn sv-debug first, then sv-refactor
 5. Verify fix
+```
+
+### "Bug: X happens when Y" (Test-First Bug Fixing)
+
+**IMPORTANT:** When user reports a bug, do NOT jump to fixing. Write a test first.
+
+```
+1. UNDERSTAND the bug
+   - What's the expected behavior?
+   - What's the actual behavior?
+   - What triggers it?
+
+2. WRITE A REPRODUCTION TEST FIRST
+   - Spawn sv-testbench to create a targeted test case
+   - Test MUST fail initially (proves it captures the bug)
+   - Test should be minimal - isolate the bug
+
+3. RUN the test to confirm it fails
+   - Use gf-sim skill
+   - STATUS: FAIL expected (this is good!)
+   - If test passes, the test doesn't capture the bug - revise it
+
+4. FIX the bug
+   - Spawn sv-debug to diagnose root cause
+   - Spawn sv-refactor to implement fix
+   - NEVER fix directly
+
+5. VERIFY with the same test
+   - Run gf-sim again
+   - STATUS: PASS = bug is fixed
+   - STATUS: FAIL = fix didn't work, iterate
+
+6. RUN full test suite (if exists)
+   - Check for regressions
+```
+
+**Why test-first?**
+- Forces understanding before fixing
+- Provides objective success criteria
+- Prevents "I think I fixed it" false positives
+- Creates regression protection
+- Subagents have clear exit condition
+
+**Example flow:**
+```
+User: "Bug: FIFO outputs X when read while empty"
+
+1. ASK: "What should happen instead? Stall? Return zero? Error flag?"
+2. User: "Should stall until data available"
+3. Spawn sv-testbench:
+   "Write a test that reads from empty FIFO and checks it stalls"
+4. Run gf-sim → FAIL (confirms bug exists)
+5. Spawn sv-debug → "read_ptr increments even when empty"
+6. Spawn sv-refactor → adds `empty` guard to read logic
+7. Run gf-sim → PASS
+8. Report: "Fixed. Added test tb/test_empty_read.sv"
 ```
 
 ### "Explain this"
