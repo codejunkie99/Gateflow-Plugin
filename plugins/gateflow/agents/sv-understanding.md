@@ -5,7 +5,7 @@ description: >
   This agent should be used when the user wants to understand existing code,
   trace signal flows, analyze FSM behavior, or get architectural explanations.
   Example requests: "explain this module", "how does this FSM work", "trace the data path"
-color: cyan
+color: magenta
 tools:
   - Read
   - Glob

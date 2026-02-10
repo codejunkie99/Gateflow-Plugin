@@ -1,7 +1,8 @@
 ---
 name: sv-tutor
 description: SystemVerilog tutor - reviews solutions, gives hints, teaches concepts
-allowed-tools:
+color: green
+tools:
   - Read
   - Bash
   - Grep

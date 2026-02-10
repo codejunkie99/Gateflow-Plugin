@@ -5,7 +5,7 @@ description: >
   This agent should be used when the user has a large feature requiring multiple
   files, architectural changes, or coordinated modifications across the codebase.
   Example requests: "implement the memory subsystem", "add DMA support", "build the interface layer"
-color: white
+color: blue
 tools:
   - Read
   - Write
