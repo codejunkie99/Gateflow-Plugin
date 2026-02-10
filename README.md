@@ -97,6 +97,175 @@ Then add to `~/.claude/settings.json` (global) or `.claude/settings.json` (proje
 
 ---
 
+## Individual Component Downloads
+
+Don't need the full plugin? Grab just the skills, agents, or commands you want.
+
+### How It Works
+
+Each component is a standalone `.md` file. Download it and drop it into your own plugin's directory:
+
+```
+your-plugin/
+├── .claude-plugin/
+│   └── plugin.json
+├── agents/          ← drop agent .md files here
+├── commands/        ← drop command .md files here
+└── skills/
+    └── skill-name/  ← drop SKILL.md files here
+        └── SKILL.md
+```
+
+### Skills
+
+| Skill | Description | Download |
+|-------|-------------|----------|
+| `gf` | Main orchestrator — plan-first, parallel build, verify until working | [SKILL.md](plugins/gateflow/skills/gf/SKILL.md) |
+| `gf-plan` | Comprehensive RTL implementation planning with diagrams | [SKILL.md](plugins/gateflow/skills/gf-plan/SKILL.md) |
+| `gf-build` | Parallel component build orchestration | [SKILL.md](plugins/gateflow/skills/gf-build/SKILL.md) |
+| `gf-architect` | Codebase map with hierarchy, FSMs, clocks, CDC | [SKILL.md](plugins/gateflow/skills/gf-architect/SKILL.md) |
+| `gf-lint` | Structured Verilator lint checking | [SKILL.md](plugins/gateflow/skills/gf-lint/SKILL.md) |
+| `gf-sim` | Structured simulation with auto DUT/TB detection | [SKILL.md](plugins/gateflow/skills/gf-sim/SKILL.md) |
+| `gf-learn` | Learning mode — generates exercises, reviews solutions | [SKILL.md](plugins/gateflow/skills/gf-learn/SKILL.md) |
+| `gf-router` | Intent classification and expand mode orchestration | [SKILL.md](plugins/gateflow/skills/gf-router/SKILL.md) |
+| `gf-expand` | Clarifying questions with trade-offs before handoff | [SKILL.md](plugins/gateflow/skills/gf-expand/SKILL.md) |
+| `gf-summary` | Summarize Verilator/lint output in readable format | [SKILL.md](plugins/gateflow/skills/gf-summary/SKILL.md) |
+| `tb-best-practices` | Testbench best practices reference | [SKILL.md](plugins/gateflow/skills/tb-best-practices/SKILL.md) |
+
+### Agents
+
+| Agent | Expertise | Download |
+|-------|-----------|----------|
+| `sv-codegen` | RTL architect — creates synthesizable modules | [sv-codegen.md](plugins/gateflow/agents/sv-codegen.md) |
+| `sv-testbench` | Verification engineer — testbenches and stimulus | [sv-testbench.md](plugins/gateflow/agents/sv-testbench.md) |
+| `sv-debug` | Debug specialist — simulation failures, X-values | [sv-debug.md](plugins/gateflow/agents/sv-debug.md) |
+| `sv-verification` | Verification methodologist — SVA, coverage, formal | [sv-verification.md](plugins/gateflow/agents/sv-verification.md) |
+| `sv-understanding` | RTL analyst — explains and documents code | [sv-understanding.md](plugins/gateflow/agents/sv-understanding.md) |
+| `sv-planner` | Architecture planner — design plans and diagrams | [sv-planner.md](plugins/gateflow/agents/sv-planner.md) |
+| `sv-orchestrator` | Parallel builder — multi-component designs | [sv-orchestrator.md](plugins/gateflow/agents/sv-orchestrator.md) |
+| `sv-refactor` | Code quality — lint fixes, cleanup, optimization | [sv-refactor.md](plugins/gateflow/agents/sv-refactor.md) |
+| `sv-developer` | Full-stack RTL — complex multi-file features | [sv-developer.md](plugins/gateflow/agents/sv-developer.md) |
+| `sv-tutor` | Teacher — reviews solutions, gives hints, teaches | [sv-tutor.md](plugins/gateflow/agents/sv-tutor.md) |
+
+### Commands
+
+| Command | Description | Download |
+|---------|-------------|----------|
+| `/gf-doctor` | Environment check | [gf-doctor.md](plugins/gateflow/commands/gf-doctor.md) |
+| `/gf-scan` | Index project | [gf-scan.md](plugins/gateflow/commands/gf-scan.md) |
+| `/gf-map` | Map codebase | [gf-map.md](plugins/gateflow/commands/gf-map.md) |
+| `/gf-lint` | Run lint | [gf-lint.md](plugins/gateflow/commands/gf-lint.md) |
+| `/gf-fix` | Fix lint | [gf-fix.md](plugins/gateflow/commands/gf-fix.md) |
+| `/gf-gen` | Generate scaffolds | [gf-gen.md](plugins/gateflow/commands/gf-gen.md) |
+| `/gf-sim` | Run simulation | [gf-sim.md](plugins/gateflow/commands/gf-sim.md) |
+
+### Quick Download via curl
+
+```bash
+# Example: download just the sv-codegen agent
+curl -O https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md
+
+# Example: download just the gf-plan skill
+mkdir -p skills/gf-plan
+curl -o skills/gf-plan/SKILL.md https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-plan/SKILL.md
+
+# Example: download a command
+curl -O https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/commands/gf-lint.md
+```
+
+> **Note:** Some skills (like `gf-plan`) include reference files in a `references/` subdirectory. For full functionality, download the entire skill folder.
+
+### Using GateFlow Components in Other Tools
+
+GateFlow's skills and agents are plain Markdown files — they work across multiple AI coding tools, not just Claude Code. Here's how to use them in each:
+
+#### OpenAI Codex CLI
+
+Codex uses the same `SKILL.md` format. Drop skills directly into the Codex skills folder:
+
+```bash
+# Install a skill for Codex
+mkdir -p ~/.codex/skills/gf-plan
+curl -o ~/.codex/skills/gf-plan/SKILL.md \
+  https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-plan/SKILL.md
+
+# Or at repo level
+mkdir -p .agents/skills/gf-lint
+curl -o .agents/skills/gf-lint/SKILL.md \
+  https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-lint/SKILL.md
+```
+
+Codex scans these directories (by precedence):
+| Location | Scope |
+|----------|-------|
+| `.agents/skills/` | Current repo |
+| `~/.codex/skills/` | User-global |
+| `/etc/codex/skills/` | System-wide |
+
+Restart Codex after adding new skills. You can also use the built-in installer:
+```
+$skill-installer install gf-plan from codejunkie99/Gateflow-Plugin
+```
+
+#### Cursor
+
+Use agent files as custom instructions or drop them into your rules:
+
+```bash
+# Copy an agent's content into .cursorrules
+curl -s https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md \
+  >> .cursorrules
+
+# Or use as a Cursor custom agent mode instruction
+# Settings → Agent Modes → Add Custom Mode → paste agent content
+```
+
+#### GitHub Copilot CLI
+
+Add agent content as custom instructions:
+
+```bash
+# Add to repo-level Copilot instructions
+mkdir -p .github
+curl -s https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md \
+  >> .github/copilot-instructions.md
+```
+
+#### Cline
+
+```bash
+# Add to project-level rules
+curl -s https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md \
+  >> .clinerules
+```
+
+#### Windsurf
+
+```bash
+# Add as a Windsurf rule
+mkdir -p .windsurf/rules
+curl -o .windsurf/rules/sv-codegen.md \
+  https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md
+
+# Or add as a workflow
+mkdir -p .windsurf/workflows
+curl -o .windsurf/workflows/gf-plan.md \
+  https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-plan/SKILL.md
+```
+
+#### Quick Reference
+
+| Tool | Where to Put Files | Format |
+|------|-------------------|--------|
+| **Claude Code** | Plugin `skills/`, `agents/`, `commands/` dirs | Native (SKILL.md, agent .md) |
+| **Codex CLI** | `~/.codex/skills/` or `.agents/skills/` | SKILL.md (same format) |
+| **Cursor** | `.cursorrules` or custom agent mode | Append to rules file |
+| **Copilot CLI** | `.github/copilot-instructions.md` | Append to instructions |
+| **Cline** | `.clinerules` or MCP config | Append to rules file |
+| **Windsurf** | `.windsurf/rules/` or `.windsurf/workflows/` | Individual .md files |
+
+---
+
 ## Usage
 
 ### Skills (Auto-Activating)
