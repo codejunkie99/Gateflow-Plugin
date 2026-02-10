@@ -1,6 +1,10 @@
 ---
 name: gf-build
-description: Parallel build orchestrator for SystemVerilog creation tasks. Decomposes designs into independent modules, builds in parallel phases, runs verification on each component, then integrates. Example: "/gf-build RISC-V CPU with ALU, regfile, decoder, control FSM"
+description: >
+  Parallel build orchestrator for SystemVerilog creation tasks.
+  Decomposes designs into independent modules, builds in parallel phases,
+  runs verification on each component, then integrates.
+  Example: "/gf-build RISC-V CPU with ALU, regfile, decoder, control FSM"
 allowed-tools:
   - Read
   - Write

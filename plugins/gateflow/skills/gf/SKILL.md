@@ -141,7 +141,7 @@ This is the same build phase exposed by `/gf-build`.
 │  └──────────────────────────────────────────────────────────┘   │
 │                          ↓                                       │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │ 4. ASSESS (parse GATEFLOW-RESULT block)                   │   │
+│  │ 4. ASSESS (see Result Parsing Protocol)                    │   │
 │  │    STATUS: PASS  → Next phase or DONE                     │   │
 │  │    STATUS: FAIL  → Spawn sv-debug (NEVER fix directly)    │   │
 │  │    STATUS: ERROR → Report to user                         │   │
@@ -150,6 +150,90 @@ This is the same build phase exposed by `/gf-build`.
 │                    (loop until done)                             │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+### Result Parsing Protocol
+
+Skills (`gf-lint`, `gf-sim`) return `GATEFLOW-RESULT` blocks. Agents (`sv-codegen`, `sv-debug`, etc.) return `GATEFLOW-RETURN` blocks. Both must be parsed after every invocation.
+
+**Block formats:**
+
+| Source | Delimiter | Required Fields |
+|--------|-----------|-----------------|
+| Skills (gf-lint, gf-sim) | `---GATEFLOW-RESULT---` / `---END-GATEFLOW-RESULT---` | STATUS, ERRORS, WARNINGS, FILES, DETAILS |
+| Agents (sv-codegen, sv-debug, etc.) | `---GATEFLOW-RETURN---` / `---END-GATEFLOW-RETURN---` | STATUS, SUMMARY, FILES_CREATED or FILES_MODIFIED |
+
+**Extraction procedure:**
+
+1. **Locate block** — scan agent/skill output for the opening delimiter (`---GATEFLOW-RESULT---` or `---GATEFLOW-RETURN---`)
+2. **Extract STATUS** — read the `STATUS:` line; valid values are `PASS`, `FAIL`, `ERROR` (skills) or `complete`, `needs_clarification` (agents)
+3. **Handle missing block** — if no delimiter found in output, treat as `STATUS: ERROR` with `DETAILS: No structured result block returned`
+4. **Handle unrecognized STATUS** — if STATUS value is not in the expected set, treat as `STATUS: ERROR`
+
+**Decision table — what to do with each STATUS:**
+
+| STATUS | Source | Action |
+|--------|--------|--------|
+| `PASS` | gf-lint | Proceed to simulation (or done if sim already passed) |
+| `PASS` | gf-sim | Report success, done |
+| `FAIL` | gf-lint | Spawn sv-refactor with DETAILS + full lint output |
+| `FAIL` | gf-sim | Spawn sv-debug with DETAILS + simulation output |
+| `ERROR` | any skill | Report to user via AskUserQuestion — do NOT retry blindly |
+| `complete` | any agent | Proceed to next phase (verify files exist first) |
+| `needs_clarification` | any agent | Forward question to user via AskUserQuestion |
+| missing/unrecognized | any | Treat as ERROR — report to user |
+
+### Verification Gate
+
+**After every agent or skill return, run this mandatory checkpoint before proceeding:**
+
+| After Phase | Gate Condition | If Gate Fails |
+|-------------|---------------|---------------|
+| sv-planner | GATEFLOW-RETURN with `STATUS: complete` and plan text present | Re-spawn sv-planner with clarified requirements |
+| sv-orchestrator | GATEFLOW-RETURN with `STATUS: complete` and FILES_CREATED list non-empty | Re-spawn sv-orchestrator |
+| sv-codegen | Files listed in FILES_CREATED exist on disk (`ls` check) | Re-spawn sv-codegen for missing files only |
+| sv-refactor | **MUST re-run lint** — never assume fix worked | If lint still FAIL, increment retry counter and re-spawn sv-refactor with previous + new errors |
+| sv-debug | GATEFLOW-RETURN with `STATUS: complete` and SUMMARY contains fix description | If `needs_clarification`, forward to user |
+| gf-lint | GATEFLOW-RESULT block present with valid STATUS | If missing, re-run lint once; if still missing, report ERROR |
+| gf-sim | GATEFLOW-RESULT block present with valid STATUS | If missing, re-run sim once; if still missing, report ERROR |
+
+**File existence validation (between build and lint):**
+
+```bash
+# After sv-codegen or sv-orchestrator, verify files exist
+ls <expected_files> 2>/dev/null
+```
+
+- If all files exist → proceed to lint
+- If some files missing → re-spawn sv-codegen for missing files only (do NOT rebuild files that already exist)
+- If no files exist → treat as ERROR, report to user
+
+**Key rule: sv-refactor is NEVER assumed to succeed.** Always re-run the verification step (lint or sim) that originally failed. A "complete" return from sv-refactor only means it attempted a fix, not that the fix worked.
+
+### Retry Tracking
+
+Maintain a progress tracker for each verification target throughout the orchestration loop:
+
+```
+| Phase   | Target         | Attempt | Status  | Notes                    |
+|---------|----------------|---------|---------|--------------------------|
+| Lint    | rtl/fifo.sv    | 1/3     | FAIL    | WIDTH warning on line 42 |
+| Lint    | rtl/fifo.sv    | 2/3     | PASS    | Fixed by sv-refactor     |
+| Sim     | tb/tb_fifo.sv  | 1/3     | FAIL    | Read data mismatch       |
+```
+
+**Retry rules:**
+
+- **1st failure** → spawn fix agent (sv-refactor for lint, sv-debug→sv-refactor for sim)
+- **2nd failure** → spawn fix agent with additional context: include the previous attempt's error AND the new error so the agent can see what didn't work
+- **3rd failure** → **STOP.** Use AskUserQuestion to present the situation to the user with options:
+  - What has been tried (all 3 attempts with errors)
+  - Suggested alternatives (different approach, relax constraints, manual intervention)
+
+**Counter rules:**
+
+- Counter increments on **verification steps only** (lint run, sim run), NOT on fix agent spawns
+- Each file×phase combination has its own counter (e.g., `lint:fifo.sv` is separate from `sim:fifo.sv`)
+- Counter resets if the user provides new guidance via AskUserQuestion
 
 ### Example Flow (NEW - with questions and planning)
 
@@ -382,7 +466,7 @@ Use Skill tool:
 
 ### When to Ask User
 
-- After 3 failed attempts at same issue
+- After 3 failed verification attempts at same issue (see Retry Tracking)
 - When requirements are unclear
 - When multiple valid approaches exist
 - When destructive changes needed
@@ -625,7 +709,7 @@ When a `/gf-plan` plan exists:
 - Don't over-engineer simple requests
 - Don't add features not asked for
 - Don't skip the verification step
-- Don't loop forever - ask user after 3 attempts
+- Don't loop forever - ask user after 3 verification failures (see Retry Tracking)
 - **Don't fix code directly - ALWAYS use agents**
 - **Don't hard-pin models unless the user requests it**
 - **Don't skip planning - ALWAYS plan first for creation tasks**

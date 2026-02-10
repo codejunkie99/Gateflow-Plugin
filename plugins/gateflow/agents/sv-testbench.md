@@ -1,6 +1,6 @@
 ---
 name: sv-testbench
-description: |
+description: >
   Verification engineer - Creates testbenches and simulation environments.
   This agent should be used when the user wants to write testbenches, create test
   stimulus, add self-checking logic, or build verification infrastructure.

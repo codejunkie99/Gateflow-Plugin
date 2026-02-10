@@ -1,6 +1,6 @@
 ---
 name: sv-refactor
-description: |
+description: >
   Code quality engineer - Refactors, optimizes, and fixes SystemVerilog code.
   This agent should be used when the user wants to clean up code, fix lint warnings,
   improve coding style, or optimize existing RTL.

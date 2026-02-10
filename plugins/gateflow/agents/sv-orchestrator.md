@@ -1,6 +1,6 @@
 ---
 name: sv-orchestrator
-description: |
+description: >
   Parallel RTL orchestrator - Decomposes designs into components and builds them in parallel.
   This agent is the **default build engine** after planning, even for single-module tasks
   (single-module = one component in Phase 1).
@@ -142,6 +142,83 @@ Use Task tool:
 
     ## Output
     Write to: [path/to/file.sv]
+```
+
+### Parallel Result Aggregation
+
+After spawning parallel agents, aggregate results before proceeding:
+
+**Aggregation protocol:**
+
+1. **Wait for ALL parallel agents** to return — do not proceed on partial results
+2. **Build result table** from each agent's GATEFLOW-RETURN block:
+
+```
+| Component    | STATUS   | FILES_CREATED     | Notes          |
+|--------------|----------|-------------------|----------------|
+| alu.sv       | complete | rtl/alu.sv        |                |
+| regfile.sv   | complete | rtl/regfile.sv    |                |
+| imm_gen.sv   | ERROR    | (none)            | Missing spec   |
+```
+
+3. **Classify aggregate result:**
+
+| Classification | Condition | Action |
+|----------------|-----------|--------|
+| ALL_PASS | Every agent returned `STATUS: complete` | Proceed to next phase |
+| PARTIAL_FAIL | Some agents complete, some failed/error | Keep successful results; retry only failed components (max 2 retries per component) |
+| ALL_FAIL | No agent returned `STATUS: complete` | Report to user via AskUserQuestion — likely a spec or environment issue |
+
+4. **PARTIAL_FAIL handling:**
+   - Keep files from successful agents — do NOT rebuild them
+   - Re-spawn sv-codegen only for failed components with additional context from the error
+   - After retry, re-aggregate: merge new results with previously successful ones
+   - If a component fails twice, stop retrying it and report to user
+
+**Block extraction rules:**
+
+- Parse each agent's output for `---GATEFLOW-RETURN---` delimiter
+- If delimiter missing, treat that agent's result as `STATUS: ERROR` with `SUMMARY: No structured result block returned`
+- If STATUS is unrecognized, treat as ERROR
+
+**File verification after aggregation:**
+
+```bash
+# Verify all expected files exist before proceeding to lint
+ls <all_expected_files> 2>/dev/null
+```
+
+- All exist → proceed to Phase 2 (lint)
+- Some missing → re-spawn for missing only (do not count against retry if agent returned complete but file is missing — this is an ERROR, report it)
+
+### Phase Gate Protocol
+
+Each phase has a gate that must pass before advancing. No phase may be skipped or partially advanced.
+
+**Gate definitions:**
+
+| Phase | Gate Condition | Failure Action |
+|-------|---------------|----------------|
+| Phase 0: Setup | Package compiles (`verilator --lint-only`) | Fix package, re-check |
+| Phase 1: Components | All components have `STATUS: complete` + files exist on disk | Re-spawn failed components (see Parallel Result Aggregation) |
+| Phase 2: Lint | gf-lint returns `STATUS: PASS` for all files | Spawn sv-refactor per failing file, re-lint |
+| Phase 3: Integration | Top-level compiles + lint clean | Fix integration, re-lint |
+| Phase 4: Testbench | TB files created + lint clean | Re-spawn sv-testbench for missing TBs |
+| Phase 5: Simulation | gf-sim returns `STATUS: PASS` | Spawn sv-debug → sv-refactor, re-sim |
+
+**Enforcement rules:**
+
+- **No skipping**: Every phase gate must be checked, even if you expect it to pass
+- **No partial advancement**: ALL files in a phase must pass before moving to the next phase
+- **Retry within phase**: Fix cycles happen inside the phase, not as a separate step
+- **Max 2 fix cycles per phase**: If a phase gate still fails after 2 fix attempts, report to user via AskUserQuestion
+
+**Phase Gate Check (report to user as progress):**
+
+```
+Phase 1: Components ✓ (3/3 complete)
+Phase 2: Lint ⚠ (2/3 clean, fixing regfile.sv — attempt 1/2)
+Phase 3: Integration ⏳ (waiting on Phase 2)
 ```
 
 ---
