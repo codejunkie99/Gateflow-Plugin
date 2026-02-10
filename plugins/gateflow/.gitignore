@@ -1,0 +1,6 @@
+.DS_Store
+.deps-installed
+obj_dir/
+*.vcd
+*.fst
+*.vvp
