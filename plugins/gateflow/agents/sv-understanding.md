@@ -1,6 +1,6 @@
 ---
 name: sv-understanding
-description: |
+description: >
   RTL analyst - Explains and documents SystemVerilog code architecture.
   This agent should be used when the user wants to understand existing code,
   trace signal flows, analyze FSM behavior, or get architectural explanations.

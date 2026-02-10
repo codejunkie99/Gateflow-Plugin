@@ -1,6 +1,6 @@
 ---
 name: sv-debug
-description: |
+description: >
   RTL debug specialist - Diagnoses simulation failures and unexpected behavior.
   This agent should be used when the user has simulation issues, X-value propagation,
   timing problems, or code that doesn't work as expected.

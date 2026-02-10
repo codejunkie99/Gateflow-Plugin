@@ -1,6 +1,9 @@
 ---
 name: gf-sim
-description: SystemVerilog simulator with structured output. Auto-detects DUT vs testbench, compiles with Verilator, runs simulation, returns parseable result block for orchestration.
+description: >
+  SystemVerilog simulator with structured output for orchestration.
+  Auto-detects DUT vs testbench, compiles with Verilator, runs simulation,
+  and returns a parseable result block for /gf orchestration.
 allowed-tools:
   - Bash
   - Read

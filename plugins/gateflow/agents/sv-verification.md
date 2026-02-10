@@ -1,6 +1,6 @@
 ---
 name: sv-verification
-description: |
+description: >
   Verification methodologist - Adds assertions, coverage, and formal properties.
   This agent should be used when the user wants to add SVA assertions, functional
   coverage, cover properties, or formal verification constraints.

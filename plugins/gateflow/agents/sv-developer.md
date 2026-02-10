@@ -1,6 +1,6 @@
 ---
 name: sv-developer
-description: |
+description: >
   Full-stack RTL developer - Handles complex multi-file implementation tasks.
   This agent should be used when the user has a large feature requiring multiple
   files, architectural changes, or coordinated modifications across the codebase.

@@ -1,6 +1,6 @@
 ---
 name: sv-codegen
-description: |
+description: >
   SystemVerilog RTL architect - Creates synthesizable modules and hardware blocks.
   This agent should be used when the user wants to create new SystemVerilog modules,
   implement FSMs, FIFOs, arbiters, pipelines, or any RTL design from scratch.

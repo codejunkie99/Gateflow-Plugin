@@ -1,6 +1,6 @@
 ---
 name: sv-planner
-description: |
+description: >
   SystemVerilog planning agent - asks clarifying questions and produces
   a detailed RTL architecture plan before any coding. Use for requests like
   "plan a DMA", "design a UART", "architect a subsystem", or "how should I implement X".

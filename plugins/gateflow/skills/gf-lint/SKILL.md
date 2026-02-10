@@ -1,6 +1,9 @@
 ---
 name: gf-lint
-description: SystemVerilog lint checker with structured output. Runs Verilator lint, categorizes errors/warnings, explains issues, returns parseable result block for orchestration.
+description: >
+  SystemVerilog lint checker with structured output for orchestration.
+  Runs Verilator lint, categorizes errors/warnings, explains issues,
+  and returns a parseable result block for /gf orchestration.
 allowed-tools:
   - Bash
   - Read
