@@ -17,6 +17,12 @@ skills|skills/gf/SKILL.md|Main orchestrator, verification loops
 skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
 skills|skills/gf-architect/SKILL.md|Codebase mapping, hierarchy analysis
 skills|skills/gf-build/SKILL.md|Parallel multi-component build orchestrator
+skills|skills/gf-expand/SKILL.md|Design expansion and requirement elaboration
+skills|skills/gf-learn/SKILL.md|Learning-oriented SV guidance and explanations
+skills|skills/gf-lint/SKILL.md|Lint analysis and remediation workflow
+skills|skills/gf-router/SKILL.md|Task routing and intent classification
+skills|skills/gf-sim/SKILL.md|Simulation flow and debug loops
+skills|skills/gf-summary/SKILL.md|Summarization and progress reporting
 skills|skills/tb-best-practices/SKILL.md|Testbench best practices, layered TB, randomization, coverage, OOP patterns
 
 agents|agents/sv-codegen.md|RTL generation, modules, FSMs, FIFOs
@@ -28,6 +34,7 @@ agents|agents/sv-planner.md|Architecture planning, design plans, diagrams
 agents|agents/sv-orchestrator.md|Parallel component orchestration, multi-module builds
 agents|agents/sv-refactor.md|Lint fixes, cleanup, optimization
 agents|agents/sv-developer.md|Multi-file development, complex features
+agents|agents/sv-tutor.md|SV tutoring and concept explanations
 
 hooks|hooks/hooks.json|Automation hooks configuration
 
