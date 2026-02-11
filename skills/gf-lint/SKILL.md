@@ -1,0 +1,1 @@
+../../plugins/gateflow/skills/gf-lint/SKILL.md
