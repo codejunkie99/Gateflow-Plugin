@@ -112,6 +112,7 @@ For Understanding:
 | Run simulation | `/gf-sim` skill | - | - |
 | Map codebase | `/gf-architect` skill | - | session |
 | Learn/practice | `/gf-learn` skill | - | session |
+| Visualize codebase | `/gf-viz` skill or `sv-viz` agent | - | session |
 
 ### Step 4: NEVER Handle These Directly
 
@@ -167,6 +168,7 @@ Use Task tool (call 2 - same message, parallel):
 | `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file", "large change" |
 | `gateflow:sv-orchestrator` | Parallel builder | "build CPU", "create SoC", "multi-component" |
 | `gateflow:sv-tutor` | Teacher | "teach", "learn", "exercise", "practice" |
+| `gateflow:sv-viz` | Terminal visualizer | "visualize", "show hierarchy", "show FSM", "show module" |
 
 ---
 
