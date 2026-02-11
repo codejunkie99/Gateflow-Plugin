@@ -173,6 +173,7 @@ Use specialized agents for complex SystemVerilog tasks:
 | `gateflow:sv-planner` | Architecture planner | "plan", "design", "architect" |
 | `gateflow:sv-refactor` | Code quality | "fix lint", "refactor", "clean up" |
 | `gateflow:sv-developer` | Full-stack RTL | "implement feature", "multi-file change" |
+| `gateflow:sv-viz` | Terminal visualizer | "visualize", "show hierarchy", "show FSM", "show module" |
 
 **Handle directly:** Quick fixes, simple questions, running lint/sim commands.
 
