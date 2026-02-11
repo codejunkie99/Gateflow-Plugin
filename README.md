@@ -5,9 +5,7 @@
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
 <img width="1619" height="787" alt="image" src="https://github.com/user-attachments/assets/f53240b4-5704-4c5a-8e0e-5d65546a0ad1" />
-
 ---
-
 ## Table of Contents
 
 | Start Here | Reference |
