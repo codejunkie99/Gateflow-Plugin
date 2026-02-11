@@ -388,6 +388,7 @@ The skills below are available at `skills/` (mirrored from `plugins/gateflow/ski
 | `gf-router` | `skills/gf-router/SKILL.md` | Request classification and routing |
 | `gf-sim` | `skills/gf-sim/SKILL.md` | Simulation workflows |
 | `gf-summary` | `skills/gf-summary/SKILL.md` | Summarization and reporting |
+| `gf-viz` | `skills/gf-viz/SKILL.md` | Terminal visualization of RTL architecture |
 | `tb-best-practices` | `skills/tb-best-practices/SKILL.md` | Testbench conventions and best practices |
 
 ## Agents Directory
@@ -406,6 +407,7 @@ The agents below are available at `agents/` (mirrored from `plugins/gateflow/age
 | `sv-tutor` | `agents/sv-tutor.md` | Explain SystemVerilog concepts and code |
 | `sv-understanding` | `agents/sv-understanding.md` | Analyze and explain existing RTL |
 | `sv-verification` | `agents/sv-verification.md` | Assertions, coverage, and verification strategy |
+| `sv-viz` | `agents/sv-viz.md` | Terminal visualization of RTL architecture diagrams |
 
 Agents are automatically invoked by `/gf` based on request context.
 
@@ -463,7 +465,8 @@ Gateflow-Plugin/
 │   ├── sv-testbench.md
 │   ├── sv-tutor.md
 │   ├── sv-understanding.md
-│   └── sv-verification.md
+│   ├── sv-verification.md
+│   └── sv-viz.md
 ├── skills/                   # Top-level mirrored skill entrypoints
 │   ├── gf/
 │   ├── gf-architect/
@@ -475,6 +478,7 @@ Gateflow-Plugin/
 │   ├── gf-router/
 │   ├── gf-sim/
 │   ├── gf-summary/
+│   ├── gf-viz/
 │   └── tb-best-practices/
 ├── plugins/
 │   └── gateflow/             # Main plugin
@@ -490,7 +494,8 @@ Gateflow-Plugin/
 │       │   ├── sv-testbench.md
 │       │   ├── sv-tutor.md
 │       │   ├── sv-understanding.md
-│       │   └── sv-verification.md
+│       │   ├── sv-verification.md
+│       │   └── sv-viz.md
 │       ├── commands/         # Slash commands
 │       │   ├── gf-doctor.md
 │       │   ├── gf-scan.md
@@ -510,6 +515,7 @@ Gateflow-Plugin/
 │       │   ├── gf-router/
 │       │   ├── gf-sim/
 │       │   ├── gf-summary/
+│       │   ├── gf-viz/
 │       │   └── tb-best-practices/
 │       ├── hooks/            # Automation hooks
 │       └── CLAUDE.md         # SystemVerilog reference
