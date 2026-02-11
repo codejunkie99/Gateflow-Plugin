@@ -8,6 +8,21 @@
 
 ---
 
+## Table of Contents
+
+| Start Here | Reference |
+|------------|-----------|
+| [What is GateFlow?](#what-is-gateflow) | [Skills Directory](#skills-directory) |
+| [Why GateFlow?](#why-gateflow) | [Agents Directory](#agents-directory) |
+| [Repo Navigation](#repo-navigation) | [Features](#features) |
+| [Quick Start](#quick-start) | [Project Structure](#project-structure) |
+| [Updating GateFlow](#updating-gateflow) | [Configuration (Optional)](#configuration-optional) |
+| [Usage](#usage) | [Troubleshooting](#troubleshooting) |
+| [Contributing](#contributing) | [License](#license) |
+| [Links](#links) |  |
+
+---
+
 ## What is GateFlow?
 
 GateFlow brings professional SystemVerilog tooling to Claude Code. Design RTL modules, generate testbenches, debug simulation failures, and get lint-clean code — all through natural conversation.
@@ -31,6 +46,24 @@ No more cryptic error messages. No more hunting through documentation for the ri
 **The GateFlow difference:** We don't just generate code — we deliver *working* code. Lint-checked, simulated, verified.
 
 We can't wait to see what you create. ❤️
+
+---
+
+## Repo Navigation
+
+Use these two dedicated spaces to quickly find what you need:
+
+| Area | Purpose | Path |
+|------|---------|------|
+| Skills Space | Auto-activating workflows and orchestration logic | [`skills/`](skills) |
+| Agents Space | Specialized SystemVerilog agent instructions | [`agents/`](agents) |
+
+Top-level `skills/` and `agents/` are mirrored to the plugin source files for easier discovery.
+
+Fast links:
+- [Skills Directory](#skills-directory)
+- [Agents Directory](#agents-directory)
+- [Project Structure](#project-structure)
 
 ---
 
@@ -171,23 +204,42 @@ Done! Created:
 
 ---
 
-## Agents
+## Skills Directory
 
-GateFlow includes specialized agents for different tasks:
+The skills below are available at `skills/` (mirrored from `plugins/gateflow/skills/`).
 
-| Agent | Expertise | Use Case |
-|-------|-----------|----------|
-| `sv-codegen` | RTL architect | Creating new modules, FSMs, FIFOs, arbiters |
-| `sv-testbench` | Verification engineer | Writing testbenches, stimulus, self-checking logic |
-| `sv-debug` | Debug specialist | Simulation failures, X-values, timing issues |
-| `sv-verification` | Verification methodologist | SVA assertions, coverage, formal properties |
-| `sv-understanding` | RTL analyst | Explaining code, tracing signals, architecture docs |
-| `sv-planner` | Architecture planner | Design planning, block diagrams, implementation phases |
-| `sv-orchestrator` | Parallel builder | Multi-component designs, parallel builds |
-| `sv-refactor` | Code quality engineer | Fixing lint, cleanup, optimization |
-| `sv-developer` | Full-stack RTL | Complex multi-file features |
+| Skill | Path | Purpose |
+|-------|------|---------|
+| `gf` | `skills/gf/SKILL.md` | Main orchestrator and execution flow |
+| `gf-architect` | `skills/gf-architect/SKILL.md` | Codebase mapping and architecture analysis |
+| `gf-build` | `skills/gf-build/SKILL.md` | Multi-component build orchestration |
+| `gf-expand` | `skills/gf-expand/SKILL.md` | Expand and flesh out design artifacts |
+| `gf-learn` | `skills/gf-learn/SKILL.md` | Learning and explanation workflows |
+| `gf-lint` | `skills/gf-lint/SKILL.md` | Lint-first fix workflows |
+| `gf-plan` | `skills/gf-plan/SKILL.md` | Design planning with implementation phases |
+| `gf-router` | `skills/gf-router/SKILL.md` | Request classification and routing |
+| `gf-sim` | `skills/gf-sim/SKILL.md` | Simulation workflows |
+| `gf-summary` | `skills/gf-summary/SKILL.md` | Summarization and reporting |
+| `tb-best-practices` | `skills/tb-best-practices/SKILL.md` | Testbench conventions and best practices |
 
-Agents are automatically invoked by the `/gf` orchestrator based on your request.
+## Agents Directory
+
+The agents below are available at `agents/` (mirrored from `plugins/gateflow/agents/`).
+
+| Agent | Path | Focus |
+|-------|------|-------|
+| `sv-codegen` | `agents/sv-codegen.md` | Generate RTL modules and architecture skeletons |
+| `sv-debug` | `agents/sv-debug.md` | Debug simulation failures and root-cause issues |
+| `sv-developer` | `agents/sv-developer.md` | End-to-end multi-file RTL implementation |
+| `sv-orchestrator` | `agents/sv-orchestrator.md` | Coordinate parallel agent workflows |
+| `sv-planner` | `agents/sv-planner.md` | Plan architecture and phased implementation |
+| `sv-refactor` | `agents/sv-refactor.md` | Cleanup, modernization, and lint-driven refactors |
+| `sv-testbench` | `agents/sv-testbench.md` | Build testbenches, stimuli, and checks |
+| `sv-tutor` | `agents/sv-tutor.md` | Explain SystemVerilog concepts and code |
+| `sv-understanding` | `agents/sv-understanding.md` | Analyze and explain existing RTL |
+| `sv-verification` | `agents/sv-verification.md` | Assertions, coverage, and verification strategy |
+
+Agents are automatically invoked by `/gf` based on request context.
 
 ---
 
@@ -233,18 +285,44 @@ Create → Lint → Fix → Test → Fix → Deliver
 Gateflow-Plugin/
 ├── .claude-plugin/
 │   └── marketplace.json      # Marketplace manifest
+├── agents/                   # Top-level mirrored agent entrypoints
+│   ├── sv-codegen.md
+│   ├── sv-debug.md
+│   ├── sv-developer.md
+│   ├── sv-orchestrator.md
+│   ├── sv-planner.md
+│   ├── sv-refactor.md
+│   ├── sv-testbench.md
+│   ├── sv-tutor.md
+│   ├── sv-understanding.md
+│   └── sv-verification.md
+├── skills/                   # Top-level mirrored skill entrypoints
+│   ├── gf/
+│   ├── gf-architect/
+│   ├── gf-build/
+│   ├── gf-expand/
+│   ├── gf-learn/
+│   ├── gf-lint/
+│   ├── gf-plan/
+│   ├── gf-router/
+│   ├── gf-sim/
+│   ├── gf-summary/
+│   └── tb-best-practices/
 ├── plugins/
 │   └── gateflow/             # Main plugin
 │       ├── .claude-plugin/
 │       │   └── plugin.json   # Plugin manifest
 │       ├── agents/           # Specialized AI agents
 │       │   ├── sv-codegen.md
-│       │   ├── sv-testbench.md
 │       │   ├── sv-debug.md
-│       │   ├── sv-verification.md
-│       │   ├── sv-understanding.md
+│       │   ├── sv-developer.md
+│       │   ├── sv-orchestrator.md
+│       │   ├── sv-planner.md
 │       │   ├── sv-refactor.md
-│       │   └── sv-developer.md
+│       │   ├── sv-testbench.md
+│       │   ├── sv-tutor.md
+│       │   ├── sv-understanding.md
+│       │   └── sv-verification.md
 │       ├── commands/         # Slash commands
 │       │   ├── gf-doctor.md
 │       │   ├── gf-scan.md
@@ -255,8 +333,16 @@ Gateflow-Plugin/
 │       │   └── gf-sim.md
 │       ├── skills/           # Auto-activating skills
 │       │   ├── gf/
+│       │   ├── gf-architect/
+│       │   ├── gf-build/
+│       │   ├── gf-expand/
+│       │   ├── gf-learn/
+│       │   ├── gf-lint/
 │       │   ├── gf-plan/
-│       │   └── gf-architect/
+│       │   ├── gf-router/
+│       │   ├── gf-sim/
+│       │   ├── gf-summary/
+│       │   └── tb-best-practices/
 │       ├── hooks/            # Automation hooks
 │       └── CLAUDE.md         # SystemVerilog reference
 ├── docs/
