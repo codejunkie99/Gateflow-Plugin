@@ -15,6 +15,9 @@ obj_dir/
 # Local settings
 .claude/*.local.md
 
+# Deprecated hooks
+plugins/gateflow/hooks/deprecated/
+
 # IDE
 .vscode/
 .idea/
