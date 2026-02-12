@@ -485,6 +485,12 @@ BSL-1.1 (Business Source License) — see [LICENSE](LICENSE) for details.
 
 ---
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=codejunkie99/Gateflow-Plugin&type=date&legend=top-left)](https://www.star-history.com/#codejunkie99/Gateflow-Plugin&type=date&legend=top-left)
+
+---
+
 <p align="center">
   <b>Built for hardware engineers who want to move faster.</b><br>
   <i>Design. Verify. Ship.</i>
