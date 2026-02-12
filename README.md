@@ -2,6 +2,7 @@
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
 [![GitHub Stars](https://img.shields.io/github/stars/codejunkie99/Gateflow-Plugin?style=social)](https://github.com/codejunkie99/Gateflow-Plugin/stargazers)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcodejunkie99%2FGateflow-Plugin%2Fmain%2Fplugins%2Fgateflow%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&color=blue)](https://github.com/codejunkie99/Gateflow-Plugin/releases)
 [![License: BSL-1.1](https://img.shields.io/badge/License-BSL%201.1-orange.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
@@ -19,7 +20,18 @@
 | [Updating GateFlow](#updating-gateflow) | [Configuration (Optional)](#configuration-optional) |
 | [Usage](#usage) | [Troubleshooting](#troubleshooting) |
 | [Contributing](#contributing) | [License](#license) |
-| [Links](#links) |  |
+| [Links](#links) | [Updates](#updates) |
+
+---
+
+## Updates
+
+| Version | Date | What Changed |
+|---------|------|-------------|
+| **1.5.1** | 2025-02-12 | Prompt-based hooks for PreToolUse (SV file safety), PostToolUse (lint nudge), Stop (smart completion gate) |
+| **1.5.0** | 2025-02-11 | Terminal visualization with `/gf-viz` skill and `sv-viz` agent |
+| **1.4.4** | 2025-02-11 | Individual component downloads, cross-tool install instructions (Codex, Cursor, Copilot, Cline, Windsurf) |
+| **1.4.3** | 2025-02-10 | Split `gf-plan` references, validation fixes, docs improvements |
 
 ---
 
