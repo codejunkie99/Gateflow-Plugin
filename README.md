@@ -1,6 +1,7 @@
 # GateFlow Plugin for Claude Code
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
+[![GitHub Stars](https://img.shields.io/github/stars/codejunkie99/Gateflow-Plugin?style=social)](https://github.com/codejunkie99/Gateflow-Plugin/stargazers)
 [![License: BSL-1.1](https://img.shields.io/badge/License-BSL%201.1-orange.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
