@@ -450,7 +450,7 @@ gateflow:sv-testbench
 
 | Version | Date | What Changed |
 |---------|------|-------------|
-| **1.5.1** | 2025-02-12 | Prompt-based hooks: PreToolUse (SV file safety), PostToolUse (lint nudge), Stop (smart completion gate) |
+| **1.5.2** | 2026-02-15 | Fix Stop hook JSON validation: replace prompt hook with deterministic command hook |
 | **1.5.0** | 2025-02-11 | Terminal visualization with `/gf-viz` skill and `sv-viz` agent |
 | **1.4.4** | 2025-02-11 | Individual component downloads, cross-tool install instructions |
 | **1.4.3** | 2025-02-10 | Split `gf-plan` references, validation fixes, docs improvements |
