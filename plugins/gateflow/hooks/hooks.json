@@ -50,9 +50,9 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Check if this session involved SystemVerilog/Verilog work (creating, editing, debugging .sv/.v files). If NO SV work was done, return {}. If SV work WAS done, check: (1) Were lint checks run on modified files? (2) Were simulations run if testbenches exist? (3) Are there obvious incomplete tasks? Return a JSON object: if everything looks good: {\"decision\": \"approve\"}. If verification steps were skipped: {\"decision\": \"block\", \"reason\": \"SV files were modified but lint/sim was not run. Consider running /gf-lint or /gf-sim before finishing.\"}.",
-            "timeout": 15
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/stop-hook.sh",
+            "timeout": 10
           }
         ]
       }
