@@ -31,6 +31,7 @@ We can't wait to see what you create. ❤️
 - [Project Structure](#project-structure) — Repo layout
 - [Troubleshooting](#troubleshooting) — Common issues
 - [Updates](#updates) — Changelog
+- [Releases](releases.md) — Detailed release notes
 - [Contributing](#contributing) | [License](#license) | [Links](#links)
 
 ---
@@ -448,9 +449,11 @@ gateflow:sv-testbench
 
 ## Updates
 
+For detailed release notes, see [`releases.md`](releases.md).
+
 | Version | Date | What Changed |
 |---------|------|-------------|
-| **1.5.2** | 2026-02-15 | Fix Stop hook JSON validation: replace prompt hook with deterministic command hook |
+| **1.5.2** | 2026-02-15 | Fix Stop hook JSON validation: replace prompt hook with deterministic command hook (non-blocking reminder) |
 | **1.5.0** | 2025-02-11 | Terminal visualization with `/gf-viz` skill and `sv-viz` agent |
 | **1.4.4** | 2025-02-11 | Individual component downloads, cross-tool install instructions |
 | **1.4.3** | 2025-02-10 | Split `gf-plan` references, validation fixes, docs improvements |
