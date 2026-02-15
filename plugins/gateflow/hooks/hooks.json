@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Decide if this user prompt is asking to CREATE, DEBUG, TEST, SIMULATE, or MODIFY SystemVerilog/Verilog/RTL hardware code. Return ONLY a JSON object. If yes: {\"systemMessage\": \"SystemVerilog task detected. Use /gf to plan first (with ASCII diagram) before implementation, or /gf-plan for planning only.\"}. If no (e.g. questions about plugins, settings, naming, general software, brainstorming non-SV topics): {}. Be strict — only trigger for actual hardware design work, not casual mentions of hardware concepts.",
+            "prompt": "Is this prompt CLEARLY asking to CREATE, DEBUG, TEST, SIMULATE, or MODIFY SystemVerilog/Verilog/RTL hardware code? Return ONLY a JSON object. If YES (actual hardware design work): {\"systemMessage\": \"SystemVerilog task detected. Consider using /gf to plan first.\"}. If NO or UNSURE: return exactly {}. NEVER block non-SV prompts.",
             "timeout": 10
           }
         ]
