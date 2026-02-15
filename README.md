@@ -7,7 +7,7 @@
 [![License: BSL-1.1](https://img.shields.io/badge/License-BSL%201.1-orange.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
-<img width="1619" height="787" alt="image" src="https://github.com/user-attachments/assets/f53240b4-5704-4c5a-8e0e-5d65546a0ad1" />
+![GateFlow Demo](https://github.com/user-attachments/assets/f53240b4-5704-4c5a-8e0e-5d65546a0ad1)
 
 ---
 
