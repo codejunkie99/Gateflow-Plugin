@@ -1,4 +1,4 @@
-<img width="1024" height="495" alt="image" src="https://github.com/user-attachments/assets/e665f807-af54-4d81-b679-40259e683421" /># GateFlow Plugin for Claude Code
+ GateFlow Plugin for Claude Code
 
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
