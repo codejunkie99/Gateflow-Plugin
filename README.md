@@ -7,8 +7,7 @@
 [![License: BSL-1.1](https://img.shields.io/badge/License-BSL%201.1-orange.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://code.claude.com/)
 
-https://lh3.googleusercontent.com/gg-dl/AOI_d__GG_Z0jIgJ-sejQkJ20pB-IsbH-G6yfamJL6f1W6cNmPNa_uA-IfLg9mbfPeUoM9qnM4x7FlqlIYEFOoPGPXMgMSlpDiHokSVD2IZp0kTweztleOTHWuJrybu_8NiDx7Ee6oma8CJ6yjAq3jJ6dykpewxpFTnpgMJQ7fxnboZznTFXCg=s1024-rj<img width="1024" height="495" alt="image" src="https://github.com/user-attachments/assets/73115231-5dac-473c-8f6b-5ed88a780135" />
-
+![GateFlow Demo](https://github.com/user-attachments/assets/73115231-5dac-473c-8f6b-5ed88a780135)
 
 ---
 
