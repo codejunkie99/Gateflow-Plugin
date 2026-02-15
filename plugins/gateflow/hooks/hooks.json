@@ -15,9 +15,9 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Is this prompt CLEARLY asking to CREATE, DEBUG, TEST, SIMULATE, or MODIFY SystemVerilog/Verilog/RTL hardware code? Return ONLY a JSON object. If YES (actual hardware design work): {\"systemMessage\": \"SystemVerilog task detected. Consider using /gf to plan first.\"}. If NO or UNSURE: return exactly {}. NEVER block non-SV prompts.",
-            "timeout": 10
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/userpromptsubmit-sv-nudge.py",
+            "timeout": 2
           }
         ]
       }
@@ -27,9 +27,9 @@
         "matcher": "Bash",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Check if this Bash command could destructively affect SystemVerilog/Verilog files (.sv, .svh, .v, .vh). Look for: rm/delete of SV files, git checkout/reset that discards SV changes, overwriting SV files with redirects. Return ONLY a JSON object. If destructive: {\"hookSpecificOutput\": {\"permissionDecision\": \"ask\"}, \"systemMessage\": \"⚠️ This command may delete or overwrite SystemVerilog files. Confirm with the user before proceeding.\"}. If safe: {}.",
-            "timeout": 10
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pretooluse-bash-guard.py",
+            "timeout": 2
           }
         ]
       }
