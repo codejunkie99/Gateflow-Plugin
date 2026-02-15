@@ -1,4 +1,4 @@
- GateFlow Plugin for Claude Code
+# GateFlow Plugin for Claude Code
 
 > AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
 
