@@ -39,9 +39,9 @@
         "matcher": "Write|Edit",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Check if the file just written/edited is a SystemVerilog or Verilog file (.sv, .svh, .v, .vh). Return ONLY a JSON object. If it IS an SV/V file: {\"systemMessage\": \"SV file modified. Run /gf-lint to check for issues, or continue if you plan to lint later.\"}. If it is NOT an SV file: {}.",
-            "timeout": 10
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/posttooluse-sv-lint-nudge.py",
+            "timeout": 2
           }
         ]
       }
