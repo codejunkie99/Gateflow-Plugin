@@ -23,6 +23,67 @@ export interface ComponentToken {
   styles: Record<string, string>;
 }
 
+/* ─── Animation capture types ─── */
+
+export type AnimationLibrary = 'css' | 'gsap' | 'lottie' | 'framer-motion' | 'react-spring' | 'motion-one' | 'unknown';
+export type MotionIntent = 'fade' | 'slide' | 'scale' | 'rotate' | 'color-shift' | 'spring' | 'bounce' | 'morph' | 'reveal' | 'parallax' | 'complex';
+export type TriggerEvent = 'load' | 'hover' | 'focus' | 'click' | 'scroll' | 'viewport-enter' | 'media-query' | 'unknown';
+
+export interface KeyframeStop {
+  offset: number;
+  properties: Record<string, string>;
+  easing?: string;
+}
+
+export interface AnimationTiming {
+  duration: number;
+  delay: number;
+  easing: string;
+  iterations: number;
+  direction: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
+  fillMode: 'none' | 'forwards' | 'backwards' | 'both';
+}
+
+export interface ScrollBinding {
+  triggerSelector?: string;
+  hasScrollTrigger: boolean;
+  hasIntersectionObserver: boolean;
+  scrollTimelineAxis?: 'block' | 'inline';
+}
+
+export interface PhysicsParams {
+  type: 'spring' | 'bounce' | 'inertia';
+  mass?: number;
+  stiffness?: number;
+  damping?: number;
+  oscillationCount?: number;
+  overshootPercent?: number;
+}
+
+export interface AnimationGroup {
+  groupId: string;
+  role: 'lead' | 'follower';
+  staggerDelay?: number;
+}
+
+export interface AnimationToken {
+  selector: string;
+  library: AnimationLibrary;
+  motionIntent: MotionIntent;
+  timing?: AnimationTiming;
+  keyframes?: KeyframeStop[];
+  trigger: TriggerEvent;
+  scrollBinding?: ScrollBinding;
+  physics?: PhysicsParams;
+  group?: AnimationGroup;
+  gsapVars?: Record<string, unknown>;
+  lottieMetadata?: { frameRate: number; totalFrames: number; duration: number };
+  rawTransition?: string;
+  rawAnimation?: string;
+  rawTransform?: string;
+}
+
+/** @deprecated Use AnimationToken instead */
 export interface MotionToken {
   selector: string;
   transition: string;
@@ -75,7 +136,7 @@ export interface DesignAnalysis {
   colors: ColorToken[];
   typography: TypographyToken[];
   components: ComponentToken[];
-  motion: MotionToken[];
+  motion: (MotionToken | AnimationToken)[];
   layout: LayoutToken[];
   cssVariables: Record<string, string>;
   accessibilitySnapshot?: string;
