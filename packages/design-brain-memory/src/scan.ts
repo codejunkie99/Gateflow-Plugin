@@ -1,7 +1,8 @@
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, extname } from 'node:path';
-import type { ScanTokens, ScanScore, ScanResult } from './types.js';
+import type { ScanTokens, ScanScore, ScanResult, DesignAnalysis, AnimationToken, MotionToken } from './types.js';
 import { assignPersona } from './persona.js';
+import { theatricalScan } from './theatrical.js';
 
 /* ─── File collection ─── */
 
@@ -294,6 +295,52 @@ function computeScore(tokens: ScanTokens): ScanScore {
   return { colorDiscipline, typographySystem, spacingLayout, motionPolish, total };
 }
 
+/* ─── URL detection ─── */
+
+export function looksLikeUrl(input: string): boolean {
+  if (input.startsWith('http://') || input.startsWith('https://')) return true;
+  // Bare domain: has dot, no path separator at start, valid TLD pattern
+  if (/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}/.test(input) && !input.startsWith('.') && !input.startsWith('/')) return true;
+  return false;
+}
+
+export function normalizeToUrl(input: string): string {
+  if (input.startsWith('http://') || input.startsWith('https://')) return input;
+  return `https://${input}`;
+}
+
+/* ─── DesignAnalysis → ScanTokens bridge ─── */
+
+function isAnimationToken(token: MotionToken | AnimationToken): token is AnimationToken {
+  return 'library' in token && 'motionIntent' in token;
+}
+
+export function designAnalysisToScanTokens(analysis: DesignAnalysis): ScanTokens {
+  const transitionValues: string[] = [];
+  for (const m of analysis.motion) {
+    if (isAnimationToken(m)) {
+      if (m.timing) {
+        transitionValues.push(`${m.motionIntent} ${m.timing.duration}ms ${m.timing.easing}`);
+      }
+    } else {
+      if (m.transition && m.transition !== 'all 0s ease 0s') {
+        transitionValues.push(m.transition);
+      }
+    }
+  }
+
+  return {
+    colors: analysis.colors.map(c => c.hex),
+    fontFamilies: [...new Set(analysis.typography.map(t => t.fontFamily.toLowerCase()))],
+    fontSizes: [...new Set(analysis.typography.map(t => t.fontSize))],
+    transitions: transitionValues,
+    spacingValues: analysis.components
+      .flatMap(c => [c.styles.padding, c.styles.margin].filter(Boolean) as string[]),
+    cssVariableCount: Object.keys(analysis.cssVariables).length,
+    framework: null,
+  };
+}
+
 /* ─── Main scan function ─── */
 
 export async function scanDesignSystem(scanPath: string): Promise<ScanResult> {
@@ -343,5 +390,23 @@ export async function scanDesignSystem(scanPath: string): Promise<ScanResult> {
     score,
     persona,
     framework,
+  };
+}
+
+/* ─── URL scan function ─── */
+
+export async function scanFromUrl(url: string): Promise<ScanResult> {
+  const { analysis } = await theatricalScan(url);
+  const tokens = designAnalysisToScanTokens(analysis);
+  const score = computeScore(tokens);
+  const persona = assignPersona(tokens);
+
+  return {
+    path: url,
+    filesScanned: 0,
+    tokens,
+    score,
+    persona,
+    framework: null,
   };
 }
