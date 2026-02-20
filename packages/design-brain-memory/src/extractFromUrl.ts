@@ -635,7 +635,7 @@ function convertObserverResult(raw: RawAnimObserverResult): AnimationToken[] {
       timing: {
         duration: tween.duration * 1000,
         delay: tween.delay * 1000,
-        easing: tween.ease,
+        easing: tween.ease || 'power1.out',
         iterations: 1,
         direction: 'normal',
         fillMode: 'none',
@@ -1009,6 +1009,26 @@ export async function captureDesignFromUrl(params: {
       session: sessionName,
       cwd: workingDir,
     }).catch(() => undefined);
+
+    // Scroll through the page to trigger lazy-loaded animation libraries (GSAP, ScrollTrigger, etc.)
+    try {
+      const pageInfo = await runAgentBrowserJson(['eval',
+        `({ height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), vh: window.innerHeight })`
+      ], { session: sessionName, cwd: workingDir });
+      const { height = 5000, vh = 800 } = (pageInfo.data.result as { height?: number; vh?: number }) ?? {};
+      const scrollSteps = Math.min(Math.ceil(height / vh), 15);
+      const stepSize = Math.ceil(height / scrollSteps);
+      for (let i = 1; i <= scrollSteps; i++) {
+        await runAgentBrowserJson(['eval', `window.scrollTo({top:${i * stepSize},behavior:"instant"});true`],
+          { session: sessionName, cwd: workingDir });
+        await runAgentBrowserJson(['wait', '200'], { session: sessionName, cwd: workingDir });
+      }
+      await runAgentBrowserJson(['eval', 'window.scrollTo({top:0,behavior:"instant"});true'],
+        { session: sessionName, cwd: workingDir });
+      await runAgentBrowserJson(['wait', '1500'], { session: sessionName, cwd: workingDir });
+    } catch {
+      // Scroll is best-effort; continue to animation capture
+    }
 
     // Run animation observer script (once, at desktop viewport)
     let animationTokens: AnimationToken[] = [];

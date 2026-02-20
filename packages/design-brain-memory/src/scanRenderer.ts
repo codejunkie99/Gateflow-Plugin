@@ -84,8 +84,8 @@ export function renderScanResults(result: ScanResult): void {
   // Header box
   console.log(topBorder());
   console.log(emptyBoxLine());
-  const title = `${BOLD}${CYAN}design-brain${RESET}  v0.2.0`;
-  console.log(boxLine(title, 'design-brain  v0.2.0'.length));
+  const title = `${BOLD}${CYAN}design-brain${RESET}  v0.3.0`;
+  console.log(boxLine(title, 'design-brain  v0.3.0'.length));
   const subtitle = `${DIM}Relational design memory${RESET}`;
   console.log(boxLine(subtitle, 'Relational design memory'.length));
   console.log(emptyBoxLine());
@@ -94,7 +94,12 @@ export function renderScanResults(result: ScanResult): void {
   console.log('');
 
   // Checkmark summary
-  console.log(check(`Scanned ${BOLD}${filesScanned}${RESET} files`));
+  const isUrl = result.path.startsWith('http://') || result.path.startsWith('https://');
+  if (isUrl) {
+    console.log(check(`Scanned ${BOLD}${result.path}${RESET} (live site)`));
+  } else {
+    console.log(check(`Scanned ${BOLD}${filesScanned}${RESET} files`));
+  }
   console.log(check(
     `Found ${BOLD}${tokens.colors.length}${RESET} colors, ` +
     `${BOLD}${tokens.fontFamilies.length}${RESET} fonts, ` +

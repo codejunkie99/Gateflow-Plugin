@@ -221,7 +221,7 @@ function mergeTokens(a: Omit<ScanTokens, 'framework'>, b: Partial<ScanTokens>): 
 
 /* ─── Score computation ─── */
 
-function computeScore(tokens: ScanTokens): ScanScore {
+export function computeScore(tokens: ScanTokens): ScanScore {
   // Color Discipline (0–25): fewer unique colors = higher score
   const colorCount = tokens.colors.length;
   let colorDiscipline: number;

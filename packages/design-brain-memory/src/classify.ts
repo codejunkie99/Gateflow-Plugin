@@ -138,7 +138,8 @@ export function detectPhysics(
 /**
  * Map GSAP easing string to physics params when applicable.
  */
-export function classifyGsapEasing(easeString: string): PhysicsParams | null {
+export function classifyGsapEasing(easeString: string | undefined | null): PhysicsParams | null {
+  if (!easeString) return null;
   const lower = easeString.toLowerCase();
 
   if (lower.includes('elastic')) {

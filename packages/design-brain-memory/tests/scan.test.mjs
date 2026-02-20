@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { scanCssContent, collectFiles, detectFramework, scanDesignSystem } from '../dist/scan.js';
+import { scanCssContent, collectFiles, detectFramework, scanDesignSystem, looksLikeUrl, normalizeToUrl, designAnalysisToScanTokens } from '../dist/scan.js';
 
 test('scanCssContent extracts hex colors', () => {
   const result = scanCssContent(`
@@ -194,4 +194,76 @@ test('score computation rewards disciplined design', async () => {
   assert.ok(result.score.total >= 50, `Expected score >= 50 but got ${result.score.total}`);
   assert.ok(result.score.colorDiscipline >= 15, `Color discipline too low: ${result.score.colorDiscipline}`);
   assert.ok(result.score.typographySystem >= 15, `Typography system too low: ${result.score.typographySystem}`);
+});
+
+/* ─── URL detection tests ─── */
+
+test('looksLikeUrl recognizes bare domains', () => {
+  assert.equal(looksLikeUrl('stripe.com'), true);
+  assert.equal(looksLikeUrl('example.co.uk'), true);
+  assert.equal(looksLikeUrl('my-site.dev'), true);
+});
+
+test('looksLikeUrl recognizes full URLs', () => {
+  assert.equal(looksLikeUrl('https://example.com'), true);
+  assert.equal(looksLikeUrl('http://localhost:3000'), true);
+  assert.equal(looksLikeUrl('https://stripe.com/docs'), true);
+});
+
+test('looksLikeUrl rejects local paths', () => {
+  assert.equal(looksLikeUrl('./src'), false);
+  assert.equal(looksLikeUrl('/Users/arnavdas/project'), false);
+  assert.equal(looksLikeUrl('.'), false);
+  assert.equal(looksLikeUrl('src'), false);
+  assert.equal(looksLikeUrl('../dist'), false);
+});
+
+test('normalizeToUrl adds https:// to bare domains', () => {
+  assert.equal(normalizeToUrl('stripe.com'), 'https://stripe.com');
+  assert.equal(normalizeToUrl('example.co.uk'), 'https://example.co.uk');
+});
+
+test('normalizeToUrl preserves existing protocol', () => {
+  assert.equal(normalizeToUrl('https://example.com'), 'https://example.com');
+  assert.equal(normalizeToUrl('http://localhost:3000'), 'http://localhost:3000');
+});
+
+/* ─── DesignAnalysis → ScanTokens bridge tests ─── */
+
+test('designAnalysisToScanTokens converts analysis correctly', () => {
+  const mockAnalysis = {
+    colors: [
+      { hex: '#FF0000', count: 10, samples: ['body:background'] },
+      { hex: '#00FF00', count: 5, samples: ['h1:color'] },
+    ],
+    typography: [
+      { fontFamily: 'Inter', fontSize: '16px', fontWeight: '400', lineHeight: '1.5', count: 20 },
+      { fontFamily: 'Inter', fontSize: '24px', fontWeight: '700', lineHeight: '1.2', count: 5 },
+      { fontFamily: 'Georgia', fontSize: '14px', fontWeight: '400', lineHeight: '1.6', count: 3 },
+    ],
+    components: [
+      { kind: 'button', tag: 'button', selector: 'button.primary', text: 'Submit', className: 'primary',
+        styles: { padding: '8px 16px', margin: '4px', color: '#fff', backgroundColor: '#0055ff',
+          borderRadius: '4px', border: 'none', fontSize: '14px', fontWeight: '600', boxShadow: 'none' } },
+    ],
+    motion: [
+      { selector: '.btn', transition: 'all 0.3s ease', animation: 'none', transform: 'none' },
+      { selector: '.fade', transition: 'all 0s ease 0s', animation: 'fadeIn 0.5s', transform: 'none' },
+    ],
+    layout: [],
+    cssVariables: { '--primary': '#0055ff', '--bg': '#ffffff', '--text': '#333' },
+  };
+
+  const tokens = designAnalysisToScanTokens(mockAnalysis);
+
+  assert.deepEqual(tokens.colors, ['#FF0000', '#00FF00']);
+  assert.deepEqual(tokens.fontFamilies, ['inter', 'georgia']);
+  assert.deepEqual(tokens.fontSizes, ['16px', '24px', '14px']);
+  // Should filter out "all 0s ease 0s" (no real transition)
+  assert.equal(tokens.transitions.length, 1);
+  assert.ok(tokens.transitions[0].includes('0.3s'));
+  assert.ok(tokens.spacingValues.includes('8px 16px'));
+  assert.ok(tokens.spacingValues.includes('4px'));
+  assert.equal(tokens.cssVariableCount, 3);
+  assert.equal(tokens.framework, null);
 });
