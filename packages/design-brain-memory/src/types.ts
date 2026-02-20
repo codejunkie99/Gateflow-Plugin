@@ -296,3 +296,108 @@ export interface InstallResult {
   success: boolean;
   error?: string;
 }
+
+/* ─── Taste Profile types ─── */
+
+export interface TasteColorPreference {
+  palette: Array<{ hex: string; role: string; source: string }>;
+  harmony: string;
+  hueRange: { min: number; max: number };
+  saturationBias: 'muted' | 'vibrant' | 'neutral';
+  lightnessBias: 'light' | 'dark' | 'balanced';
+}
+
+export interface TasteTypographyPreference {
+  primaryFont: string;
+  secondaryFont: string | null;
+  scaleType: string;
+  sizes: string[];
+  weightRange: { min: string; max: string };
+}
+
+export interface TasteSpacingPreference {
+  baseUnit: number;
+  scale: number[];
+  gridAlignmentRatio: number;
+}
+
+export interface TasteMotionPreference {
+  easing: string;
+  durations: string[];
+  intensity: 'none' | 'subtle' | 'moderate' | 'expressive';
+}
+
+export interface TasteComponentPreference {
+  cherryPicks: ComponentCherryPick[];
+  borderRadius: string;
+  shadowStyle: 'none' | 'subtle' | 'elevated' | 'dramatic';
+}
+
+export interface ComponentCherryPick {
+  componentKind: string;
+  sourceInspirationId: string;
+  sourceUrl: string;
+  tokens: ComponentToken[];
+  styles: Record<string, string>;
+  note?: string;
+}
+
+export interface TasteDecision {
+  id: string;
+  question: string;
+  answer: string;
+  dimension: 'color' | 'typography' | 'spacing' | 'motion' | 'component' | 'layout' | 'general';
+  decidedAt: string;
+}
+
+export interface TasteConflict {
+  dimension: string;
+  description: string;
+  options: string[];
+  resolved: boolean;
+  resolvedByDecisionId?: string;
+}
+
+export interface TasteProfile {
+  id: string;
+  name: string;
+  version: number;
+  sourceInspirationIds: string[];
+  sourceUrls: string[];
+  persona: PersonaMatch;
+  aggregateScore: ScanScore;
+  color: TasteColorPreference;
+  typography: TasteTypographyPreference;
+  spacing: TasteSpacingPreference;
+  motion: TasteMotionPreference;
+  components: TasteComponentPreference;
+  decisions: TasteDecision[];
+  conflicts: TasteConflict[];
+  narrative?: string;
+  principles?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TasteDiffResult {
+  alignment: number;
+  dimensions: {
+    color: TasteDimensionDiff;
+    typography: TasteDimensionDiff;
+    spacing: TasteDimensionDiff;
+    motion: TasteDimensionDiff;
+  };
+  deltas: TasteDelta[];
+}
+
+export interface TasteDimensionDiff {
+  alignment: number;
+  summary: string;
+}
+
+export interface TasteDelta {
+  dimension: string;
+  issue: string;
+  suggestion: string;
+  severity: 'info' | 'warning' | 'mismatch';
+}

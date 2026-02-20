@@ -160,6 +160,15 @@ async function runCompletion(params: {
   }
 }
 
+export async function runDesignLlm(params: {
+  llm: LlmConfig;
+  system: string;
+  userContent: string;
+  temperature?: number;
+}): Promise<string> {
+  return runCompletion(params);
+}
+
 function buildPrompt(input: {
   sourceName: string;
   sourceUrl?: string;

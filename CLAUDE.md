@@ -291,6 +291,21 @@ verible-verilog-syntax *.sv
 | Registers | _q or _reg suffix | `data_q`, `count_reg` |
 | Next-state | _next or _d suffix | `state_next`, `data_d` |
 
+## TypeScript Skills
+
+Use these skills when working on TypeScript/JavaScript code in this project:
+
+| Skill | Scope | Use When |
+|-------|-------|----------|
+| `typescript-expert` | Type-level programming, performance, monorepos, migration, tooling | Any TS/JS issue: complex types, build performance, debugging, architecture |
+| `typescript-best-practices` | Type-first development, illegal-state prevention, exhaustive handling, runtime validation | Reading or writing any TS/JS file |
+| `typescript-advanced-types` | Generics, conditional types, mapped types, template literals, utility types | Complex type logic, reusable type utilities, compile-time type safety |
+
+**Usage rules:**
+- `typescript-best-practices` is **mandatory** when reading or writing any `.ts` / `.js` file
+- `typescript-expert` should be used **proactively** for any TS/JS question or task
+- `typescript-advanced-types` applies when working with advanced type-level programming
+
 ## External References
 
 ```

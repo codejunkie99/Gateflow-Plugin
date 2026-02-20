@@ -24,7 +24,7 @@ function mdTable(headers: string[], rows: string[][]): string {
   return [head, rule, body].filter((line) => line.length > 0).join('\n');
 }
 
-function aggregateColors(records: InspirationRecord[]): ColorToken[] {
+export function aggregateColors(records: InspirationRecord[]): ColorToken[] {
   const map = new Map<string, ColorToken>();
 
   for (const record of records) {
@@ -43,7 +43,7 @@ function aggregateColors(records: InspirationRecord[]): ColorToken[] {
   return [...map.values()].sort((a, b) => b.count - a.count).slice(0, 40);
 }
 
-function aggregateTypography(records: InspirationRecord[]): TypographyToken[] {
+export function aggregateTypography(records: InspirationRecord[]): TypographyToken[] {
   const map = new Map<string, TypographyToken>();
 
   for (const record of records) {
@@ -58,7 +58,7 @@ function aggregateTypography(records: InspirationRecord[]): TypographyToken[] {
   return [...map.values()].sort((a, b) => b.count - a.count).slice(0, 60);
 }
 
-function aggregateComponents(records: InspirationRecord[]): Array<ComponentToken & { count: number }> {
+export function aggregateComponents(records: InspirationRecord[]): Array<ComponentToken & { count: number }> {
   const map = new Map<string, ComponentToken & { count: number }>();
 
   for (const record of records) {
@@ -73,7 +73,7 @@ function aggregateComponents(records: InspirationRecord[]): Array<ComponentToken
   return [...map.values()].sort((a, b) => b.count - a.count).slice(0, 120);
 }
 
-function aggregateMotion(records: InspirationRecord[]): Array<(MotionToken | AnimationToken) & { count: number }> {
+export function aggregateMotion(records: InspirationRecord[]): Array<(MotionToken | AnimationToken) & { count: number }> {
   const map = new Map<string, (MotionToken | AnimationToken) & { count: number }>();
 
   for (const record of records) {
