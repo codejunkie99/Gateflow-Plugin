@@ -70,11 +70,14 @@ function parseJsonFromOutput(stdout: string): AgentBrowserJsonResponse {
   throw new Error(`Failed to parse Agent Browser JSON response. Output:\n${stdout}`);
 }
 
+const DEFAULT_TIMEOUT_MS = 60_000;
+
 export async function runAgentBrowserJson(
   args: string[],
-  options: { session?: string; cwd?: string; headed?: boolean } = {}
+  options: { session?: string; cwd?: string; headed?: boolean; timeoutMs?: number } = {}
 ): Promise<AgentBrowserJsonResponse> {
   const runner = resolveRunner();
+  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
   const finalArgs = [
     ...runner.prefixArgs,
     ...(options.session ? ['--session', options.session] : []),
@@ -84,6 +87,9 @@ export async function runAgentBrowserJson(
   ];
 
   return new Promise<AgentBrowserJsonResponse>((resolve, reject) => {
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
     const child = spawn(runner.command, finalArgs, {
       cwd: options.cwd,
       env: {
@@ -97,6 +103,20 @@ export async function runAgentBrowserJson(
     let stdout = '';
     let stderr = '';
 
+    function settle(fn: () => void): void {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      fn();
+    }
+
+    timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      settle(() => reject(new Error(
+        `agent-browser timed out after ${timeoutMs}ms: ${args.join(' ')}`
+      )));
+    }, timeoutMs);
+
     child.stdout.on('data', (chunk: Buffer | string) => {
       stdout += chunk.toString();
     });
@@ -106,21 +126,23 @@ export async function runAgentBrowserJson(
     });
 
     child.on('error', (error) => {
-      reject(error);
+      settle(() => reject(error));
     });
 
     child.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error(`agent-browser command failed (${code}): ${stderr || stdout}`));
-        return;
-      }
+      settle(() => {
+        if (code !== 0) {
+          reject(new Error(`agent-browser command failed (${code}): ${stderr || stdout}`));
+          return;
+        }
 
-      try {
-        resolve(parseJsonFromOutput(stdout));
-      } catch (error) {
-        const details = stderr ? `${(error as Error).message}\n${stderr}` : (error as Error).message;
-        reject(new Error(details));
-      }
+        try {
+          resolve(parseJsonFromOutput(stdout));
+        } catch (error) {
+          const details = stderr ? `${(error as Error).message}\n${stderr}` : (error as Error).message;
+          reject(new Error(details));
+        }
+      });
     });
   });
 }

@@ -84,8 +84,8 @@ export function renderScanResults(result: ScanResult): void {
   // Header box
   console.log(topBorder());
   console.log(emptyBoxLine());
-  const title = `${BOLD}${CYAN}design-brain${RESET}  v0.9.2`;
-  console.log(boxLine(title, 'design-brain  v0.9.2'.length));
+  const title = `${BOLD}${CYAN}design-brain${RESET}  v0.9.3`;
+  console.log(boxLine(title, 'design-brain  v0.9.3'.length));
   const subtitle = `${DIM}Relational design memory${RESET}`;
   console.log(boxLine(subtitle, 'Relational design memory'.length));
   console.log(emptyBoxLine());
