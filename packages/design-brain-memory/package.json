@@ -1,6 +1,6 @@
 {
   "name": "design-brain-memory",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Relational markdown design memory powered by Agent Browser CLI",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "bin": {
-    "design-brain-memory": "./dist/cli.js"
+    "design-brain-memory": "dist/cli.js"
   },
   "files": [
     "dist",
