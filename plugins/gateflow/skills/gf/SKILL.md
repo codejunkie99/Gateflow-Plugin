@@ -48,6 +48,14 @@ You deliver working, verified code
 - For ANY SystemVerilog creation task, spawn `sv-planner` FIRST
 - Only skip planning for pure debug/fix tasks on existing code
 - Plan must include an ASCII block diagram; if a protocol is mentioned, include a brief WebFetch-backed summary
+- **Exception — Simple tasks:** If the request is a single module with no
+  multi-component orchestration needed (e.g., "create a counter", "write a
+  debouncer"), skip sv-planner and sv-orchestrator. Route directly to
+  sv-codegen. Indicators of simple tasks:
+  - Single module mentioned
+  - No protocol integration (no AXI, SPI, I2C)
+  - No multi-clock domain
+  - No "system", "SoC", "subsystem" language
 
 ### Rule 4: ALWAYS Ask Before Routing (Expand Mode)
 - Before spawning agents, use AskUserQuestion to clarify intent
@@ -58,6 +66,9 @@ You deliver working, verified code
 - After planning, use **sv-orchestrator** to decompose and build in parallel
 - Do **not** call sv-codegen directly for creation tasks; it should be spawned by sv-orchestrator
 - **Exception:** If the user explicitly asks for single-threaded/sequential build, honor it
+- **Exception — Simple tasks:** Single-module requests go directly to
+  sv-codegen without sv-orchestrator. If the plan contains only 1 component,
+  skip orchestration overhead.
 
 ---
 
@@ -403,6 +414,21 @@ Use AskUserQuestion:
 
 ---
 
+## Error Translation
+
+When ANY verification step returns STATUS: FAIL, translate the error
+before presenting to the user. Use the gf-errors skill's 3-layer protocol:
+
+1. **WHAT**: One sentence, plain English — no tool names or jargon
+2. **WHY**: Context with specific line numbers and signal names
+3. **FIX**: Exact actionable change needed (file, line, what to change)
+
+NEVER show raw Verilator/Yosys output to the user without translation.
+The raw output goes to the fix agent (sv-refactor/sv-debug), but the
+user sees the translated version.
+
+---
+
 ## Verification Commands
 
 ### Lint Check
@@ -734,3 +760,42 @@ Your job:
 - All work done by specialized agents (session model)
 - Continuous progress updates
 - Delivered result, not just attempt
+
+---
+
+## Progressive Command Discovery
+
+After each orchestration step, surface the equivalent slash command — but
+only if the user hasn't used it before. This teaches power features organically.
+
+### Rules
+
+1. **Check before tipping**: If `~/.gateflow/profile.json` exists and
+   `commands_used[command] > 0`, skip the tip.
+
+2. **Tip format**: One line, after the step result:
+   ```
+   Tip: You can also run /gf-lint directly to check for issues anytime
+   ```
+
+3. **Decay schedule**:
+   - Sessions 1-3: Show tips after every relevant step
+   - Sessions 4-5: Maximum 2 tips per session
+   - Sessions 6+: No inline tips. Show a post-session recap instead:
+     ```
+     Session recap: You created 2 modules and ran 3 simulations.
+     Try /gf-formal next time to formally verify your design properties.
+     ```
+
+4. **Never tip about a command the user has already used.**
+
+### Tip Map
+
+| After Step | Tip |
+|-----------|-----|
+| Lint pass | "Run `/gf-lint` to check lint anytime" |
+| Simulation pass | "Run `/gf-sim` to re-run tests anytime" |
+| Plan created | "Use `/gf-plan` to plan designs before building" |
+| Codebase mapped | "Use `/gf-map` to refresh the codebase map" |
+| Code generated | "Use `/gf-gen` to scaffold modules quickly" |
+| Demo run | "Try describing your own design in natural language" |
