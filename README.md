@@ -1,6 +1,6 @@
 # GateFlow Plugin for Claude Code
 
-> AI-powered SystemVerilog development assistant — design, verify, debug, and deliver working RTL with natural language.
+> AI-powered hardware development platform — design, verify, synthesize, and deploy working RTL with natural language. Supports SystemVerilog, Verilog, and VHDL across the full open-source FPGA toolchain.
 
 [![GitHub Stars](https://img.shields.io/github/stars/codejunkie99/Gateflow-Plugin?style=social)](https://github.com/codejunkie99/Gateflow-Plugin/stargazers)
 [![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcodejunkie99%2FGateflow-Plugin%2Fmain%2Fplugins%2Fgateflow%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&color=blue)](https://github.com/codejunkie99/Gateflow-Plugin/releases)
@@ -13,9 +13,9 @@
 
 **Loving hardware doesn't have to be gatekept.**
 
-GateFlow brings professional SystemVerilog tooling to Claude Code. Describe what you want to build and get lint-checked, simulated, verified code — not just generated code.
+GateFlow brings professional hardware development tooling to Claude Code. Describe what you want to build — including your target board — and get lint-checked, simulated, formally verified, synthesis-ready code with correct pin assignments.
 
-Whether you're writing your first `always_ff` or architecting a multi-module SoC, the tools should help you, not fight you.
+Whether you're writing your first `always_ff`, formally proving your FIFO never overflows, or synthesizing an SPI controller for your Arty A7, the tools should help you, not fight you.
 
 We can't wait to see what you create. ❤️
 
@@ -67,8 +67,10 @@ For Option 3, add to `~/.claude/settings.json` or `.claude/settings.json`:
 | Tool | Required | macOS | Linux |
 |------|----------|-------|-------|
 | [Claude Code](https://code.claude.com/) | Yes | See website | See website |
-| [Verilator](https://verilator.org/) | Yes | `brew install verilator` | `sudo apt install verilator` |
+| [Verilator](https://verilator.org/) | Recommended | `brew install verilator` | `sudo apt install verilator` |
 | Verible | Optional | `brew tap chipsalliance/verible && brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
+| [Yosys](https://github.com/YosysHQ/yosys) | For synthesis | `brew install yosys` | `sudo apt install yosys` |
+| [SymbiYosys](https://github.com/YosysHQ/sby) | For formal | `pip install symbiyosys` | `pip install symbiyosys` |
 
 ### Verify & Update
 
@@ -95,17 +97,23 @@ GateFlow understands context. Describe what you need in plain English:
 "Create a FIFO and test it"
  → Generates FIFO, creates testbench, runs simulation, fixes issues, delivers working code
 
+"Formally verify that the FIFO never overflows"
+ → Generates SVA properties, configures SymbiYosys, runs proof, reports results
+
+"Synthesize my design for the iCEBreaker board"
+ → Runs Yosys synthesis, reports LUT/FF/BRAM usage, generates constraint file
+
+"Add an SPI controller to my project"
+ → Installs verified SPI master IP block with testbench and formal proofs
+
+"What pins does the Arty A7 PMOD JA have?"
+ → Looks up curated board database, shows pin assignments with I/O standards
+
 "Why is my output X?"
  → Analyzes code, traces signal path, identifies root cause
 
 "Plan a DMA controller"
  → Creates detailed design plan with block diagrams, FSMs, interfaces, verification strategy
-
-"Add assertions to check the handshake protocol"
- → Generates SVA properties for valid/ready handshake
-
-"Explain how the FSM in uart_tx.sv works"
- → Analyzes state machine, explains transitions, creates state diagram
 ```
 
 ### Skills (Auto-Activating)
@@ -117,6 +125,8 @@ Skills activate automatically based on context:
 | `/gf` | Any SV task | **Main orchestrator** — plan-first, parallel build, verify until working |
 | `/gf-plan` | "plan", "design", "architect" | RTL implementation plans with ASCII diagrams |
 | `/gf-build` | "build", "multi-component", "SoC" | Parallel component build orchestration |
+| `/gf-formal` | "formally verify", "prove", "check property" | **Formal verification from natural language** via SymbiYosys |
+| `/gf-synth` | "synthesize", "area estimate", "resource usage" | **Yosys synthesis** with LUT/FF/BRAM/DSP reports |
 | `/gf-architect` | "map codebase", "analyze project" | Codebase map with hierarchy, FSMs, clocks, CDC |
 | `/gf-viz` | "visualize", "show hierarchy" | Terminal ASCII visualization of RTL architecture |
 | `/gf-learn` | "teach me", "exercise", "practice" | Learning mode with exercises and feedback |
@@ -128,7 +138,11 @@ Skills activate automatically based on context:
 | `/gf-lint` | Run Verilator lint with structured output |
 | `/gf-fix` | Auto-fix lint errors |
 | `/gf-sim` | Compile and run simulation |
+| `/gf-formal` | Run SymbiYosys formal verification |
 | `/gf-gen` | Generate module/testbench scaffolds |
+| `/gf-ip` | Manage verified IP block library (add/list/info) |
+| `/gf-boards` | List supported FPGA boards and query pinouts |
+| `/gf-demo` | One-command zero-config showcase project |
 | `/gf-scan` | Index project files |
 | `/gf-map` | Map codebase architecture |
 | `/gf-doctor` | Check environment and dependencies |
@@ -164,8 +178,42 @@ Done! Created:
 ### Working Code, Not Just Generated Code
 The `/gf` orchestrator doesn't stop at generation — it verifies:
 ```
-Create → Lint → Fix → Test → Fix → Deliver
+Create → Lint → Fix → Test → Fix → Formally Verify → Synthesize → Deliver
 ```
+
+### Formal Verification from Natural Language
+Tell GateFlow what to prove in plain English:
+```
+"Formally verify that the FIFO never overflows and the pointers are always consistent"
+ → Generates SVA assert property statements
+ → Configures SymbiYosys (.sby file)
+ → Runs bounded model checking
+ → Reports proof results or explains counterexamples in English
+```
+
+### Yosys Synthesis with Resource Reports
+```
+"Synthesize my design for the iCEBreaker"
+ → Checks for unsupported SV constructs (warns before failing)
+ → Runs Yosys synthesis targeting iCE40
+ → Reports: LUTs: 142, FFs: 87, BRAM: 1, DSP: 0
+```
+
+### Drop-In IP Library
+8 verified, formally proven IP blocks ready to use:
+```
+/gf-ip add fifo_sync    → Installs FIFO with RTL + testbench + formal proofs
+/gf-ip add uart          → UART TX+RX with configurable baud rate
+/gf-ip add axi4lite_slave → AXI4-Lite register interface
+```
+Every block is lint-clean, simulation-tested, and formally verified.
+
+### Board-Aware Development
+GateFlow knows your FPGA board's pinout:
+```
+/gf-boards arty-a7-35t pmod-ja  → Shows exact pin assignments
+```
+Curated constraint files (.xdc, .pcf, .cst) for popular boards included.
 
 ### Hardware Design Planning
 `/gf-plan` creates professional design documents:
@@ -194,35 +242,43 @@ GateFlow watches your workflow and helps proactively:
 - **After SV edits** — reminds you to lint
 - **Before destructive commands** — warns if you're about to delete SV files
 - **On session end** — checks if you forgot to lint or simulate modified files
+- **Progressive tips** — surfaces slash commands you haven't used yet
 
 ---
 
 ## Components
 
-### Skills (12)
+### Skills (17)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
 | `gf` | Main orchestrator — plan, build, verify until working | [SKILL.md](plugins/gateflow/skills/gf/SKILL.md) |
 | `gf-plan` | RTL implementation planning with diagrams | [SKILL.md](plugins/gateflow/skills/gf-plan/SKILL.md) |
 | `gf-build` | Parallel component build orchestration | [SKILL.md](plugins/gateflow/skills/gf-build/SKILL.md) |
+| `gf-formal` | **Formal verification from natural language** (SymbiYosys) | [SKILL.md](plugins/gateflow/skills/gf-formal/SKILL.md) |
+| `gf-synth` | **Yosys synthesis** with area/timing reports | [SKILL.md](plugins/gateflow/skills/gf-synth/SKILL.md) |
+| `gf-ip` | **IP block library** — verified drop-in components | [SKILL.md](plugins/gateflow/skills/gf-ip/SKILL.md) |
 | `gf-architect` | Codebase map with hierarchy, FSMs, clocks, CDC | [SKILL.md](plugins/gateflow/skills/gf-architect/SKILL.md) |
 | `gf-lint` | Structured Verilator lint checking | [SKILL.md](plugins/gateflow/skills/gf-lint/SKILL.md) |
 | `gf-sim` | Simulation with auto DUT/TB detection | [SKILL.md](plugins/gateflow/skills/gf-sim/SKILL.md) |
 | `gf-viz` | Terminal visualization of RTL architecture | [SKILL.md](plugins/gateflow/skills/gf-viz/SKILL.md) |
 | `gf-learn` | Learning mode — exercises, reviews, hints | [SKILL.md](plugins/gateflow/skills/gf-learn/SKILL.md) |
+| `gf-errors` | 3-layer error translation for hardware tools | [SKILL.md](plugins/gateflow/skills/gf-errors/SKILL.md) |
+| `gf-project` | Project context (.gateflow/project.yaml) management | [SKILL.md](plugins/gateflow/skills/gf-project/SKILL.md) |
 | `gf-router` | Intent classification and routing | [SKILL.md](plugins/gateflow/skills/gf-router/SKILL.md) |
 | `gf-expand` | Clarifying questions with trade-offs | [SKILL.md](plugins/gateflow/skills/gf-expand/SKILL.md) |
 | `gf-summary` | Summarize Verilator/lint output | [SKILL.md](plugins/gateflow/skills/gf-summary/SKILL.md) |
 | `tb-best-practices` | Testbench best practices reference | [SKILL.md](plugins/gateflow/skills/tb-best-practices/SKILL.md) |
 
-### Agents (11)
+### Agents (13)
 
 | Agent | Expertise | Source |
 |-------|-----------|--------|
 | `sv-codegen` | RTL architect — synthesizable modules | [sv-codegen.md](plugins/gateflow/agents/sv-codegen.md) |
 | `sv-testbench` | Verification engineer — testbenches and stimulus | [sv-testbench.md](plugins/gateflow/agents/sv-testbench.md) |
 | `sv-debug` | Debug specialist — simulation failures, X-values | [sv-debug.md](plugins/gateflow/agents/sv-debug.md) |
+| `sv-formal` | **Formal verification** — SVA properties, SymbiYosys proofs | [sv-formal.md](plugins/gateflow/agents/sv-formal.md) |
+| `sv-synth` | **Synthesis specialist** — Yosys, area/timing optimization | [sv-synth.md](plugins/gateflow/agents/sv-synth.md) |
 | `sv-verification` | Verification methodologist — SVA, coverage, formal | [sv-verification.md](plugins/gateflow/agents/sv-verification.md) |
 | `sv-understanding` | RTL analyst — explains and documents code | [sv-understanding.md](plugins/gateflow/agents/sv-understanding.md) |
 | `sv-planner` | Architecture planner — design plans and diagrams | [sv-planner.md](plugins/gateflow/agents/sv-planner.md) |
@@ -232,17 +288,47 @@ GateFlow watches your workflow and helps proactively:
 | `sv-tutor` | Teacher — reviews solutions, gives hints | [sv-tutor.md](plugins/gateflow/agents/sv-tutor.md) |
 | `sv-viz` | Terminal visualization of RTL architecture | [sv-viz.md](plugins/gateflow/agents/sv-viz.md) |
 
-### Commands (7)
+### Commands (11)
 
 | Command | Description | Source |
 |---------|-------------|--------|
 | `/gf-doctor` | Environment check | [gf-doctor.md](plugins/gateflow/commands/gf-doctor.md) |
+| `/gf-demo` | Zero-config showcase project | [gf-demo.md](plugins/gateflow/commands/gf-demo.md) |
+| `/gf-formal` | Run formal verification | [gf-formal.md](plugins/gateflow/commands/gf-formal.md) |
+| `/gf-ip` | Manage IP block library | [gf-ip.md](plugins/gateflow/commands/gf-ip.md) |
+| `/gf-boards` | List boards and query pinouts | [gf-boards.md](plugins/gateflow/commands/gf-boards.md) |
 | `/gf-scan` | Index project | [gf-scan.md](plugins/gateflow/commands/gf-scan.md) |
 | `/gf-map` | Map codebase | [gf-map.md](plugins/gateflow/commands/gf-map.md) |
 | `/gf-lint` | Run lint | [gf-lint.md](plugins/gateflow/commands/gf-lint.md) |
 | `/gf-fix` | Fix lint | [gf-fix.md](plugins/gateflow/commands/gf-fix.md) |
 | `/gf-gen` | Generate scaffolds | [gf-gen.md](plugins/gateflow/commands/gf-gen.md) |
 | `/gf-sim` | Run simulation | [gf-sim.md](plugins/gateflow/commands/gf-sim.md) |
+
+### IP Library (8 verified blocks)
+
+| Block | Description | Includes |
+|-------|-------------|----------|
+| `fifo_sync` | Synchronous FIFO (parameterized width/depth) | RTL + TB + formal |
+| `fifo_async` | Async FIFO with Gray code pointers (CDC) | RTL + TB + formal |
+| `cdc_2ff` | 2-flip-flop synchronizer | RTL + TB + formal |
+| `cdc_handshake` | Multi-bit handshake synchronizer | RTL + TB + formal |
+| `uart` | UART TX+RX with configurable baud | RTL + TB + formal |
+| `spi_master` | SPI master (all 4 CPOL/CPHA modes) | RTL + TB + formal |
+| `axi4lite_slave` | AXI4-Lite register slave | RTL + TB + formal |
+| `debouncer` | Button debouncer with edge detection | RTL + TB + formal |
+
+Install with: `/gf-ip add fifo_sync` or "add a FIFO to my project"
+
+### Board Database (4 boards)
+
+| Board | FPGA | Toolchain |
+|-------|------|-----------|
+| Digilent Arty A7-35T | Xilinx xc7a35t | Vivado / Yosys |
+| Digilent Basys 3 | Xilinx xc7a35t | Vivado / Yosys |
+| 1BitSquared iCEBreaker | Lattice iCE40UP5K | Yosys + nextpnr |
+| Sipeed Tang Nano 9K | Gowin GW1NR-9 | Yosys + nextpnr |
+
+Query with: `/gf-boards arty-a7-35t` or "what pins does the Arty A7 have?"
 
 Agents are automatically invoked by `/gf` based on your request — you don't need to call them directly.
 
@@ -410,10 +496,12 @@ clock_freq: 100MHz
 Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
-│   ├── agents/                #   11 specialized AI agents
-│   ├── commands/              #   7 slash commands
-│   ├── skills/                #   12 auto-activating skills
-│   ├── hooks/                 #   Automation hooks
+│   ├── agents/                #   13 specialized AI agents
+│   ├── commands/              #   11 slash commands
+│   ├── skills/                #   17 auto-activating skills
+│   ├── hooks/                 #   Automation hooks + session tracking
+│   ├── boards/                #   Curated FPGA board database (4 boards)
+│   ├── ip/                    #   Verified IP block library (8 blocks)
 │   └── CLAUDE.md              #   SystemVerilog reference
 ├── agents/                    # Mirrored agent entrypoints (symlinks)
 ├── skills/                    # Mirrored skill entrypoints (symlinks)
@@ -480,10 +568,11 @@ For detailed release notes, see [`releases.md`](releases.md).
 ## Contributing
 
 Contributions welcome! Areas we'd love help with:
-- Additional protocol support (AXI4, PCIe, USB)
-- More design patterns
-- Tool integrations (Yosys, Vivado, Quartus)
-- Documentation and examples
+- **Board definitions**: Add your FPGA board to `plugins/gateflow/boards/`
+- **IP blocks**: Submit verified blocks to `plugins/gateflow/ip/`
+- **Protocol support**: AXI4-Full, PCIe, USB, Ethernet, Wishbone
+- **Tool integrations**: Cocotb, FuseSoC, Edalize
+- **Documentation and examples**
 
 ---
 
