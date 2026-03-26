@@ -7,7 +7,41 @@ allowed-tools:
 
 # GateFlow Doctor Command
 
-Verify that all required tools and dependencies are properly installed.
+Verify tools and dependencies, organized by capability tier.
+
+## Tiered Tool Display
+
+Show tools grouped by what they unlock:
+
+### Core (RTL + Lint + Sim)
+- Verilator: [installed/missing] — `verilator --version`
+- Verible: [installed/missing] — `verible-verilog-syntax --version`
+
+### Formal Verification
+- SymbiYosys: [installed/missing] — `sby --help`
+- z3 solver: [installed/missing] — `z3 --version`
+
+### Synthesis
+- Yosys: [installed/missing] — `yosys --version`
+
+### Place & Route + Flash
+- nextpnr: [installed/missing] — `nextpnr-ice40 --version` (or ecp5/gowin)
+- openFPGALoader: [installed/missing] — `openFPGALoader --version`
+
+### VHDL Support
+- GHDL: [installed/missing] — `ghdl --version`
+
+### PCB Design
+- KiCad: [installed/missing] — `kicad-cli --version`
+
+### Python Verification
+- Cocotb: [installed/missing] — `python3 -c "import cocotb"`
+
+### Build System
+- FuseSoC: [installed/missing] — `fusesoc --version`
+
+Only show install instructions for tools in tiers the user has tried to use.
+Show a summary: "X/Y tools installed. Run /gf-doctor --all for full list."
 
 ## Instructions
 

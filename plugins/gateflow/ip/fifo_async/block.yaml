@@ -2,6 +2,19 @@ name: fifo_async
 version: 1.0.0
 description: Asynchronous FIFO with Gray code pointers for CDC
 parameters:
-  WIDTH: { type: int, default: 8 }
-  DEPTH: { type: int, default: 8 }
+  WIDTH: { type: int, default: 8, description: "Data width in bits" }
+  DEPTH: { type: int, default: 8, description: "FIFO depth (power of 2)" }
+ports:
+  - { name: wr_clk, dir: input, width: 1 }
+  - { name: wr_rst_n, dir: input, width: 1 }
+  - { name: wr_en, dir: input, width: 1 }
+  - { name: wr_data, dir: input, width: WIDTH }
+  - { name: full, dir: output, width: 1 }
+  - { name: rd_clk, dir: input, width: 1 }
+  - { name: rd_rst_n, dir: input, width: 1 }
+  - { name: rd_en, dir: input, width: 1 }
+  - { name: rd_data, dir: output, width: WIDTH }
+  - { name: empty, dir: output, width: 1 }
+formal_proofs:
+  - p_no_overflow: "No write when full"
 dependencies: []

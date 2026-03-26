@@ -12,7 +12,7 @@ Read the referenced files before answering SystemVerilog questions.
 |index:{docs/gateflow.index}|compressed file listing
 |commands:{commands/gf-*.md}|slash commands
 |skills:{skills/*/SKILL.md}|orchestrator, planner, architect, tb-best-practices
-|agents:{agents/sv-*.md}|codegen, testbench, debug, verification, understanding, refactor, developer
+|agents:{agents/sv-*.md,agents/vhdl-*.md,agents/pcb-*.md}|codegen, testbench, debug, verification, understanding, refactor, developer, formal, synth, pinmap, ip-scanner, vhdl-codegen, vhdl-testbench, pcb-designer
 |hooks:{hooks/hooks.json}
 ```
 

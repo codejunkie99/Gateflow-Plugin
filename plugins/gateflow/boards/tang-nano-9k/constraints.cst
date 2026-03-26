@@ -1,10 +1,27 @@
-// Tang Nano 9K Constraints (Gowin CST)
+// Tang Nano 9K Constraints (Gowin CST) — GateFlow Board Database
+
+// Clock (27 MHz)
 IO_LOC "clk" 52;
+IO_PORT "clk" IO_TYPE=LVCMOS33;
+
+// LEDs (active low)
 IO_LOC "led[0]" 10;
 IO_LOC "led[1]" 11;
 IO_LOC "led[2]" 13;
 IO_LOC "led[3]" 14;
 IO_LOC "led[4]" 15;
 IO_LOC "led[5]" 16;
+
+// Buttons (active low)
 IO_LOC "btn[0]" 3;
 IO_LOC "btn[1]" 4;
+
+// UART (directly to USB-C FTDI)
+IO_LOC "uart_tx" 17;
+IO_LOC "uart_rx" 18;
+
+// SPI Flash
+IO_LOC "flash_clk" 59;
+IO_LOC "flash_cs"  60;
+IO_LOC "flash_mosi" 61;
+IO_LOC "flash_miso" 62;
