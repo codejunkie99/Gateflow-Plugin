@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 20
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/cdc_2ff.sv
+read -formal formal/cdc_2ff_props.sv
+prep -top cdc_2ff
+[files]
+rtl/cdc_2ff.sv
+formal/cdc_2ff_props.sv

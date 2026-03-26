@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 30
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/debouncer.sv
+read -formal formal/debouncer_props.sv
+prep -top debouncer
+[files]
+rtl/debouncer.sv
+formal/debouncer_props.sv
