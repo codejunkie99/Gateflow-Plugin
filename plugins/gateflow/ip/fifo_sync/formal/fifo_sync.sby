@@ -1,0 +1,18 @@
+[tasks]
+prove
+
+[options]
+prove: mode prove
+prove: depth 20
+
+[engines]
+prove: smtbmc z3
+
+[script]
+read -formal rtl/fifo_sync.sv
+read -formal formal/fifo_sync_props.sv
+prep -top fifo_sync
+
+[files]
+rtl/fifo_sync.sv
+formal/fifo_sync_props.sv

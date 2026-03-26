@@ -1,0 +1,11 @@
+name: cdc_2ff
+version: 1.0.0
+description: 2-flip-flop synchronizer for single-bit clock domain crossing
+parameters:
+  STAGES: { type: int, default: 2, description: "Number of synchronizer stages" }
+ports:
+  - { name: clk, dir: input, width: 1 }
+  - { name: rst_n, dir: input, width: 1 }
+  - { name: async_in, dir: input, width: 1 }
+  - { name: sync_out, dir: output, width: 1 }
+dependencies: []

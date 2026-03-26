@@ -1,0 +1,20 @@
+name: fifo_sync
+version: 1.0.0
+description: Synchronous FIFO with parameterized width and depth
+parameters:
+  WIDTH: { type: int, default: 8, description: "Data width in bits" }
+  DEPTH: { type: int, default: 16, description: "FIFO depth (power of 2)" }
+ports:
+  - { name: clk, dir: input, width: 1 }
+  - { name: rst_n, dir: input, width: 1 }
+  - { name: wr_en, dir: input, width: 1 }
+  - { name: wr_data, dir: input, width: WIDTH }
+  - { name: rd_en, dir: input, width: 1 }
+  - { name: rd_data, dir: output, width: WIDTH }
+  - { name: full, dir: output, width: 1 }
+  - { name: empty, dir: output, width: 1 }
+formal_proofs:
+  - p_no_overflow: "FIFO never accepts writes when full"
+  - p_no_underflow: "FIFO never allows reads when empty"
+  - p_ptr_range: "Pointer difference never exceeds DEPTH"
+dependencies: []
