@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 30
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/uart_tx.sv
+read -formal formal/uart_props.sv
+prep -top uart_tx
+[files]
+rtl/uart_tx.sv
+formal/uart_props.sv

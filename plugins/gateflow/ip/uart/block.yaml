@@ -1,0 +1,7 @@
+name: uart
+version: 1.0.0
+description: UART TX+RX with configurable baud rate (8N1)
+parameters:
+  CLK_FREQ: { type: int, default: 100000000, description: "Clock frequency Hz" }
+  BAUD_RATE: { type: int, default: 115200, description: "Baud rate" }
+dependencies: []
