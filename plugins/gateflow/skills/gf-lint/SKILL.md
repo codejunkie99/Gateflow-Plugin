@@ -14,6 +14,35 @@ allowed-tools:
 
 Lint SystemVerilog files with structured output for orchestration.
 
+## Tool Detection
+
+Before running lint, check if Verilator is available:
+```bash
+which verilator
+```
+
+If Verilator is not available, check for Verible:
+```bash
+which verible-verilog-lint
+```
+
+If neither is available, return immediately:
+```
+---GATEFLOW-RESULT---
+STATUS: ERROR
+ERRORS: 0
+WARNINGS: 0
+FILES: []
+DETAILS: No lint tool available. Install Verilator (recommended) or Verible.
+  macOS: brew install verilator
+  Linux: sudo apt install verilator
+---END-GATEFLOW-RESULT---
+```
+
+Do NOT attempt to lint without a tool. Return the ERROR status and let the orchestrator handle it.
+
+---
+
 ## Instructions
 
 ### 1. Identify Files to Lint
