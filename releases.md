@@ -1,5 +1,25 @@
 # Releases
 
+## 2.1.0 (2026-03-26) — Multi-HDL + Platform + Pin Mapping
+
+### New Features
+- **VHDL support**: vhdl-codegen and vhdl-testbench agents for GHDL-compatible VHDL-2008
+- **Pin mapping** (`/gf-pinmap`): Board-aware constraint file generation with safety checks
+- **Place & Route** (`/gf-pnr`): nextpnr integration for iCE40/ECP5/Gowin
+- **FPGA Flash** (`/gf-flash`): openFPGALoader programming
+- **Protocol scaffolding**: AXI4-Lite, SPI, I2C, AXI4-Full, AXI-Stream, Wishbone references
+- **OpenClaw integration**: Published as ClawHub skill for autonomous hardware design
+- **Platform index**: Integration guides for 7 AI coding platforms + OpenClaw
+
+### New Agents
+- `vhdl-codegen` — VHDL entity/architecture generation
+- `vhdl-testbench` — VHDL testbench with GHDL compatibility
+- `sv-pinmap` — Pin assignment with safety rules
+
+### New Commands
+- `/gf-pnr` — Place & route with nextpnr
+- `/gf-flash` — Flash FPGA via openFPGALoader
+
 ## 2.0.0 (2026-03-26) — Formal Verification + Synthesis + IP Library
 
 ### New Features
