@@ -1,6 +1,6 @@
 {
   "name": "gateflow",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "AI-powered SystemVerilog development assistant with lint fixing, code generation, simulation, and waveform analysis",
   "author": {
     "name": "codejunkie99",

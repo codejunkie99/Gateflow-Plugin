@@ -106,6 +106,9 @@ else:
 | PROTOCOL | Protocol interface scaffold | gf-protocols |
 | VHDL_CREATE | Create VHDL module | gateflow:vhdl-codegen |
 | VHDL_TB | Create VHDL testbench | gateflow:vhdl-testbench |
+| IP_DETECT | Scan for missing IP, find gaps | gf-ip-detect |
+| IP_AUTOFILL | Detect and implement missing modules | gf-ip-detect (auto-fill) |
+| CDC_SCAN | Find clock domain crossing issues | gf-ip-detect (cdc-only) |
 
 ### Meta Intents
 | Intent | Meaning |

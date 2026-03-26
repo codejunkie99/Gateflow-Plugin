@@ -251,7 +251,7 @@ GateFlow watches your workflow and helps proactively:
 
 ## Components
 
-### Skills (24)
+### Skills (25)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
@@ -279,8 +279,9 @@ GateFlow watches your workflow and helps proactively:
 | `gf-cocotb` | Python testbenches via Cocotb | [SKILL.md](plugins/gateflow/skills/gf-cocotb/SKILL.md) |
 | `gf-fusesoc` | FuseSoC build system integration | [SKILL.md](plugins/gateflow/skills/gf-fusesoc/SKILL.md) |
 | `gf-learn-ctx` | Contextual learning — micro-lessons in workflows | [SKILL.md](plugins/gateflow/skills/gf-learn-ctx/SKILL.md) |
+| `gf-ip-detect` | **Auto-detect IP blocks** — scan, match, auto-fill gaps | [SKILL.md](plugins/gateflow/skills/gf-ip-detect/SKILL.md) |
 
-### Agents (17)
+### Agents (18)
 
 | Agent | Expertise | Source |
 |-------|-----------|--------|
@@ -301,8 +302,9 @@ GateFlow watches your workflow and helps proactively:
 | `vhdl-codegen` | **VHDL code generation** — entities and architectures | [vhdl-codegen.md](plugins/gateflow/agents/vhdl-codegen.md) |
 | `vhdl-testbench` | **VHDL testbench** — GHDL-compatible verification | [vhdl-testbench.md](plugins/gateflow/agents/vhdl-testbench.md) |
 | `pcb-designer` | **KiCad PCB** — AI-verified schematics and layouts | [pcb-designer.md](plugins/gateflow/agents/pcb-designer.md) |
+| `sv-ip-scanner` | **IP scanner** — detect missing modules, auto-fill | [sv-ip-scanner.md](plugins/gateflow/agents/sv-ip-scanner.md) |
 
-### Commands (13)
+### Commands (14)
 
 | Command | Description | Source |
 |---------|-------------|--------|
@@ -319,6 +321,7 @@ GateFlow watches your workflow and helps proactively:
 | `/gf-sim` | Run simulation | [gf-sim.md](plugins/gateflow/commands/gf-sim.md) |
 | `/gf-pnr` | Place & route (nextpnr) | [gf-pnr.md](plugins/gateflow/commands/gf-pnr.md) |
 | `/gf-flash` | Flash FPGA board | [gf-flash.md](plugins/gateflow/commands/gf-flash.md) |
+| `/gf-detect` | Scan for missing IP blocks and CDC issues | [gf-detect.md](plugins/gateflow/commands/gf-detect.md) |
 
 ### IP Library (8 verified blocks)
 
@@ -512,9 +515,9 @@ clock_freq: 100MHz
 Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
-│   ├── agents/                #   17 specialized AI agents
-│   ├── commands/              #   13 slash commands
-│   ├── skills/                #   24 auto-activating skills
+│   ├── agents/                #   18 specialized AI agents
+│   ├── commands/              #   14 slash commands
+│   ├── skills/                #   25 auto-activating skills
 │   ├── hooks/                 #   Automation hooks + session tracking
 │   ├── boards/                #   Curated FPGA board database (4 boards)
 │   ├── ip/                    #   Verified IP block library (8 blocks)

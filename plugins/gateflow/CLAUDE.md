@@ -174,6 +174,8 @@ Use Task tool (call 2 - same message, parallel):
 | `gateflow:sv-pinmap` | Pin assignment | "pin mapping", "constraints", "board pinout" |
 | `gateflow:vhdl-codegen` | VHDL code generation | "VHDL", "create VHDL", "entity", "architecture" |
 | `gateflow:vhdl-testbench` | VHDL testbench | "VHDL testbench", "VHDL TB", "GHDL" |
+| `gateflow:sv-ip-scanner` | IP detection + auto-fill | "scan for IP", "what's missing", "detect CDC", "auto-fill" |
+| `gateflow:pcb-designer` | KiCad schematic/PCB | "design board", "create schematic", "PCB layout" |
 
 ---
 

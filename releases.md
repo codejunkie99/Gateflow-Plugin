@@ -1,5 +1,20 @@
 # Releases
 
+## 2.2.1 (2026-03-26) — IP Auto-Detection & Auto-Fill
+
+### New Features
+- **IP auto-detection** (`/gf-detect`): Scans codebases for missing module implementations, stub modules, and standard IP patterns
+- **Auto-fill**: Detects gaps and dispatches agents to implement using verified IP library blocks
+- **CDC violation scanning**: Identifies clock domain crossings without synchronizers (CRITICAL severity)
+- **Pattern matching**: Recognizes FIFO, CDC, UART, SPI, AXI patterns in ad-hoc code and suggests verified replacements
+- **Sub-agent capability**: sv-ip-scanner works as a skill other agents can invoke mid-task
+
+### New Agent
+- `sv-ip-scanner` — IP block detection and auto-fill agent
+
+### New Command
+- `/gf-detect` — Scan for missing IP, stubs, CDC issues (`--auto-fill` to implement)
+
 ## 2.2.0 (2026-03-26) — Community + KiCad + Ecosystem
 
 ### New Features
