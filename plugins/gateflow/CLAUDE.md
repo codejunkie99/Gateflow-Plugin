@@ -169,6 +169,11 @@ Use Task tool (call 2 - same message, parallel):
 | `gateflow:sv-orchestrator` | Parallel builder | "build CPU", "create SoC", "multi-component" |
 | `gateflow:sv-tutor` | Teacher | "teach", "learn", "exercise", "practice" |
 | `gateflow:sv-viz` | Terminal visualizer | "visualize", "show hierarchy", "show FSM", "show module" |
+| `gateflow:sv-formal` | Formal verification | "prove", "formally verify", "check property", "SymbiYosys" |
+| `gateflow:sv-synth` | Synthesis specialist | "synthesize", "area estimate", "Yosys", "resource usage" |
+| `gateflow:sv-pinmap` | Pin assignment | "pin mapping", "constraints", "board pinout" |
+| `gateflow:vhdl-codegen` | VHDL code generation | "VHDL", "create VHDL", "entity", "architecture" |
+| `gateflow:vhdl-testbench` | VHDL testbench | "VHDL testbench", "VHDL TB", "GHDL" |
 
 ---
 

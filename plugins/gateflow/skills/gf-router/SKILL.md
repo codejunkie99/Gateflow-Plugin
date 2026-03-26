@@ -98,6 +98,14 @@ else:
 | DEVELOP | Complex multi-file changes | gateflow:sv-developer |
 | PLAN | Design/architect before coding | gateflow:sv-planner |
 | TUTOR | Learning review, hints, feedback | gateflow:sv-tutor |
+| FORMAL | Formal verification, prove properties | gf-formal |
+| SYNTHESIZE | Synthesis, resource estimation | gf-synth |
+| PIN_MAP | Board pinout, constraint generation | gf-pinmap |
+| BOARD_QUERY | Board info, available pins | gf-boards |
+| IP_ADD | Add IP block to project | gf-ip |
+| PROTOCOL | Protocol interface scaffold | gf-protocols |
+| VHDL_CREATE | Create VHDL module | gateflow:vhdl-codegen |
+| VHDL_TB | Create VHDL testbench | gateflow:vhdl-testbench |
 
 ### Meta Intents
 | Intent | Meaning |
