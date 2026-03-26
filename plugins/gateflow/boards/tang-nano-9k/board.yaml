@@ -1,0 +1,14 @@
+name: Sipeed Tang Nano 9K
+vendor: Sipeed
+fpga:
+  family: gowin
+  device: GW1NR-LV9QN88PC6/I5
+  package: QN88
+synth_target: synth_gowin
+pnr_target: nextpnr-gowin --device GW1NR-LV9QN88PC6/I5
+programmer: openFPGALoader -b tangnano9k
+clock:
+  pin: 52
+  frequency: 27MHz
+leds: [10, 11, 13, 14, 15, 16]
+buttons: [3, 4]

@@ -1,0 +1,26 @@
+name: Digilent Arty A7-35T
+vendor: Digilent
+fpga:
+  family: xilinx-7series
+  device: xc7a35ticsg324-1L
+  package: csg324
+synth_target: synth_xilinx
+pnr_target: null
+programmer: openFPGALoader -b arty
+clock:
+  pin: E3
+  frequency: 100MHz
+  iostandard: LVCMOS33
+leds: [H5, J5, T9, T10]
+rgb_leds:
+  led0: {r: G6, g: F6, b: E1}
+  led1: {r: G3, g: J4, b: G4}
+  led2: {r: J3, g: J2, b: H4}
+  led3: {r: K1, g: H6, b: K2}
+buttons: [D9, C9, B9, B8]
+switches: [A8, C11, C10, A10]
+pmod:
+  ja: [G13, B11, A11, D12, D13, B18, A18, K16]
+  jb: [E15, E16, D15, C15, J17, J18, K15, J15]
+  jc: [U12, V12, V10, V11, U14, V14, T13, U13]
+  jd: [D4, D3, F4, F3, E2, D2, H2, G2]

@@ -1,0 +1,21 @@
+name: Digilent Basys 3
+vendor: Digilent
+fpga:
+  family: xilinx-7series
+  device: xc7a35tcpg236-1
+  package: cpg236
+synth_target: synth_xilinx
+pnr_target: null
+programmer: openFPGALoader -b basys3
+clock:
+  pin: W5
+  frequency: 100MHz
+  iostandard: LVCMOS33
+leds: [U16, E19, U19, V19, W18, U15, U14, V14, V13, V3, W3, U3, P3, N3, P1, L1]
+switches: [V17, V16, W16, W17, W15, V15, W14, W13, V2, T3, T2, R3, W2, U1, T1, R2]
+buttons:
+  center: U18
+  up: T18
+  left: W19
+  right: T17
+  down: U17

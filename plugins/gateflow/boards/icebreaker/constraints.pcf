@@ -1,0 +1,23 @@
+# iCEBreaker Constraints (PCF)
+set_io clk 35
+set_io led_r 11
+set_io led_g 37
+set_io btn_n 10
+# PMOD P1A
+set_io p1a[0] 4
+set_io p1a[1] 2
+set_io p1a[2] 47
+set_io p1a[3] 45
+set_io p1a[4] 3
+set_io p1a[5] 48
+set_io p1a[6] 46
+set_io p1a[7] 44
+# PMOD P1B
+set_io p1b[0] 43
+set_io p1b[1] 38
+set_io p1b[2] 34
+set_io p1b[3] 31
+set_io p1b[4] 42
+set_io p1b[5] 36
+set_io p1b[6] 32
+set_io p1b[7] 28
