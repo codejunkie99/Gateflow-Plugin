@@ -1,5 +1,23 @@
 # Releases
 
+## 2.2.0 (2026-03-26) — Community + KiCad + Ecosystem
+
+### New Features
+- **KiCad schematic/PCB generation** (`/gf-pcb`): AI-verified draft designs with DRC/ERC/AI review loop, confidence scoring, mandatory disclaimers
+- **Cocotb support** (`gf-cocotb`): Python-based testbench generation as alternative to SystemVerilog TBs
+- **FuseSoC integration** (`gf-fusesoc`): .core file generation with Edalize backends (Vivado, Quartus, Yosys)
+- **CI/CD templates**: GitHub Actions and GitLab CI pipelines for lint → sim → formal → synthesis
+- **Contextual learning**: Micro-lessons embedded in workflow output, concept tracking, generative exercises
+- **Ecosystem integrations**: F4PGA (Xilinx 7-series open-source), OpenFPGA (custom architectures), OpenLane (ASIC tapeout)
+
+### New Agent
+- `pcb-designer` — KiCad schematic and PCB with self-improving verification
+
+### Community
+- Board contribution guide with verification checklist
+- IP block contribution guide with verification pipeline
+- CI/CD templates for hardware projects
+
 ## 2.1.0 (2026-03-26) — Multi-HDL + Platform + Pin Mapping
 
 ### New Features

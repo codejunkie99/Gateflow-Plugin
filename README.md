@@ -251,7 +251,7 @@ GateFlow watches your workflow and helps proactively:
 
 ## Components
 
-### Skills (20)
+### Skills (24)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
@@ -275,8 +275,12 @@ GateFlow watches your workflow and helps proactively:
 | `gf-pinmap` | **Board-aware pin mapping** with constraint generation | [SKILL.md](plugins/gateflow/skills/gf-pinmap/SKILL.md) |
 | `gf-pnr` | Place & route via nextpnr (iCE40/ECP5/Gowin) | [SKILL.md](plugins/gateflow/skills/gf-pnr/SKILL.md) |
 | `gf-protocols` | Protocol scaffolding (AXI4, SPI, I2C, Wishbone) | [SKILL.md](plugins/gateflow/skills/gf-protocols/SKILL.md) |
+| `gf-pcb` | **KiCad schematic/PCB** with AI verification loop | [SKILL.md](plugins/gateflow/skills/gf-pcb/SKILL.md) |
+| `gf-cocotb` | Python testbenches via Cocotb | [SKILL.md](plugins/gateflow/skills/gf-cocotb/SKILL.md) |
+| `gf-fusesoc` | FuseSoC build system integration | [SKILL.md](plugins/gateflow/skills/gf-fusesoc/SKILL.md) |
+| `gf-learn-ctx` | Contextual learning — micro-lessons in workflows | [SKILL.md](plugins/gateflow/skills/gf-learn-ctx/SKILL.md) |
 
-### Agents (16)
+### Agents (17)
 
 | Agent | Expertise | Source |
 |-------|-----------|--------|
@@ -296,6 +300,7 @@ GateFlow watches your workflow and helps proactively:
 | `sv-pinmap` | **Pin assignment specialist** — constraint files | [sv-pinmap.md](plugins/gateflow/agents/sv-pinmap.md) |
 | `vhdl-codegen` | **VHDL code generation** — entities and architectures | [vhdl-codegen.md](plugins/gateflow/agents/vhdl-codegen.md) |
 | `vhdl-testbench` | **VHDL testbench** — GHDL-compatible verification | [vhdl-testbench.md](plugins/gateflow/agents/vhdl-testbench.md) |
+| `pcb-designer` | **KiCad PCB** — AI-verified schematics and layouts | [pcb-designer.md](plugins/gateflow/agents/pcb-designer.md) |
 
 ### Commands (13)
 
@@ -507,9 +512,9 @@ clock_freq: 100MHz
 Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
-│   ├── agents/                #   16 specialized AI agents
+│   ├── agents/                #   17 specialized AI agents
 │   ├── commands/              #   13 slash commands
-│   ├── skills/                #   20 auto-activating skills
+│   ├── skills/                #   24 auto-activating skills
 │   ├── hooks/                 #   Automation hooks + session tracking
 │   ├── boards/                #   Curated FPGA board database (4 boards)
 │   ├── ip/                    #   Verified IP block library (8 blocks)
