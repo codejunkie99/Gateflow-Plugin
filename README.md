@@ -356,6 +356,20 @@ curl -o .windsurf/workflows/gf-plan.md \
   https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-plan/SKILL.md
 ```
 
+### OpenCode
+
+OpenCode supports MCP servers and skill files:
+
+```bash
+# Add GateFlow skills to your OpenCode config
+mkdir -p .opencode/skills/gf-plan
+curl -o .opencode/skills/gf-plan/SKILL.md \
+  https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/skills/gf-plan/SKILL.md
+
+# Add agent definitions
+curl -O https://raw.githubusercontent.com/codejunkie99/Gateflow-Plugin/main/plugins/gateflow/agents/sv-codegen.md
+```
+
 ### Quick Reference
 
 | Tool | Where to Put Files | Format |
@@ -366,6 +380,7 @@ curl -o .windsurf/workflows/gf-plan.md \
 | **Copilot CLI** | `.github/copilot-instructions.md` | Append |
 | **Cline** | `.clinerules` | Append |
 | **Windsurf** | `.windsurf/rules/` or `.windsurf/workflows/` | Individual .md |
+| **OpenCode** | `.opencode/skills/` or MCP | SKILL.md / Agent .md |
 
 </details>
 
@@ -453,6 +468,8 @@ For detailed release notes, see [`releases.md`](releases.md).
 
 | Version | Date | What Changed |
 |---------|------|-------------|
+| **1.6.0** | 2026-03-26 | Version sync across plugin.json and marketplace.json; BSL-1.1 license confirmed |
+| **1.5.3** | 2026-02-18 | Replace prompt-based PostToolUse hook with deterministic Python script |
 | **1.5.2** | 2026-02-15 | Fix Stop hook JSON validation: replace prompt hook with deterministic command hook (non-blocking reminder) |
 | **1.5.0** | 2025-02-11 | Terminal visualization with `/gf-viz` skill and `sv-viz` agent |
 | **1.4.4** | 2025-02-11 | Individual component downloads, cross-tool install instructions |
