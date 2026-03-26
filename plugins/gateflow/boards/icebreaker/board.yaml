@@ -1,0 +1,17 @@
+name: 1BitSquared iCEBreaker
+vendor: 1BitSquared
+fpga:
+  family: ice40
+  device: iCE40UP5K-SG48I
+  package: SG48
+synth_target: synth_ice40
+pnr_target: nextpnr-ice40 --up5k --package sg48
+programmer: openFPGALoader -b ice40_generic
+clock:
+  pin: 35
+  frequency: 12MHz
+leds: [11, 37]
+buttons: [10]
+pmod:
+  p1a: [4, 2, 47, 45, 3, 48, 46, 44]
+  p1b: [43, 38, 34, 31, 42, 36, 32, 28]
