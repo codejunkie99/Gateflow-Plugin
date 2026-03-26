@@ -71,6 +71,9 @@ For Option 3, add to `~/.claude/settings.json` or `.claude/settings.json`:
 | Verible | Optional | `brew tap chipsalliance/verible && brew install verible` | See [releases](https://github.com/chipsalliance/verible/releases) |
 | [Yosys](https://github.com/YosysHQ/yosys) | For synthesis | `brew install yosys` | `sudo apt install yosys` |
 | [SymbiYosys](https://github.com/YosysHQ/sby) | For formal | `pip install symbiyosys` | `pip install symbiyosys` |
+| [GHDL](https://github.com/ghdl/ghdl) | For VHDL | `brew install ghdl` | `sudo apt install ghdl` |
+| [nextpnr](https://github.com/YosysHQ/nextpnr) | For P&R | `brew install nextpnr` | See GitHub |
+| [openFPGALoader](https://github.com/trabucayre/openFPGALoader) | For flash | `brew install openfpgaloader` | See GitHub |
 
 ### Verify & Update
 
@@ -248,7 +251,7 @@ GateFlow watches your workflow and helps proactively:
 
 ## Components
 
-### Skills (17)
+### Skills (20)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
@@ -269,8 +272,11 @@ GateFlow watches your workflow and helps proactively:
 | `gf-expand` | Clarifying questions with trade-offs | [SKILL.md](plugins/gateflow/skills/gf-expand/SKILL.md) |
 | `gf-summary` | Summarize Verilator/lint output | [SKILL.md](plugins/gateflow/skills/gf-summary/SKILL.md) |
 | `tb-best-practices` | Testbench best practices reference | [SKILL.md](plugins/gateflow/skills/tb-best-practices/SKILL.md) |
+| `gf-pinmap` | **Board-aware pin mapping** with constraint generation | [SKILL.md](plugins/gateflow/skills/gf-pinmap/SKILL.md) |
+| `gf-pnr` | Place & route via nextpnr (iCE40/ECP5/Gowin) | [SKILL.md](plugins/gateflow/skills/gf-pnr/SKILL.md) |
+| `gf-protocols` | Protocol scaffolding (AXI4, SPI, I2C, Wishbone) | [SKILL.md](plugins/gateflow/skills/gf-protocols/SKILL.md) |
 
-### Agents (13)
+### Agents (16)
 
 | Agent | Expertise | Source |
 |-------|-----------|--------|
@@ -287,8 +293,11 @@ GateFlow watches your workflow and helps proactively:
 | `sv-developer` | Full-stack RTL — complex multi-file features | [sv-developer.md](plugins/gateflow/agents/sv-developer.md) |
 | `sv-tutor` | Teacher — reviews solutions, gives hints | [sv-tutor.md](plugins/gateflow/agents/sv-tutor.md) |
 | `sv-viz` | Terminal visualization of RTL architecture | [sv-viz.md](plugins/gateflow/agents/sv-viz.md) |
+| `sv-pinmap` | **Pin assignment specialist** — constraint files | [sv-pinmap.md](plugins/gateflow/agents/sv-pinmap.md) |
+| `vhdl-codegen` | **VHDL code generation** — entities and architectures | [vhdl-codegen.md](plugins/gateflow/agents/vhdl-codegen.md) |
+| `vhdl-testbench` | **VHDL testbench** — GHDL-compatible verification | [vhdl-testbench.md](plugins/gateflow/agents/vhdl-testbench.md) |
 
-### Commands (11)
+### Commands (13)
 
 | Command | Description | Source |
 |---------|-------------|--------|
@@ -303,6 +312,8 @@ GateFlow watches your workflow and helps proactively:
 | `/gf-fix` | Fix lint | [gf-fix.md](plugins/gateflow/commands/gf-fix.md) |
 | `/gf-gen` | Generate scaffolds | [gf-gen.md](plugins/gateflow/commands/gf-gen.md) |
 | `/gf-sim` | Run simulation | [gf-sim.md](plugins/gateflow/commands/gf-sim.md) |
+| `/gf-pnr` | Place & route (nextpnr) | [gf-pnr.md](plugins/gateflow/commands/gf-pnr.md) |
+| `/gf-flash` | Flash FPGA board | [gf-flash.md](plugins/gateflow/commands/gf-flash.md) |
 
 ### IP Library (8 verified blocks)
 
@@ -496,9 +507,9 @@ clock_freq: 100MHz
 Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
-│   ├── agents/                #   13 specialized AI agents
-│   ├── commands/              #   11 slash commands
-│   ├── skills/                #   17 auto-activating skills
+│   ├── agents/                #   16 specialized AI agents
+│   ├── commands/              #   13 slash commands
+│   ├── skills/                #   20 auto-activating skills
 │   ├── hooks/                 #   Automation hooks + session tracking
 │   ├── boards/                #   Curated FPGA board database (4 boards)
 │   ├── ip/                    #   Verified IP block library (8 blocks)
