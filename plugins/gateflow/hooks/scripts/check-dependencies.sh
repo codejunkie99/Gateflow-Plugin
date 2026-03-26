@@ -76,10 +76,12 @@ if [ ${#REQUIRED_MISSING[@]} -eq 0 ] && [ ${#OPTIONAL_MISSING[@]} -eq 0 ]; then
     exit 0
 fi
 
-# Required dependency missing → report and exit without marking success
+# Required dependency missing → warn but DO NOT block the session
 if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
     show_welcome
-    echo "⚠ GateFlow: Missing required tools: ${REQUIRED_MISSING[*]}"
+    echo "⚠ GateFlow: Verilator not found. Lint and simulation will be unavailable."
+    echo "  GateFlow will work in code-generation-only mode."
+    echo ""
     if [ ${#OPTIONAL_MISSING[@]} -ne 0 ]; then
         echo "ℹ GateFlow: Optional tools missing: ${OPTIONAL_MISSING[*]}"
     fi
@@ -97,6 +99,8 @@ if [ ${#REQUIRED_MISSING[@]} -ne 0 ]; then
         echo "   Install Verilator from https://verilator.org"
         echo "   Install Verible from https://github.com/chipsalliance/verible/releases"
     fi
+    # Still mark as checked and allow session to continue
+    touch "$MARKER_FILE"
     exit 0
 fi
 
