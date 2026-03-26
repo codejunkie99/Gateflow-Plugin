@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 20
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/cdc_handshake.sv
+read -formal formal/cdc_handshake_props.sv
+prep -top cdc_handshake
+[files]
+rtl/cdc_handshake.sv
+formal/cdc_handshake_props.sv

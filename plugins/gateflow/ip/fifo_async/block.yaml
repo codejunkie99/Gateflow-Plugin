@@ -1,0 +1,7 @@
+name: fifo_async
+version: 1.0.0
+description: Asynchronous FIFO with Gray code pointers for CDC
+parameters:
+  WIDTH: { type: int, default: 8 }
+  DEPTH: { type: int, default: 8 }
+dependencies: []

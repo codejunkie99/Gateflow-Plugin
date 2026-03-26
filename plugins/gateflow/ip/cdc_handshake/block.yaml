@@ -1,0 +1,6 @@
+name: cdc_handshake
+version: 1.0.0
+description: Multi-bit req/ack handshake synchronizer for CDC
+parameters:
+  WIDTH: { type: int, default: 8, description: "Data width in bits" }
+dependencies: []
