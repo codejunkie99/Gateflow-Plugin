@@ -1,7 +1,7 @@
 {
   "name": "gateflow",
   "version": "2.2.1",
-  "description": "AI-powered SystemVerilog development assistant with lint fixing, code generation, simulation, and waveform analysis",
+  "description": "AI-powered hardware development platform — design, verify, synthesize, and deploy working RTL with natural language. 18 agents, 25 skills, 8 IP blocks.",
   "author": {
     "name": "codejunkie99",
     "github": "https://github.com/codejunkie99",
