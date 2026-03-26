@@ -1,0 +1,8 @@
+name: axi4lite_slave
+version: 1.0.0
+description: AXI4-Lite register slave with byte strobes
+parameters:
+  ADDR_WIDTH: { type: int, default: 8 }
+  DATA_WIDTH: { type: int, default: 32 }
+  NUM_REGS: { type: int, default: 16 }
+dependencies: []

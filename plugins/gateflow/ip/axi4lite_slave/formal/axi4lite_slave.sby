@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 20
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/axi4lite_slave.sv
+read -formal formal/axi4lite_slave_props.sv
+prep -top axi4lite_slave
+[files]
+rtl/axi4lite_slave.sv
+formal/axi4lite_slave_props.sv
