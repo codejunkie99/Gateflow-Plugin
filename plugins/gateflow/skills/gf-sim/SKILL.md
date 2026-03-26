@@ -15,6 +15,30 @@ allowed-tools:
 
 Compile and run SystemVerilog simulation with structured output.
 
+## Tool Detection
+
+Before running simulation, check if Verilator is available:
+```bash
+which verilator
+```
+
+If Verilator is not available, return immediately:
+```
+---GATEFLOW-RESULT---
+STATUS: ERROR
+ERRORS: 0
+WARNINGS: 0
+FILES: []
+DETAILS: Simulation requires Verilator. Install it to enable simulation.
+  macOS: brew install verilator
+  Linux: sudo apt install verilator
+---END-GATEFLOW-RESULT---
+```
+
+Do NOT attempt to simulate without Verilator. Return the ERROR status and let the orchestrator handle it.
+
+---
+
 ## Instructions
 
 ### 1. Identify Files
