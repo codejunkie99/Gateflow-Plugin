@@ -1,0 +1,14 @@
+[tasks]
+prove
+[options]
+prove: mode prove
+prove: depth 30
+[engines]
+prove: smtbmc z3
+[script]
+read -formal rtl/spi_master.sv
+read -formal formal/spi_master_props.sv
+prep -top spi_master
+[files]
+rtl/spi_master.sv
+formal/spi_master_props.sv

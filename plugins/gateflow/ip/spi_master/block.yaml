@@ -1,0 +1,7 @@
+name: spi_master
+version: 1.0.0
+description: SPI master supporting all 4 CPOL/CPHA modes
+parameters:
+  CLK_DIV: { type: int, default: 4, description: "Clock divider" }
+  DATA_WIDTH: { type: int, default: 8, description: "Data width" }
+dependencies: []
