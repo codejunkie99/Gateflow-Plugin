@@ -251,7 +251,7 @@ GateFlow watches your workflow and helps proactively:
 
 ## Components
 
-### Skills (25)
+### Skills (26)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
@@ -304,7 +304,7 @@ GateFlow watches your workflow and helps proactively:
 | `pcb-designer` | **KiCad PCB** — AI-verified schematics and layouts | [pcb-designer.md](plugins/gateflow/agents/pcb-designer.md) |
 | `sv-ip-scanner` | **IP scanner** — detect missing modules, auto-fill | [sv-ip-scanner.md](plugins/gateflow/agents/sv-ip-scanner.md) |
 
-### Commands (14)
+### Commands (18)
 
 | Command | Description | Source |
 |---------|-------------|--------|
@@ -322,6 +322,10 @@ GateFlow watches your workflow and helps proactively:
 | `/gf-pnr` | Place & route (nextpnr) | [gf-pnr.md](plugins/gateflow/commands/gf-pnr.md) |
 | `/gf-flash` | Flash FPGA board | [gf-flash.md](plugins/gateflow/commands/gf-flash.md) |
 | `/gf-detect` | Scan for missing IP blocks and CDC issues | [gf-detect.md](plugins/gateflow/commands/gf-detect.md) |
+| `/gf-pcb` | Generate KiCad schematic/PCB (AI-verified) | [gf-pcb.md](plugins/gateflow/commands/gf-pcb.md) |
+| `/gf-pinmap` | Generate pin constraint file for board | [gf-pinmap.md](plugins/gateflow/commands/gf-pinmap.md) |
+| `/gf-cocotb` | Generate Python testbench (Cocotb) | [gf-cocotb.md](plugins/gateflow/commands/gf-cocotb.md) |
+| `/gf-fusesoc` | Generate FuseSoC .core file | [gf-fusesoc.md](plugins/gateflow/commands/gf-fusesoc.md) |
 
 ### IP Library (8 verified blocks)
 
@@ -516,8 +520,8 @@ Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
 │   ├── agents/                #   18 specialized AI agents
-│   ├── commands/              #   14 slash commands
-│   ├── skills/                #   25 auto-activating skills
+│   ├── commands/              #   18 slash commands
+│   ├── skills/                #   26 auto-activating skills
 │   ├── hooks/                 #   Automation hooks + session tracking
 │   ├── boards/                #   Curated FPGA board database (4 boards)
 │   ├── ip/                    #   Verified IP block library (8 blocks)

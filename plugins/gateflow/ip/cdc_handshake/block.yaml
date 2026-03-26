@@ -3,4 +3,16 @@ version: 1.0.0
 description: Multi-bit req/ack handshake synchronizer for CDC
 parameters:
   WIDTH: { type: int, default: 8, description: "Data width in bits" }
+ports:
+  - { name: src_clk, dir: input, width: 1 }
+  - { name: src_rst_n, dir: input, width: 1 }
+  - { name: src_data, dir: input, width: WIDTH }
+  - { name: src_valid, dir: input, width: 1 }
+  - { name: src_ready, dir: output, width: 1 }
+  - { name: dst_clk, dir: input, width: 1 }
+  - { name: dst_rst_n, dir: input, width: 1 }
+  - { name: dst_data, dir: output, width: WIDTH }
+  - { name: dst_valid, dir: output, width: 1 }
+formal_proofs:
+  - p_backpressure: "Ready deasserts during transfer"
 dependencies: []

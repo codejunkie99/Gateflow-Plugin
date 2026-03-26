@@ -283,6 +283,13 @@ User: "Create a FIFO and test it"
 | `sv-understanding` | Explaining code, architecture | File paths, specific questions |
 | `sv-refactor` | **ANY** code fix needed | Lint output, code to fix |
 | `sv-developer` | Complex multi-file changes | Full context, multiple files |
+| `sv-formal` | Formal verification requested | Module, properties to prove |
+| `sv-synth` | Synthesis or resource estimation | Module, target FPGA |
+| `sv-pinmap` | Pin assignment or constraint file | Board, RTL ports |
+| `sv-ip-scanner` | Scan for missing IP or CDC issues | Project path |
+| `vhdl-codegen` | VHDL module creation | Requirements, VHDL-2008 |
+| `vhdl-testbench` | VHDL testbench creation | DUT file, test scenarios |
+| `pcb-designer` | KiCad schematic/PCB design | Board description, components |
 
 ### Spawning Pattern - Inherit Session Model
 

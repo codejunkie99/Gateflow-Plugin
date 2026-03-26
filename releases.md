@@ -1,5 +1,25 @@
 # Releases
 
+## 2.3.0 (2026-03-27) — Quality Pass + Missing Features
+
+### Fixes
+- Expanded 5 IP block READMEs from stubs to full docs with instantiation examples
+- Added ports to 5 block.yaml files (axi4lite_slave, cdc_handshake, fifo_async, spi_master, uart)
+- Added 4 missing protocol references (UART, Wishbone, AXI4-Full, AXI-Stream)
+- Expanded Basys 3 constraints (all 16 LEDs, 16 switches, 7-segment display)
+- Expanded Tang Nano 9K constraints (UART, SPI flash pins)
+- Updated CLAUDE.md title to 'Open-Source Hardware Development Platform'
+- Updated AGENTS.md with all 18 agents
+- Updated orchestrator routing table with Phase 3-4 agents
+- Updated /gf-doctor with tiered tool display (Core/Formal/Synth/P&R/VHDL/PCB)
+- Removed empty gf-learn-v2 directory
+
+### New Commands
+- /gf-pcb — Generate KiCad schematic/PCB
+- /gf-pinmap — Generate pin constraint files
+- /gf-cocotb — Generate Python Cocotb testbenches
+- /gf-fusesoc — Generate FuseSoC .core files
+
 ## 2.2.1 (2026-03-26) — IP Auto-Detection & Auto-Fill
 
 ### New Features

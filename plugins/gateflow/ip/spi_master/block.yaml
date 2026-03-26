@@ -2,6 +2,22 @@ name: spi_master
 version: 1.0.0
 description: SPI master supporting all 4 CPOL/CPHA modes
 parameters:
-  CLK_DIV: { type: int, default: 4, description: "Clock divider" }
-  DATA_WIDTH: { type: int, default: 8, description: "Data width" }
+  CLK_DIV: { type: int, default: 4, description: "Clock divider for SCLK" }
+  DATA_WIDTH: { type: int, default: 8, description: "Bits per transfer" }
+ports:
+  - { name: clk, dir: input, width: 1 }
+  - { name: rst_n, dir: input, width: 1 }
+  - { name: cpol, dir: input, width: 1 }
+  - { name: cpha, dir: input, width: 1 }
+  - { name: tx_data, dir: input, width: DATA_WIDTH }
+  - { name: start, dir: input, width: 1 }
+  - { name: rx_data, dir: output, width: DATA_WIDTH }
+  - { name: busy, dir: output, width: 1 }
+  - { name: done, dir: output, width: 1 }
+  - { name: sclk, dir: output, width: 1 }
+  - { name: mosi, dir: output, width: 1 }
+  - { name: miso, dir: input, width: 1 }
+  - { name: cs_n, dir: output, width: 1 }
+formal_proofs:
+  - p_cs_busy: "CS_N low when busy"
 dependencies: []

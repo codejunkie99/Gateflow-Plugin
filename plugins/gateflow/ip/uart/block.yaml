@@ -2,6 +2,19 @@ name: uart
 version: 1.0.0
 description: UART TX+RX with configurable baud rate (8N1)
 parameters:
-  CLK_FREQ: { type: int, default: 100000000, description: "Clock frequency Hz" }
+  CLK_FREQ: { type: int, default: 100000000, description: "Clock frequency in Hz" }
   BAUD_RATE: { type: int, default: 115200, description: "Baud rate" }
+ports:
+  - { name: clk, dir: input, width: 1 }
+  - { name: rst_n, dir: input, width: 1 }
+  - { name: tx_data, dir: input, width: 8 }
+  - { name: tx_valid, dir: input, width: 1 }
+  - { name: tx_ready, dir: output, width: 1 }
+  - { name: tx_out, dir: output, width: 1 }
+  - { name: rx_in, dir: input, width: 1 }
+  - { name: rx_data, dir: output, width: 8 }
+  - { name: rx_valid, dir: output, width: 1 }
+formal_proofs:
+  - p_idle_high: "TX line high when idle"
+  - p_valid_ready: "tx_ready deasserts after valid transfer"
 dependencies: []

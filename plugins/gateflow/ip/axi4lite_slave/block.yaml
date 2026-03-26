@@ -2,7 +2,29 @@ name: axi4lite_slave
 version: 1.0.0
 description: AXI4-Lite register slave with byte strobes
 parameters:
-  ADDR_WIDTH: { type: int, default: 8 }
-  DATA_WIDTH: { type: int, default: 32 }
-  NUM_REGS: { type: int, default: 16 }
+  ADDR_WIDTH: { type: int, default: 8, description: "Address bus width" }
+  DATA_WIDTH: { type: int, default: 32, description: "Data bus width" }
+  NUM_REGS: { type: int, default: 16, description: "Number of registers" }
+ports:
+  - { name: clk, dir: input, width: 1 }
+  - { name: rst_n, dir: input, width: 1 }
+  - { name: awaddr, dir: input, width: ADDR_WIDTH }
+  - { name: awvalid, dir: input, width: 1 }
+  - { name: awready, dir: output, width: 1 }
+  - { name: wdata, dir: input, width: DATA_WIDTH }
+  - { name: wstrb, dir: input, width: "DATA_WIDTH/8" }
+  - { name: wvalid, dir: input, width: 1 }
+  - { name: wready, dir: output, width: 1 }
+  - { name: bresp, dir: output, width: 2 }
+  - { name: bvalid, dir: output, width: 1 }
+  - { name: bready, dir: input, width: 1 }
+  - { name: araddr, dir: input, width: ADDR_WIDTH }
+  - { name: arvalid, dir: input, width: 1 }
+  - { name: arready, dir: output, width: 1 }
+  - { name: rdata, dir: output, width: DATA_WIDTH }
+  - { name: rresp, dir: output, width: 2 }
+  - { name: rvalid, dir: output, width: 1 }
+  - { name: rready, dir: input, width: 1 }
+formal_proofs:
+  - p_bresp_after_write: "Write response follows write completion"
 dependencies: []

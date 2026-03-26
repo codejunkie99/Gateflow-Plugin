@@ -1,4 +1,4 @@
-# GateFlow - SystemVerilog Development Assistant
+# GateFlow - Open-Source Hardware Development Platform
 
 > ## CRITICAL: AGGRESSIVE GATEFLOW DELEGATION
 >
