@@ -222,6 +222,72 @@ DETAILS: Compile error - undefined reference to fifo_mem
 | Timeout | Simulation hangs | Add timeout or fix FSM |
 | No $finish | Runs forever | Ensure TB calls $finish |
 
+## Verilator v5 Performance Options
+
+### Multi-Threaded Simulation
+```bash
+verilator --binary --threads N -Wall --trace <files> -o sim
+```
+Use `numactl` to pin to physical cores for best performance.
+
+### Trace Formats
+| Format | Flag | Size | Viewers |
+|---|---|---|---|
+| VCD | `--trace` | Large | Universal |
+| FST | `--trace-fst` | Small | GTKWave, Surfer |
+
+Use `--trace-fst` for large designs. Add `--trace-threads 2` to offload FST writing.
+
+### Assertions (SVA)
+```bash
+verilator --binary --assert <files>     # DEFAULT in v5.038+
+verilator --binary --no-assert <files>  # Disable for performance
+```
+Supports one-cycle concurrent assert/cover, `$past`, `$stable`, `$rose`, `$fell`.
+Does NOT support multi-cycle sequences (SEREs).
+
+### Code Coverage
+```bash
+verilator --binary --coverage <files>        # All coverage
+verilator --binary --coverage-line <files>   # Line only
+verilator --binary --coverage-toggle <files> # Toggle only
+```
+
+### Maximum Performance
+```bash
+verilator --binary -O3 --x-assign fast --x-initial fast --no-assert --threads N <files>
+```
+
+## Verilator SV Support
+
+| Construct | Support |
+|---|---|
+| `always_comb`/`always_ff` | Full |
+| Interfaces and modports | Full |
+| Packages, structs, enums | Full |
+| Generate | Full |
+| DPI (C/C++ import/export) | Full |
+| Classes | Partial |
+| Constrained randomization | Partial |
+| SVA (one-cycle) | Full |
+| SVA (multi-cycle) | Not supported |
+
+## Simulation Timeout
+
+Prevent simulation hangs:
+```bash
+timeout 60 ./obj_dir/sim
+```
+
+Or in testbench:
+```systemverilog
+initial begin
+    #1000000;
+    $display("TIMEOUT");
+    $finish;
+end
+```
+
 ## Usage by /gf Orchestrator
 
 The `/gf` skill uses this skill internally and parses the result block:

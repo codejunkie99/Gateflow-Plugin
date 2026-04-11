@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7b2ff7"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00c853"/>
+      <stop offset="100%" stop-color="#00e676"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="480" fill="url(#bg)" rx="12"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="800" height="3" fill="url(#accent)" rx="1"/>
+
+  <!-- Header -->
+  <text x="40" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#00d4ff" letter-spacing="3">GATEFLOW</text>
+  <text x="40" y="86" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#ffffff">v2.3.1 Skill Enrichment</text>
+  <text x="40" y="112" font-family="system-ui, -apple-system, sans-serif" font-size="15" fill="#888888">7 skills upgraded from stubs to production reference material</text>
+
+  <!-- Divider -->
+  <rect x="40" y="130" width="720" height="1" fill="#333"/>
+
+  <!-- Skills Grid -->
+  <!-- Row 1 -->
+  <rect x="40" y="150" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="56" y="175" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-formal</text>
+  <text x="56" y="196" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">SVA patterns + SymbiYosys configs</text>
+  <text x="248" y="175" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+219</text>
+
+  <rect x="285" y="150" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="301" y="175" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-cocotb</text>
+  <text x="301" y="196" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">Test templates + cocotbext libs</text>
+  <text x="493" y="175" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+181</text>
+
+  <rect x="530" y="150" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="546" y="175" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-fusesoc</text>
+  <text x="546" y="196" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">Full .core schema + backends</text>
+  <text x="738" y="175" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+150</text>
+
+  <!-- Row 2 -->
+  <rect x="40" y="222" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="56" y="247" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-pnr</text>
+  <text x="56" y="268" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">Timing analysis + constraint fmts</text>
+  <text x="248" y="247" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+94</text>
+
+  <rect x="285" y="222" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="301" y="247" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-pcb</text>
+  <text x="301" y="268" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">KiCad CLI + AI review checklist</text>
+  <text x="493" y="247" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+93</text>
+
+  <rect x="530" y="222" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="546" y="247" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-lint</text>
+  <text x="546" y="268" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">Verilator v5 warnings + SARIF</text>
+  <text x="738" y="247" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+70</text>
+
+  <!-- Row 3 (centered) -->
+  <rect x="285" y="294" width="230" height="60" rx="8" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="301" y="319" font-family="monospace" font-size="13" font-weight="700" fill="#00d4ff">gf-sim</text>
+  <text x="301" y="340" font-family="system-ui, sans-serif" font-size="11" fill="#aaa">Threading + FST + SVA + coverage</text>
+  <text x="493" y="319" font-family="monospace" font-size="11" fill="#00c853" text-anchor="end">+66</text>
+
+  <!-- Divider -->
+  <rect x="40" y="374" width="720" height="1" fill="#333"/>
+
+  <!-- Stats row -->
+  <text x="40" y="406" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">Also in this release:</text>
+
+  <!-- Stat pills -->
+  <rect x="40" y="418" width="170" height="28" rx="14" fill="#1a1a2e" stroke="#7b2ff7" stroke-width="1"/>
+  <text x="125" y="437" font-family="system-ui, sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">6 critical fixes applied</text>
+
+  <rect x="224" y="418" width="190" height="28" rx="14" fill="#1a1a2e" stroke="#7b2ff7" stroke-width="1"/>
+  <text x="319" y="437" font-family="system-ui, sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">CLAUDE.md deduplicated</text>
+
+  <rect x="428" y="418" width="170" height="28" rx="14" fill="#1a1a2e" stroke="#7b2ff7" stroke-width="1"/>
+  <text x="513" y="437" font-family="system-ui, sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">gateflow.index rebuilt</text>
+
+  <rect x="612" y="418" width="148" height="28" rx="14" fill="#1a1a2e" stroke="#7b2ff7" stroke-width="1"/>
+  <text x="686" y="437" font-family="system-ui, sans-serif" font-size="11" fill="#c4b5fd" text-anchor="middle">README rewritten</text>
+
+  <!-- Total line count -->
+  <text x="760" y="470" font-family="monospace" font-size="13" font-weight="700" fill="#00c853" text-anchor="end">+863 lines</text>
+  <text x="610" y="470" font-family="system-ui, sans-serif" font-size="12" fill="#666" text-anchor="end">Total skill enrichment:</text>
+</svg>
