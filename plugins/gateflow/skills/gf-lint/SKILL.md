@@ -159,3 +159,73 @@ Parse ---GATEFLOW-RESULT--- block:
 - STATUS: FAIL -> spawn sv-refactor agent with error context
 - STATUS: ERROR -> report issue to user
 ```
+
+## Verilator v5 New Warnings
+
+### Lint Warnings (enabled by -Wall)
+| Code | Description |
+|---|---|
+| ASSIGNEQEXPR | `=` used inside expression (may mean `==`) |
+| ALWNEVER | `always @*` has empty event list |
+| ALWCOMBORDER | Variable set after use in `always_comb` |
+| IMPLICITSTATIC | Task/function variable implicitly static |
+| WIDTHEXPAND | Value is zero-expanded |
+| WIDTHTRUNC | Value is truncated |
+| ENUMVALUE | Enum assigned incompatible type |
+| CASEOVERLAP | Case values overlap |
+| CASTCONST | `$cast` always succeeds or fails |
+| CMPCONST | Comparison always yields constant |
+| MISINDENT | Misleading indentation |
+| MULTIDRIVEN | Signal driven by multiple always blocks |
+| SYNCASYNCNET | Signal mixed sync/async resets |
+| INFINITELOOP | Loop condition always true |
+| SELRANGE | Selection index out of bounds |
+
+### Style Warnings (enabled by -Wall)
+| Code | Description |
+|---|---|
+| ASCRANGE | Packed vector with ascending range `[0:7]` |
+| DECLFILENAME | Module name doesn't match filename |
+| DEFPARAM | Deprecated `defparam` |
+| GENUNNAMED | Generate block unnamed |
+| IMPORTSTAR | `import pkg::*` in `$unit` scope |
+
+### v5 Behavior Changes
+- WIDTH is now a meta-category: disabling WIDTH disables WIDTHEXPAND + WIDTHTRUNC
+- `--assert` enabled by default since v5.038
+- `--lint-only` now implies `--timing`
+
+## Warning Suppression
+
+### Inline Pragma
+```systemverilog
+/* verilator lint_off WIDTH */
+assign narrow = wide;
+/* verilator lint_on WIDTH */
+```
+
+### Control File
+```
+lint_off -rule WIDTH -file "*.sv" -match "Operator ASSIGN*"
+```
+
+## Error Message Format
+
+```
+%Error: file.sv:42:5: syntax error, unexpected ';'
+%Warning-WIDTH: file.sv:25:15: Operator ASSIGN expects 8 bits
+```
+
+### Exit Codes
+| Code | Meaning |
+|---|---|
+| 0 | Success (no errors or fatal warnings) |
+| 1 | Errors or warnings (warnings are fatal by default) |
+
+Use `-Wno-fatal` to make warnings non-fatal.
+
+## Machine-Readable Output
+
+```bash
+verilator --lint-only --diagnostics-sarif *.sv  # SARIF JSON output
+```
