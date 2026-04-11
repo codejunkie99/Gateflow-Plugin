@@ -8,6 +8,8 @@ claude plugin add codejunkie99/Gateflow-Plugin
 
 > Say what you want to build. GateFlow plans it, builds it in parallel, lints it, simulates it, and hands you working code.
 
+![GateFlow v2.3.1 Update](assets/update-2.3.1.svg)
+
 ---
 
 ## What It Does
