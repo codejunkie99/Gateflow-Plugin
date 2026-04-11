@@ -1,5 +1,54 @@
 # Releases
 
+## 2.4.0 (2026-04-11) — Deep Skill Enrichment
+
+The biggest content update in GateFlow history. Every skill in the plugin has been enriched with research-backed reference material, actionable templates, and structured return formats. 37 files changed, +3,139 lines added.
+
+### Critical Fixes
+- Rebuilt stale `gateflow.index` (added 11+ missing skills, removed nonexistent gf-summary)
+- Removed hardcoded "Sonnet" model reference from gf-architect (now inherits session model)
+- Inlined missing gf-errors 3-layer translation protocol into gf/SKILL.md
+- Fixed dead routing targets in gf-router (gf-synth -> gateflow:sv-synth agent, gf-boards -> command)
+- Deduplicated CLAUDE.md content (~3K tokens saved per session)
+
+### Skill Enrichment — Verification & Synthesis (7 skills)
+- **gf-formal**: SVA property patterns (overflow, handshake, one-hot, liveness, reset, FIFO), SymbiYosys .sby templates (BMC/prove/cover/multi-task), proof strategy decision tree, engine comparison, counterexample interpretation guide, 4 reference files
+- **gf-cocotb**: FIFO/handshake/FSM test templates, multi-simulator Makefile, pytest runner, cocotbext protocol libraries (AXI/Wishbone/SPI/UART), Cocotb vs SV decision matrix, GATEFLOW-RESULT format
+- **gf-pcb**: Full KiCad CLI reference (DRC/ERC/BOM/gerbers/drill/STEP), DRC/ERC error interpretation tables, AI review checklist (decoupling/power/high-speed/thermal/manufacturing), confidence scoring framework, manufacturing package script
+- **gf-pnr**: Complete nextpnr flag reference (iCE40/ECP5/Gowin), full bitstream pipelines, timing analysis (Fmax/slack/critical path), utilization thresholds, common failures and fixes, constraint file format templates (PCF/LPF/CST)
+- **gf-fusesoc**: Complete CAPI=2 .core schema with multi-target configs, file type reference, dependency management with version operators, FuseSoC CLI commands, tool backend options
+- **gf-lint**: 20+ Verilator v5 new warning codes, warning suppression (inline + control file), SARIF machine-readable output, error message format and exit codes
+- **gf-sim**: Verilator v5 multi-threaded simulation, FST vs VCD tracing, SVA assertion support, code coverage flags, SV construct support matrix, timeout patterns
+
+### Skill Enrichment — Orchestration (4 skills)
+- **gf**: Verilator/Yosys error dictionary (20 patterns with plain-English translations and fixes)
+- **gf-router**: Context-dependent routing with confidence boosts, multi-intent detection for compound queries, adaptive confidence calibration formula
+- **gf-expand**: Question templates for formal verification, synthesis, board targeting, protocol choice; quick-start defaults per scenario; follow-up decision trees
+- **gf-build**: Kahn's algorithm for optimal parallel phase assignment, resource contention prevention rules, SHA256-based incremental build with dependency-aware cache invalidation, progress visualization
+
+### Skill Enrichment — Architecture & Visualization (2 skills)
+- **gf-architect**: Verilator v5 JSON AST mode for accurate mapping, RTL complexity metrics (cyclomatic + composite scoring), cross-module signal tracing algorithm, diff-aware mapping with CHANGES.md output, Mermaid dependency graph generation
+- **gf-viz**: Signal path trace view, ASCII timing diagrams, structural diff view, port connection matrix, search functionality (find modules by clock/FSM/ports, signals by glob, unconnected ports, CDC crossings)
+
+### Skill Enrichment — Learning & Verification Practices (3 skills)
+- **gf-learn**: 5 new topic categories (arbiter, memory, protocol, verification, optimization), difficulty scaling algorithm with cross-topic transfer, 4-tier grading rubric with automated checks, progress persistence in JSON, challenge mode with timed scoring
+- **gf-learn-ctx**: 15 new concept library entries (pipeline, backpressure, clock gating, Gray code, arbitration, DMA, etc.), cross-reference linking to IP blocks and skills, spaced repetition algorithm, 5 orchestration integration hooks
+- **tb-best-practices**: UVM-lite compatibility for Verilator v5, complete Cocotb equivalents for every SV TB pattern, 4-phase coverage closure checklist, 10 common TB anti-patterns with fixes, simulation performance optimization guide
+
+### Skill Enrichment — IP & Protocols (3 skills)
+- **gf-protocols**: Actual scaffold code for AXI4-Lite slave, SPI master, UART TX, and I2C master (was empty stub with zero code), GATEFLOW-RESULT format
+- **gf-ip**: Instantiation examples for all 8 IP blocks, IP block comparison/decision table, GATEFLOW-RESULT format for IP operations
+- **gf-ip-detect**: Extended vendor IP detection (Xilinx UltraScale+, Intel Agilex, Microchip PolarFire, Efinix), false positive reduction rules, 5-level severity scoring, auto-suggestion integration mapping patterns to `/gf-ip add` commands
+
+### Skill Enrichment — Hardware & Planning (3 skills)
+- **gf-pinmap**: GATEFLOW-RESULT format, I/O standard reference table (LVCMOS33 through TMDS_33), 6 common pin mapping mistakes, PMOD connector mapping patterns (Type 2/3/6)
+- **gf-project**: GATEFLOW-RESULT format, extended project.yaml schema (simulation/synthesis/verification/CI sections), project templates (iCE40/ECP5/sim-only/multi-board), health check validation
+- **gf-plan**: Power estimation with activity factors and clock gating candidates, area estimation per RTL construct, latency budget rules, risk assessment template with severity matrix
+
+### README
+- Complete rewrite with bold builder voice showing full scope (20 agents, 25 skills, 19 commands, 8 IP blocks, 4 boards)
+- Added v2.4.0 update SVG graphic
+
 ## 2.3.0 (2026-03-27) — Quality Pass + Missing Features
 
 ### Fixes
