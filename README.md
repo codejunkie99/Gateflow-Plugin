@@ -9,6 +9,8 @@
 
 ![GateFlow Demo](https://github.com/user-attachments/assets/73115231-5dac-473c-8f6b-5ed88a780135)
 
+![GateFlow v2.3.1 Update](plugins/gateflow/assets/update-2.3.1.svg)
+
 ---
 
 **Loving hardware doesn't have to be gatekept.**
