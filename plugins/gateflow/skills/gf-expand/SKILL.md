@@ -224,3 +224,42 @@ Invoke Task tool:
 3. **Be specific** - "What interface?" not "Tell me more"
 4. **Remember answers** - Build comprehensive context
 5. **Handoff with full context** - Target should have everything needed
+
+---
+
+## Additional Scenario Templates
+
+### Formal Verification
+- "What properties to verify?" -> Safety / Protocol compliance / Functional correctness / Suggest for me (multiSelect)
+- "Proof depth?" -> Quick check (BMC 20 cycles) / Full proof (unbounded) / Cover + Prove
+
+### Synthesis
+- "Target FPGA?" -> iCE40 / ECP5 / Gowin / Artix-7 / Generic estimate
+- "Optimization goal?" -> Minimum area / Maximum frequency / Low power / Balanced
+
+### Board Targeting
+- "Which board?" -> iCEBreaker / Tang Nano 9K / Arty A7 / Other
+- "Peripherals needed?" -> LEDs+buttons / UART / SPI+I2C / HDMI+VGA (multiSelect)
+
+### Protocol Choice
+- "Protocol?" -> AXI4-Lite / AXI-Stream / Wishbone / Valid/Ready / Help me choose
+- "Data flow?" -> Register read/write / Streaming / Burst transfers / Request/response
+
+## Quick Start Defaults
+
+| Scenario | Defaults |
+|---|---|
+| Creation | 32-bit, parameterized, valid/ready, self-checking TB, parallel build |
+| Debug | Run existing TB, collect waveform, auto-diagnose |
+| Formal | BMC depth 20, z3, safety properties auto-detected |
+| Synthesis | Generic target, balanced optimization |
+| Board | Auto-detect from project.yaml, fallback iCEBreaker |
+| Protocol | Valid/Ready for single module, AXI-Stream for pipelines, AXI4-Lite for registers |
+
+## Follow-Up Decision Trees
+
+**Creation:** Single module + no bus -> sv-codegen. Single module + bus -> protocol choice. Multi-component -> gf-plan then gf-build.
+
+**Debug:** X-values from start -> check resets. Wrong output consistent -> logic error. Simulation hangs -> infinite loop or deadlock.
+
+**Formal:** Safety properties -> BMC then prove. Protocol compliance -> load SVA templates. Not sure -> auto-analyze design for FIFO/FSM/handshake patterns.

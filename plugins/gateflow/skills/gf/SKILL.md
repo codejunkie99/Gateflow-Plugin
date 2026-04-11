@@ -434,6 +434,38 @@ NEVER show raw Verilator/Yosys output to the user without translation.
 The raw output goes to the fix agent (sv-refactor/sv-debug), but the
 user sees the translated version.
 
+## Verilator/Yosys Error Dictionary
+
+### Verilator Patterns
+
+| Code | WHAT | FIX |
+|---|---|---|
+| WIDTHTRUNC | Value truncated (target narrower) | Explicit slice: `target = source[7:0]` |
+| WIDTHEXPAND | Value zero-extended (target wider) | Explicit concat: `{8'b0, source}` |
+| MULTIDRIVEN | Signal driven from multiple always blocks | Single always block or CDC sync |
+| COMBDLY | Non-blocking `<=` in combinational block | Use `=` in always_comb |
+| INITIALDLY | Delayed assign in initial block | Use `=` not `<=` |
+| ENUMVALUE | Enum assigned wrong type | Cast: `state = state_t'(value)` |
+| VARHIDDEN | Inner variable shadows outer scope | Rename inner variable |
+| SYNCASYNCNET | Signal used as both sync and async reset | Use consistently as one type |
+| ALWCOMBORDER | Variable read before assigned in always_comb | Move assignment above first use |
+| TIMESCALEMOD | Module missing timescale | Add `` `timescale 1ns/1ps `` |
+| MODDUP | Module defined more than once | Remove duplicate |
+| PINNOCONNECT | Instance port not connected | Connect or `.port()` |
+| ASSIGNIN | Writing to input port | Change to output |
+| BLKANDNBLK | Mixed blocking/non-blocking on same signal | `<=` in always_ff, `=` in always_comb |
+| CASEOVERLAP | Two case items match same value | Remove duplicate |
+
+### Yosys Patterns
+
+| Pattern | WHAT | FIX |
+|---|---|---|
+| Failed to evaluate $clog2 | Argument not compile-time constant | Use localparam |
+| generate for-loop not constant | Loop bound not constant | Use parameter/literal |
+| System task outside initial | $display outside initial | Wrap in `` `ifdef SIMULATION `` |
+| Identifier not found | Missing source file | Add to synthesis script |
+| Combinational loop | Circular dependency | Insert flip-flop to break loop |
+
 ---
 
 ## Verification Commands

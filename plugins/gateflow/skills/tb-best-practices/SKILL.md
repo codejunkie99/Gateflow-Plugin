@@ -529,3 +529,58 @@ endclass
 |url: https://picture.iczhiku.com/resource/eetop/wYIEDKFRorpoPvvV.pdf
 |relevant: Ch 5 (OOP), Ch 6 (Rand), Ch 7 (Threads), Ch 8 (Advanced OOP), Ch 9 (Coverage), Ch 11 (Complete TB)
 ```
+
+---
+
+## UVM-Lite for Verilator v5
+
+Verilator v5 supports UVM 2017 subset. Works: uvm_component, uvm_object, uvm_sequence_item, uvm_driver, uvm_monitor, uvm_scoreboard, uvm_env, uvm_test, uvm_tlm ports, phases. Does NOT work: factory overrides, $cast, RAL, uvm_config_db with virtual interfaces, callbacks.
+
+Pass virtual interfaces via constructor/setter, not config_db. Use direct construction, not factory. Compile with `-DUVM_NO_DPI --timing`.
+
+## Cocotb Equivalents
+
+| SV Pattern | Cocotb Equivalent |
+|---|---|
+| Transaction class | Python dataclass |
+| rand/constraint | random module + manual constraints |
+| mailbox | collections.deque or asyncio.Queue |
+| virtual interface | Direct dut handle |
+| covergroup | cocotb-coverage decorators |
+| fork/join | Combine(start_soon(...)) |
+| fork/join_any | First(start_soon(...)) |
+| assert property | async def checker coroutine |
+
+## Coverage Closure Checklist
+
+1. Extract coverage report after full regression
+2. Categorize: unreachable code (exclude with justification), untriggered FSM transitions (write directed test), empty cross bins (constraint override), low-hit coverpoints (increase iterations or add weighted distribution)
+3. Write directed tests for each remaining hole
+4. Re-run with merged coverage, verify all targets met
+5. Document all exclusions with justification comments
+
+## 10 TB Anti-Patterns
+
+1. **Magic numbers** -> Use localparam with meaningful names
+2. **No timeout** -> fork/join_any with $fatal timeout guard
+3. **Happy path only** -> Test errors, resets mid-operation, edge cases
+4. **#delay for sync** -> Use @(posedge clk) for synchronization
+5. **Ignoring X/Z** -> Use $isunknown() and `===` operator
+6. **Monolithic test** -> Split into reusable tasks
+7. **Print-and-pray** -> Use assert with $error messages
+8. **Race conditions** -> Non-blocking `<=` at clock edges
+9. **Global state** -> Encapsulate in classes, pass via constructor
+10. **Not draining pipeline** -> Wait PIPELINE_DEPTH + margin cycles before checking
+
+## Performance Optimization
+
+| Technique | Speedup |
+|---|---|
+| `--threads N` | 2-4x |
+| `--trace-fst` (not VCD) | 2-3x smaller files |
+| Disable tracing in regression | 2-5x |
+| Minimize $display | 1.2-2x |
+| `--x-assign fast` (after X-clean) | 1.1x |
+| Parallel test execution (`make -j`) | Nx |
+
+Test tiers: SMOKE (seconds, every commit), RANDOM (minutes, PR merge), COVERAGE (hours, nightly), REGRESSION (hours, weekly).
