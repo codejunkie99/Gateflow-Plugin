@@ -80,3 +80,53 @@ formal_proofs:
   - p_no_underflow: "FIFO never allows reads when empty"
 dependencies: []
 ```
+
+## Instantiation Examples
+
+### fifo_sync
+```systemverilog
+fifo_sync #(.WIDTH(8), .DEPTH(32)) u_fifo (.clk(sys_clk), .rst_n(sys_rst_n), .wr_en(wr_valid && !fifo_full), .wr_data(wr_data), .rd_en(rd_consume), .rd_data(rd_out), .full(fifo_full), .empty(fifo_empty));
+```
+
+### fifo_async
+```systemverilog
+fifo_async #(.WIDTH(32), .DEPTH(16)) u_cdc (.wr_clk(clk_fast), .wr_rst_n(rst_fast_n), .wr_en(producer_valid), .wr_data(producer_data), .wr_full(full), .rd_clk(clk_slow), .rd_rst_n(rst_slow_n), .rd_en(consumer_ready), .rd_data(consumer_data), .rd_empty(empty));
+```
+
+### cdc_2ff
+```systemverilog
+cdc_2ff u_sync (.clk(clk_dst), .rst_n(rst_dst_n), .d(async_signal), .q(synced_signal));
+```
+
+### uart
+```systemverilog
+uart #(.CLK_FREQ(100_000_000), .BAUD_RATE(115200)) u_uart (.clk, .rst_n, .tx_data(tx_byte), .tx_valid(tx_start), .tx_ready(tx_idle), .tx(uart_tx_pin), .rx(uart_rx_pin), .rx_data(rx_byte), .rx_valid(rx_ready));
+```
+
+### spi_master
+```systemverilog
+spi_master #(.CLK_DIV(8)) u_spi (.clk, .rst_n, .cpol(1'b0), .cpha(1'b0), .tx_data(spi_tx), .tx_valid(spi_start), .tx_ready(spi_idle), .rx_data(spi_rx), .rx_valid(spi_done), .sclk(spi_sclk), .mosi(spi_mosi), .miso(spi_miso), .cs_n(spi_cs_n));
+```
+
+## IP Block Comparison
+
+| Need | Use | Not | Why |
+|---|---|---|---|
+| Same-clock buffering | fifo_sync | fifo_async | Async has Gray code overhead |
+| Cross-domain stream | fifo_async | cdc_2ff | 2FF only handles 1-bit |
+| Cross-domain 1-bit flag | cdc_2ff | fifo_async | FIFO overkill for 1-bit |
+| Cross-domain multi-bit (infrequent) | cdc_handshake | fifo_async | Handshake smaller |
+| Cross-domain multi-bit (streaming) | fifo_async | cdc_handshake | Handshake blocks |
+
+## GATEFLOW-RESULT Format
+
+```
+---GATEFLOW-RESULT---
+STATUS: PASS | FAIL | NEEDS_ACTION
+OPERATION: add | list | info
+BLOCK: <name>
+VERSION: <version>
+FILES: [copied files]
+DETAILS: [summary]
+---END-GATEFLOW-RESULT---
+```

@@ -36,6 +36,8 @@ Interactive SystemVerilog learning with exercises and solution review.
 | `arbiter` | Round-robin, priority, grant logic |
 | `memory` | RAMs, ROMs, register files |
 | `protocol` | AXI-lite, Wishbone, handshakes |
+| `verification` | Assertions, SVA properties, coverage |
+| `optimization` | Timing closure, resource sharing, pipelining tradeoffs |
 
 ## Workflow
 
@@ -135,3 +137,42 @@ Create an AXI-Lite slave with:
 2. **NEVER show solution** unless explicitly asked with `/gf-learn solution`
 3. **Track progress** in `.gateflow/learn/progress.json`
 4. **Encourage** - learning is hard, be supportive
+
+## Difficulty Scaling
+
+| Level | Score Range | Criteria |
+|---|---|---|
+| Beginner | 0-99 | Single always block, basic signals |
+| Intermediate | 100-299 | Multi-block, FSMs, parameterization |
+| Advanced | 300-499 | Multi-clock, protocols, optimization |
+| Expert | 500+ | Full subsystems, cross-cutting concerns |
+
+Advancement: +30 no hints, +20 one hint, +10 two+ hints, +10 lint-clean bonus, -10 solution revealed.
+
+## Grading Rubric
+
+| Grade | Criteria |
+|---|---|
+| A (Excellent) | Lint-clean, correct reset, parameterized, assertions included |
+| B (Good) | Correct, minor lint warnings, reasonable naming |
+| C (Acceptable) | Correct for basic cases, multiple warnings, hardcoded values |
+| D (Needs Work) | Functional errors, missing reset, width mismatches |
+
+Automated checks: lint (20%), functional correctness (40%), style (15%), parameterization (10%), edge cases (10%), assertions (5%).
+
+## Progress Persistence
+
+Store in `.gateflow/learn/progress.json`:
+```json
+{"user_level": "intermediate", "total_score": 185, "topics": {"basics": {"level": "intermediate", "score": 90, "exercises_completed": 3}}}
+```
+
+## Challenge Mode
+
+`/gf-learn challenge <topic>` -- timed exercises with scoring.
+
+| Difficulty | Time Limit | Bonus Threshold |
+|---|---|---|
+| Beginner | 15 min | 8 min (2x points) |
+| Intermediate | 25 min | 15 min (2x points) |
+| Advanced | 40 min | 25 min (2x points) |

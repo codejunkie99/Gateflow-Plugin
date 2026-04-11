@@ -766,3 +766,41 @@ Report in CODEBASE.md under "## Warnings":
 **No git available:**
 - Fall back to file hash comparison
 - Store .file_hashes for change detection
+
+---
+
+## Verilator JSON Mode
+
+When Verilator is available, use `--json-only` for more accurate mapping:
+```bash
+verilator --json-only --json-only-output design.tree.json --no-json-edit-nums -Wall <files>.sv
+```
+
+Key AST nodes: MODULE (modules), VAR (signals with ioDirection), CELL (instances), ASSIGNW/ASSIGNDLY (connections). Benefits over regex: resolves parameters/generates, captures elaborated hierarchy, typed width info. Falls back to regex if Verilator unavailable.
+
+## Complexity Metrics
+
+Add to each module page and CODEBASE.md summary:
+
+| Metric | What It Measures |
+|---|---|
+| CC (Cyclomatic) | Decision points in combinational logic |
+| FSM_STATES | Number of FSM states |
+| ALWAYS | Number of always blocks |
+| PORTS | Port count |
+| INSTANCES | Submodule count |
+| SLOC | Non-blank non-comment lines |
+
+Composite: `(CC*3) + (FSM_STATES*2) + ALWAYS + (PORTS/5) + (INSTANCES*2)`. Rating: 1-10 Low, 11-30 Medium, 31-60 High, 61+ Critical.
+
+## Signal Tracing
+
+Build directed connectivity graph (nodes=signals, edges=assignments+port bindings). BFS forward from source, BFS backward from destination. Output trace path with module crossings and pipeline stage markers.
+
+## Diff-Aware Mapping
+
+After each map, save snapshot. On next map, compare module-level: ADDED/MODIFIED/REMOVED with specific change type (port, instance, FSM, parameter). Output to `.gateflow/map/CHANGES.md`.
+
+## Dependency Graph Output
+
+Generate `.gateflow/map/dependencies.md` with Mermaid: solid arrows for instantiation, dashed for imports, subgraphs for clock domains, classDef for top/mid/leaf/package.

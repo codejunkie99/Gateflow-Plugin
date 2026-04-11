@@ -278,3 +278,49 @@ Combine with codebase mapping:
 - "What IP blocks does my project need?" → detection + suggestions
 - "Find CDC issues" → focused CDC crossing analysis
 - "Replace ad-hoc code with verified IP" → pattern match + swap
+
+---
+
+## Extended Vendor IP Detection
+
+Additional primitives to detect beyond existing list:
+- **Xilinx UltraScale+:** URAM288, DSP48E2, BUFGCE, MMCME4_ADV, GTHE4_CHANNEL, STARTUPE3
+- **Intel Agilex:** IOPLL, RAM20K, M20K, MLAB, tennm_ph2_iopll
+- **Lattice ECP5:** EHXPLLL, DP16KD, TRELLIS_FF, DCUA, EXTREFB
+- **Gowin (extended):** rPLL, PLLVR, SDPB, DPB, pROM, EMCU, DHCEN
+- **Microchip PolarFire:** LSRAM, uSRAM, MACC, CCC, SERDES_IF
+- **Efinix:** EFX_PLL, EFX_RAM_5K, EFX_DPRAM_5K, EFX_GBUFCE
+
+## False Positive Reduction
+
+| Pattern | False Positive When | Action |
+|---|---|---|
+| 2FF chain | Inside shift register (3+ stages) | Skip |
+| 2FF chain | Both FFs same clock | Skip |
+| FIFO signals | Inside module named `*fifo*` | Skip |
+| valid/ready | AXI bus already using IP block | Skip |
+| SPI signals | Inside testbench files (tb_*, *_tb.sv) | Skip |
+| Vendor primitive | In comments or string literals | Skip |
+
+## Severity Scoring
+
+| Severity | Criteria | Examples |
+|---|---|---|
+| CRITICAL | Data corruption, metastability | CDC without synchronizer |
+| HIGH | Missing module, empty stubs | Instantiated but undefined |
+| MEDIUM | Ad-hoc reimplementation | Hand-rolled FIFO, manual 2FF |
+| LOW | Style, minor optimization | Vendor primitive with OSS equivalent |
+| INFO | Already correct | Verified IP properly used |
+
+## Auto-Suggestion Integration
+
+| Detected Pattern | Suggested Command | Parameters |
+|---|---|---|
+| Sync FIFO signals | `/gf-ip add fifo_sync` | WIDTH=detected, DEPTH=next_pow2 |
+| Async FIFO signals | `/gf-ip add fifo_async` | WIDTH=detected, DEPTH=8 |
+| 2FF CDC crossing | `/gf-ip add cdc_2ff` | default |
+| Multi-bit CDC handshake | `/gf-ip add cdc_handshake` | WIDTH=detected |
+| UART pattern | `/gf-ip add uart` | CLK_FREQ=detected, BAUD=115200 |
+| SPI pattern | `/gf-ip add spi_master` | CLK_DIV=computed |
+| AXI register pattern | `/gf-ip add axi4lite_slave` | ADDR_WIDTH=detected |
+| Button debounce | `/gf-ip add debouncer` | DEBOUNCE_MS=20 |

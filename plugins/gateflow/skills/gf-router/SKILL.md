@@ -372,3 +372,37 @@ NEXT_TARGET: [if handoff]
 3. **ALWAYS build context** before handoff
 4. **ALWAYS use expand mode** when confidence < 0.85
 5. **Track handoff chains** to prevent circular routing
+
+---
+
+## Context-Dependent Routing
+
+| Prior State | Query Pattern | Boost | Target |
+|---|---|---|---|
+| Code just created | "test/run/try" | +0.20 SIMULATE | gf-sim |
+| Code just created | "check/lint" | +0.20 LINT | gf-lint |
+| Sim just failed | "fix/debug/why" | +0.20 DEBUG | sv-debug |
+| Lint just failed | "fix/clean" | +0.20 REFACTOR | sv-refactor |
+| Plan just created | "build/go/do it" | +0.20 ORCHESTRATE | gf |
+| Learning active | any task query | +0.15 TUTOR | sv-tutor |
+
+## Multi-Intent Detection
+
+| Query | Intents | Route To |
+|---|---|---|
+| "Create a FIFO and formally verify it" | CREATE + FORMAL | gf (orchestrate) |
+| "Build and test a counter" | CREATE + SIMULATE | gf (orchestrate) |
+| "Explain the FSM then add assertions" | EXPLAIN + VERIFY | sv-understanding then sv-verification |
+| "Fix lint and run simulation" | REFACTOR + SIMULATE | sv-refactor then gf-sim |
+| "Create UART and SPI master" | CREATE + CREATE | gf-build (multi-component) |
+
+Detection rule: scan for conjunctions ("and", "then", "also"). If any intent pair includes CREATE + VERIFY/SIMULATE/FORMAL, always route to ORCHESTRATE.
+
+## Confidence Calibration
+
+Lower threshold to 0.75 when: user is new (first 3 sessions), destructive action, multiple valid architectures.
+Raise threshold to 0.90+ when: user names exact command, references file paths, repeats previous action.
+
+Adaptive formula: `effective = 0.85 + new_user(-0.10) + destructive(-0.10) + context(+0.05) + specificity(+0.05)`. Range [0.65, 0.95].
+
+If top two intents within 0.10 of each other: force expand mode regardless.

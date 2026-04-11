@@ -256,6 +256,65 @@ Write to: tb/tb_[dut].sv
 
 ---
 
+## Dependency Graph Algorithm
+
+Use Kahn's algorithm (BFS topological sort) to identify parallel phases:
+1. Build adjacency list and in-degree for each component
+2. Initialize queue with all in-degree=0 components
+3. Drain queue level by level -- each level is a parallel phase
+4. If any component still has in_degree>0 after all levels: cycle detected
+
+---
+
+## Resource Contention Rules
+
+| Rule | Description |
+|---|---|
+| One writer per file | Each file owned by exactly one agent |
+| Write-before-read | Writers in earlier phase than readers |
+| Shared package pattern | Shared types go to pkg.sv in Phase 0 |
+| No implicit deps | Agent prompts list files to CREATE, READ, and NEVER MODIFY |
+
+---
+
+## Incremental Build
+
+Track file hashes in `.gateflow/cache/hashes.json`:
+```json
+{"rtl/alu.sv": {"sha256": "a1b2...", "last_lint": "PASS", "last_sim": "PASS"}}
+```
+
+Decision: if hash unchanged AND all dependency hashes unchanged -> skip (cache hit). Otherwise re-run.
+
+Dependency-aware invalidation: when pkg.sv changes, invalidate all importers.
+
+---
+
+## Build Cache Structure
+
+```
+.gateflow/cache/
+  hashes.json          # hash -> result mapping
+  deps.json            # dependency graph
+  lint/<file>.lint     # cached lint output
+  sim/<tb>/result.json # cached sim result
+```
+
+---
+
+## Progress Visualization
+
+```
+[Phase 0] Setup         [====================] DONE  0:04
+[Phase 1] Components    [==========>         ] 62%   0:30
+  alu.sv                [====================] DONE
+  regfile.sv            [====================] DONE
+  decoder.sv            [=========>          ] 55%
+[Phase 2] Dependent     [                    ] WAIT
+```
+
+---
+
 ## Return Format
 
 ```
