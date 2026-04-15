@@ -1,11 +1,20 @@
 ---
 name: gf-summary
-description: Summarize Verilator/lint output in a readable format
+description: "Summarize Verilator, lint, or simulation output into a readable, actionable format. Use when the user wants to understand build output, lint errors, or simulation results from a Verilator or EDA tool run."
 user-invocable: true
+triggers:
+  - summarize lint output
+  - summarize Verilator output
+  - what do these errors mean
+  - parse build output
+  - summarize simulation results
+  - explain these lint warnings
+  - make this output readable
+  - summarize EDA tool output
+---
 allowed-tools:
   - Bash
   - Read
----
 
 # GateFlow Summary Skill
 

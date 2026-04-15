@@ -1,19 +1,20 @@
 ---
 name: gf-router
-description: >
-  Intent router and expand mode orchestrator for GateFlow.
-  Classifies user intent semantically, determines confidence, triggers expand mode
-  for ambiguous requests, and hands off to appropriate skill/agent.
-user-invocable: false
+description: "Figures out what kind of digital hardware design task the user wants to do, then hands off to the right specialist. Use when the request is unclear, multi-step, or needs help deciding whether to simulate, synthesize, lint, or implement."
+user-invocable: true
+triggers:
+  - I want to build something with hardware
+  - not sure where to start with this design
+  - help me figure out what to do
+  - I have an RTL idea but don't know how to proceed
+  - what should I do first for this design
+  - help me decide between simulation and synthesis
+  - I need hardware help but don't know which tool
+  - guide me through this digital design task
+---
 allowed-tools:
   - Read
   - Glob
-  - Grep
-  - Bash
-  - Skill
-  - Task
-  - AskUserQuestion
----
 
 # GF Router - Intent Classification and Expand Mode
 

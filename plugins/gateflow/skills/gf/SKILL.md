@@ -1,6 +1,17 @@
 ---
 name: gf
-description: Primary SystemVerilog orchestrator. Handles all RTL tasks end-to-end - routes to agents, runs verification, iterates until working. Examples: "create a FIFO", "test my UART", "fix lint errors", "implement and verify"
+description: "Primary SystemVerilog/RTL orchestrator for GateFlow. Routes to specialist agents, runs verification, and iterates until working. Use when the user wants to create, test, fix, or implement any RTL design — FIFO, UART, AXI, state machines, or any digital hardware module."
+user-invocable: true
+triggers:
+  - create a FIFO in SystemVerilog
+  - implement this RTL
+  - test my UART
+  - fix lint errors in my design
+  - implement and verify
+  - write SystemVerilog for
+  - create a hardware module
+  - design and verify this circuit
+---
 allowed-tools:
   - Grep
   - Glob
@@ -8,11 +19,6 @@ allowed-tools:
   - Write
   - Edit
   - Bash
-  - Task
-  - WebFetch
-  - AskUserQuestion
-  - Skill
----
 
 # GF - SystemVerilog Development Orchestrator
 
