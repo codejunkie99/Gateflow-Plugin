@@ -1,19 +1,20 @@
 ---
 name: gf-fusesoc
-description: >
-  FuseSoC build system integration. Generates .core files and drives
-  synthesis/simulation through Edalize backends (Vivado, Quartus, open-source).
-  Example: "create a FuseSoC core file", "build with Edalize"
+description: "FuseSoC build system integration for GateFlow. Generates .core files and drives synthesis/simulation through Edalize backends (Vivado, Quartus, open-source tools). Use when the user needs to create a FuseSoC core file, build with Edalize, or integrate RTL into a FuseSoC project."
 user-invocable: true
+triggers:
+  - create a FuseSoC core file
+  - build with Edalize
+  - FuseSoC integration
+  - generate .core file
+  - Vivado build via FuseSoC
+  - Quartus synthesis with FuseSoC
+  - set up FuseSoC project
+  - fusesoc build
+---
 allowed-tools:
   - Bash
   - Read
-  - Write
-  - Glob
-  - Grep
-  - Task
-  - AskUserQuestion
----
 
 # GF-FuseSoC -- Build System Integration
 
