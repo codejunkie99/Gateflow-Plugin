@@ -1,14 +1,23 @@
 ---
 name: gf-learn
-description: SystemVerilog learning mode - generates exercises, reviews solutions
+description: "SystemVerilog learning mode — generates exercises, reviews solutions, and teaches RTL design patterns. Use when the user wants to learn SystemVerilog, practice hardware design, get exercises, or understand verification methodology."
 user-invocable: true
+triggers:
+  - teach me SystemVerilog
+  - give me an exercise
+  - learning mode
+  - practice RTL design
+  - review my solution
+  - SystemVerilog tutorial
+  - help me learn hardware design
+  - generate a learning exercise
+---
 allowed-tools:
   - Read
   - Write
   - Bash
   - Task
   - AskUserQuestion
----
 
 # GateFlow Learning Mode
 
