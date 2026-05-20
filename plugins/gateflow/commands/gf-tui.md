@@ -9,7 +9,7 @@ allowed-tools:
 
 # GateFlow TUI Command
 
-Open the local GateFlow terminal console.
+Open the local GateFlow terminal console and local CLI.
 
 ## Usage
 
@@ -21,11 +21,24 @@ Open the local GateFlow terminal console.
 
 ## Execution
 
-Run from the repository root:
+Run the command-first CLI from the repository root:
+
+```bash
+python3 tools/gateflow_cli.py status
+python3 tools/gateflow_cli.py agents list
+python3 tools/gateflow_cli.py agents create "CDC Reviewer" \
+  --role "clock-domain crossing reviewer" \
+  --description "Reviews synchronizers and CDC constraints"
+python3 tools/gateflow_cli.py shell
+```
+
+Open the keyboard dashboard:
 
 ```bash
 python3 tools/gateflow_tui.py
 ```
+
+Inside the dashboard, press `a` to create a new agent.
 
 Use snapshot mode when running in a non-interactive terminal:
 
@@ -39,5 +52,6 @@ python3 tools/gateflow_tui.py --snapshot --plain
 - component inventory
 - local hardware tool health
 - map/release readiness
+- interactive agent creation
 - quick actions for `/gf-doctor`, `/gf-map`, `/gf-viz`, `/gf-lint`, `/gf-sim`,
   `/gf-formal`, and `/gf-release`

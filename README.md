@@ -154,6 +154,23 @@ Skills activate automatically based on context:
 | `/gf-tui` | Open the local GateFlow terminal console |
 | `/gf-release` | Validate plugin release readiness |
 
+### Local CLI
+
+GateFlow also ships with a command-first local CLI for plugin maintenance and
+agent creation:
+
+```bash
+python3 tools/gateflow_cli.py status
+python3 tools/gateflow_cli.py agents list
+python3 tools/gateflow_cli.py agents create "CDC Reviewer" \
+  --role "clock-domain crossing reviewer" \
+  --description "Reviews synchronizers and CDC constraints"
+python3 tools/gateflow_cli.py shell
+python3 tools/gateflow_cli.py tui
+```
+
+Inside the TUI, press `a` to create a new agent without leaving the dashboard.
+
 ### Example Session
 
 ```
@@ -590,6 +607,7 @@ For detailed release notes, see [`releases.md`](releases.md).
 
 | Version | Date | What Changed |
 |---------|------|-------------|
+| **2.5.3** | 2026-05-21 | Command-first local CLI, interactive agent creation, and richer terminal colors |
 | **2.5.2** | 2026-05-21 | Responsive TUI layout for narrow terminal windows |
 | **2.5.1** | 2026-05-21 | TUI terminal compatibility fixes for cursor and colorless PTYs |
 | **2.5.0** | 2026-05-21 | OpenClaw-style CLI/TUI, release readiness workflow, deterministic validators, synced marketplace/docs/index/mirrors |

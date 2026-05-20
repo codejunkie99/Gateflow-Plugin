@@ -36,7 +36,7 @@ class GateFlowTuiTests(unittest.TestCase):
         payload = tui.build_payload(ROOT)
 
         self.assertEqual("gateflow", payload["plugin"]["name"])
-        self.assertEqual("2.5.2", payload["plugin"]["version"])
+        self.assertEqual("2.5.3", payload["plugin"]["version"])
         self.assertEqual(20, payload["inventory"]["agents"])
         self.assertEqual(27, payload["inventory"]["skills"])
         self.assertEqual(21, payload["inventory"]["commands"])
@@ -95,6 +95,52 @@ class GateFlowTuiTests(unittest.TestCase):
         self.assertEqual(FakeCurses.A_DIM, styles["muted"])
         self.assertEqual(0, styles["footer"])
 
+    def test_terminal_styles_use_semantic_color_pairs_when_supported(self):
+        tui = load_tui()
+
+        class FakeCurses:
+            error = RuntimeError
+            COLORS = 256
+            COLOR_BLACK = 0
+            COLOR_RED = 1
+            COLOR_GREEN = 2
+            COLOR_YELLOW = 3
+            COLOR_BLUE = 4
+            COLOR_MAGENTA = 5
+            COLOR_CYAN = 6
+            A_BOLD = 0x100
+            A_DIM = 0x200
+            A_REVERSE = 0x400
+            calls = []
+
+            @staticmethod
+            def start_color():
+                return None
+
+            @staticmethod
+            def use_default_colors():
+                return None
+
+            @staticmethod
+            def has_colors():
+                return True
+
+            @staticmethod
+            def init_pair(pair, foreground, background):
+                FakeCurses.calls.append((pair, foreground, background))
+
+            @staticmethod
+            def color_pair(pair):
+                return pair << 12
+
+        styles = tui._terminal_styles(FakeCurses)
+
+        self.assertIn((1, 208, -1), FakeCurses.calls)
+        self.assertIn((7, 16, 214), FakeCurses.calls)
+        self.assertEqual((1 << 12) | FakeCurses.A_BOLD, styles["accent"])
+        self.assertEqual((7 << 12) | FakeCurses.A_BOLD, styles["selected"])
+        self.assertEqual((8 << 12) | FakeCurses.A_BOLD, styles["heading"])
+
     def test_narrow_terminals_use_stacked_layout(self):
         tui = load_tui()
 
@@ -140,6 +186,19 @@ class GateFlowTuiTests(unittest.TestCase):
 
         self.assertNotIn("Workspace", action_row)
         self.assertGreater(workspace_row, 11)
+
+    def test_stacked_health_rows_have_semantic_styles(self):
+        tui = load_tui()
+        payload = tui.build_payload(ROOT)
+
+        rows = tui._dashboard_rows(payload, 80, 0, "")
+
+        def style_for(prefix):
+            return next(style for text, style in rows if text.strip().startswith(prefix))
+
+        self.assertEqual("status_ok", style_for("doctor"))
+        self.assertEqual("status_ok", style_for("release"))
+        self.assertEqual("status_warn", style_for("map"))
 
 
 if __name__ == "__main__":
