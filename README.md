@@ -590,6 +590,7 @@ For detailed release notes, see [`releases.md`](releases.md).
 
 | Version | Date | What Changed |
 |---------|------|-------------|
+| **2.5.2** | 2026-05-21 | Responsive TUI layout for narrow terminal windows |
 | **2.5.1** | 2026-05-21 | TUI terminal compatibility fixes for cursor and colorless PTYs |
 | **2.5.0** | 2026-05-21 | OpenClaw-style CLI/TUI, release readiness workflow, deterministic validators, synced marketplace/docs/index/mirrors |
 | **2.4.0** | 2026-04-11 | Deep skill enrichment across verification, synthesis, orchestration, architecture, learning, IP, and planning |
