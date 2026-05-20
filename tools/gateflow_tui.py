@@ -138,6 +138,66 @@ def _terminal_styles(curses_module=curses) -> dict[str, int]:
     return styles
 
 
+def _layout_mode(width: int) -> str:
+    return "stacked" if width < 100 else "columns"
+
+
+def _fit_text(text: str, max_width: int) -> str:
+    if max_width <= 0:
+        return ""
+    if len(text) <= max_width:
+        return text
+    if max_width <= 3:
+        return "." * max_width
+    return text[: max_width - 3].rstrip() + "..."
+
+
+def _short_path(path: str, max_width: int) -> str:
+    if len(path) <= max_width:
+        return path
+    name = Path(path).name
+    parent = Path(path).parent.name
+    compact = f".../{parent}/{name}" if parent else f".../{name}"
+    return _fit_text(compact, max_width)
+
+
+def _dashboard_rows(payload: dict, width: int, selected: int, message: str) -> list[tuple[str, str]]:
+    max_width = max(20, width - 1)
+    inv = payload["inventory"]
+    health = payload["health"]
+    rows: list[tuple[str, str]] = []
+
+    def row(text: str = "", style: str = "normal") -> None:
+        rows.append((_fit_text(text, max_width), style))
+
+    row(f"GateFlow Terminal  {payload['plugin']['name']} {payload['plugin']['version']}", "accent")
+    row(payload["mode"], "muted")
+    row("─" * max_width, "muted")
+    row()
+    row("Actions", "heading")
+    for index, action in enumerate(payload["actions"], start=1):
+        marker = ">" if index - 1 == selected else " "
+        style = "selected" if index - 1 == selected else "normal"
+        row(f"{marker} {index}. {action['command']:<11} {action['description']}", style)
+    row()
+    row("Workspace", "heading")
+    row(f"  path    {_short_path(payload['workspace'], max_width - 10)}")
+    row(f"  plugin  {payload['plugin']['name']} {payload['plugin']['version']}", "accent")
+    row()
+    row("Inventory", "heading")
+    row(f"  {inv['agents']} agents   {inv['skills']} skills   {inv['commands']} commands")
+    row(f"  {inv['ip_blocks']} IP blocks   {inv['boards']} boards")
+    row()
+    row("Health", "heading")
+    row(f"  doctor    {health['doctor']:<10} release  {health['release']}")
+    row(f"  map       {health['map']['status']:<10} verilator {health['verilator']}")
+    row(f"  yosys     {health['yosys']:<10} sby       {health['sby']}")
+    row()
+    row("─" * max_width, "muted")
+    row(message or "↑/↓ select   Enter show command   r refresh   q quit", "footer")
+    return rows
+
+
 def render_snapshot(root: Path, plain: bool = False) -> str:
     payload = build_payload(root)
     inv = payload["inventory"]
@@ -182,11 +242,12 @@ def _draw(stdscr, payload: dict, selected: int, message: str) -> None:
     actions = payload["actions"]
     inv = payload["inventory"]
     health = payload["health"]
-    left_width = min(34, max(24, width // 3))
+    mode = _layout_mode(width)
 
     def add(y: int, x: int, text: str, attr=0) -> None:
         if 0 <= y < height:
-            stdscr.addnstr(y, x, text, max(0, width - x - 1), attr)
+            max_width = max(0, width - x - 1)
+            stdscr.addnstr(y, x, _fit_text(text, max_width), max_width, attr)
 
     styles = _terminal_styles()
     accent = styles["accent"]
@@ -198,22 +259,47 @@ def _draw(stdscr, payload: dict, selected: int, message: str) -> None:
     add(0, 20, payload["mode"], muted)
     add(1, 0, "─" * (width - 1), muted)
 
+    if mode == "stacked":
+        style_attrs = {
+            "accent": accent,
+            "footer": styles["footer"],
+            "heading": curses.A_BOLD,
+            "muted": muted,
+            "normal": 0,
+            "selected": curses.A_REVERSE,
+        }
+        for y, (text, style) in enumerate(_dashboard_rows(payload, width, selected, message)):
+            add(y, 0, text, style_attrs.get(style, 0))
+        stdscr.refresh()
+        return
+
     add(3, 2, "Actions", curses.A_BOLD)
+    right_x = 52 if mode == "columns" else 2
+    action_desc_width = (right_x - 18) if mode == "columns" else (width - 18)
     for idx, action in enumerate(actions):
         attr = curses.A_REVERSE if idx == selected else 0
-        add(5 + idx, 2, f"{idx + 1}. {action['command']}", attr)
-        add(5 + idx, 16, action["description"], attr)
+        y = 5 + idx
+        add(y, 2, f"{idx + 1}. {action['command']}", attr)
+        add(y, 16, _fit_text(action["description"], action_desc_width), attr)
 
-    x = left_width + 2
-    add(3, x, "Workspace", curses.A_BOLD)
-    add(5, x, payload["workspace"])
-    add(6, x, f"{payload['plugin']['name']} {payload['plugin']['version']}", accent)
+    if mode == "columns":
+        workspace_y = 3
+        inventory_y = 8
+        health_y = 13
+    else:
+        workspace_y = 6 + len(actions)
+        inventory_y = workspace_y + 5
+        health_y = inventory_y + 5
 
-    add(8, x, "Inventory", curses.A_BOLD)
-    add(10, x, f"{inv['agents']} agents   {inv['skills']} skills   {inv['commands']} commands")
-    add(11, x, f"{inv['ip_blocks']} IP blocks   {inv['boards']} boards")
+    add(workspace_y, right_x, "Workspace", curses.A_BOLD)
+    add(workspace_y + 2, right_x, payload["workspace"])
+    add(workspace_y + 3, right_x, f"{payload['plugin']['name']} {payload['plugin']['version']}", accent)
 
-    add(13, x, "Health", curses.A_BOLD)
+    add(inventory_y, right_x, "Inventory", curses.A_BOLD)
+    add(inventory_y + 2, right_x, f"{inv['agents']} agents   {inv['skills']} skills   {inv['commands']} commands")
+    add(inventory_y + 3, right_x, f"{inv['ip_blocks']} IP blocks   {inv['boards']} boards")
+
+    add(health_y, right_x, "Health", curses.A_BOLD)
     rows = [
         ("doctor", health["doctor"]),
         ("release", health["release"]),
@@ -224,7 +310,7 @@ def _draw(stdscr, payload: dict, selected: int, message: str) -> None:
     ]
     for offset, (name, value) in enumerate(rows):
         attr = ok if value in {"ready", "installed"} else warn
-        add(15 + offset, x, f"{name:<10} {value}", attr)
+        add(health_y + 2 + offset, right_x, f"{name:<10} {value}", attr)
 
     footer = message or "↑/↓ select   Enter show command   r refresh   q quit"
     add(height - 2, 0, "─" * (width - 1), muted)

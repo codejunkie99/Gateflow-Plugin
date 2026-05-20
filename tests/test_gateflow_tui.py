@@ -36,7 +36,7 @@ class GateFlowTuiTests(unittest.TestCase):
         payload = tui.build_payload(ROOT)
 
         self.assertEqual("gateflow", payload["plugin"]["name"])
-        self.assertEqual("2.5.1", payload["plugin"]["version"])
+        self.assertEqual("2.5.2", payload["plugin"]["version"])
         self.assertEqual(20, payload["inventory"]["agents"])
         self.assertEqual(27, payload["inventory"]["skills"])
         self.assertEqual(21, payload["inventory"]["commands"])
@@ -94,6 +94,52 @@ class GateFlowTuiTests(unittest.TestCase):
         self.assertEqual(0, styles["warn"])
         self.assertEqual(FakeCurses.A_DIM, styles["muted"])
         self.assertEqual(0, styles["footer"])
+
+    def test_narrow_terminals_use_stacked_layout(self):
+        tui = load_tui()
+
+        self.assertEqual("stacked", tui._layout_mode(80))
+        self.assertEqual("columns", tui._layout_mode(120))
+
+    def test_text_is_ellipsized_to_fit_column(self):
+        tui = load_tui()
+
+        value = tui._fit_text("Validate plugin release readiness", 18)
+
+        self.assertEqual("Validate plugin...", value)
+        self.assertLessEqual(len(value), 18)
+
+    def test_narrow_draw_stacks_panels_below_actions(self):
+        tui = load_tui()
+        payload = tui.build_payload(ROOT)
+
+        class FakeScreen:
+            def __init__(self):
+                self.rows = [" " * 80 for _ in range(32)]
+
+            def erase(self):
+                pass
+
+            def getmaxyx(self):
+                return (32, 80)
+
+            def addnstr(self, y, x, text, max_width, _attr=0):
+                line = self.rows[y]
+                clipped = text[:max_width]
+                self.rows[y] = line[:x] + clipped + line[x + len(clipped) :]
+
+            def refresh(self):
+                pass
+
+        screen = FakeScreen()
+
+        tui._draw(screen, payload, selected=6, message="")
+
+        action_row = next(row for row in screen.rows if "/gf-release" in row)
+        workspace_row = next(index for index, row in enumerate(screen.rows) if "Workspace" in row)
+
+        self.assertNotIn("Workspace", action_row)
+        self.assertGreater(workspace_row, 11)
 
 
 if __name__ == "__main__":
