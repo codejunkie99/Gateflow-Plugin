@@ -3,41 +3,104 @@
 # Use: Agent retrieval, codebase navigation
 
 primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes, Spear/Tumbush book index
-primary|README.md|Installation, usage, features
+primary|README.md|Installation, usage, features, component inventory
+primary|plugins/gateflow/README.md|Plugin-local overview and quick start
+primary|releases.md|Release notes and version history
 
-commands|commands/gf-doctor.md|Env check
-commands|commands/gf-fix.md|Fix lint
-commands|commands/gf-gen.md|Generate scaffolds
-commands|commands/gf-lint.md|Run lint
-commands|commands/gf-map.md|Map codebase
-commands|commands/gf-scan.md|Index project
-commands|commands/gf-sim.md|Run sim
+commands|commands/gf-audit.md|Audit plugin quality and optionally auto-fix issues
+commands|commands/gf-boards.md|List supported FPGA boards and query pinouts
+commands|commands/gf-cocotb.md|Generate Cocotb Python testbenches
+commands|commands/gf-demo.md|Create a zero-config demo project
+commands|commands/gf-detect.md|Scan for missing IP blocks, stubs, and CDC issues
+commands|commands/gf-doctor.md|Check environment and hardware tool dependencies
+commands|commands/gf-fix.md|Fix lint errors
+commands|commands/gf-flash.md|Program FPGA boards with openFPGALoader
+commands|commands/gf-formal.md|Run formal verification
+commands|commands/gf-fusesoc.md|Generate FuseSoC core files
+commands|commands/gf-gen.md|Generate RTL and testbench scaffolds
+commands|commands/gf-ip.md|Manage verified IP blocks
+commands|commands/gf-lint.md|Run Verilator lint
+commands|commands/gf-map.md|Map codebase architecture
+commands|commands/gf-pcb.md|Generate KiCad schematic and PCB drafts
+commands|commands/gf-pinmap.md|Generate board constraint files
+commands|commands/gf-pnr.md|Run place and route workflows
+commands|commands/gf-release.md|Validate and prepare GateFlow releases
+commands|commands/gf-scan.md|Index project files
+commands|commands/gf-sim.md|Run simulation
+commands|commands/gf-tui.md|Open the local GateFlow terminal console
 
 skills|skills/gf/SKILL.md|Main orchestrator, verification loops
-skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
 skills|skills/gf-architect/SKILL.md|Codebase mapping, hierarchy analysis
 skills|skills/gf-build/SKILL.md|Parallel multi-component build orchestrator
-skills|skills/gf-expand/SKILL.md|Design expansion and requirement elaboration
-skills|skills/gf-learn/SKILL.md|Learning-oriented SV guidance and explanations
+skills|skills/gf-cocotb/SKILL.md|Cocotb testbench generation and execution
+skills|skills/gf-errors/SKILL.md|Three-layer hardware tool error translation
+skills|skills/gf-expand/SKILL.md|Requirement expansion and clarifying questions
+skills|skills/gf-formal/SKILL.md|Formal verification, SVA, SymbiYosys
+skills|skills/gf-fusesoc/SKILL.md|FuseSoC and Edalize integration
+skills|skills/gf-ip/SKILL.md|Verified IP block library operations
+skills|skills/gf-ip-detect/SKILL.md|Missing IP, stub, pattern, and CDC detection
+skills|skills/gf-learn/SKILL.md|Interactive SV learning mode
+skills|skills/gf-learn-ctx/SKILL.md|Contextual micro-lessons and concept tracking
 skills|skills/gf-lint/SKILL.md|Lint analysis and remediation workflow
+skills|skills/gf-pcb/SKILL.md|KiCad schematic and PCB workflow
+skills|skills/gf-pinmap/SKILL.md|Board-aware pin mapping
+skills|skills/gf-plan/SKILL.md|Hardware planner, Mermaid diagrams, FSM design
+skills|skills/gf-pnr/SKILL.md|Synthesis, place and route flow
+skills|skills/gf-project/SKILL.md|Project context and .gateflow/project.yaml management
+skills|skills/gf-protocols/SKILL.md|Protocol references and scaffolds
+skills|skills/gf-release/SKILL.md|Release readiness validation and version prep
 skills|skills/gf-router/SKILL.md|Task routing and intent classification
 skills|skills/gf-sim/SKILL.md|Simulation flow and debug loops
 skills|skills/gf-summary/SKILL.md|Summarization and progress reporting
+skills|skills/gf-synth/SKILL.md|Yosys synthesis and resource reports
+skills|skills/gf-tui/SKILL.md|OpenClaw-style local terminal console
 skills|skills/gf-viz/SKILL.md|Terminal visualization, hierarchy and FSM diagrams
-skills|skills/tb-best-practices/SKILL.md|Testbench best practices, layered TB, randomization, coverage, OOP patterns
+skills|skills/tb-best-practices/SKILL.md|Testbench best practices, coverage, OOP patterns
 
+agents|agents/gf-auditor.md|Plugin quality audit
+agents|agents/gf-pluginfixer.md|Automatic plugin gap fixing
+agents|agents/pcb-designer.md|KiCad schematic and PCB design
 agents|agents/sv-codegen.md|RTL generation, modules, FSMs, FIFOs
-agents|agents/sv-testbench.md|Testbench creation, stimulus, self-checking
 agents|agents/sv-debug.md|Simulation failures, X-values, timing
-agents|agents/sv-verification.md|SVA assertions, coverage, formal
-agents|agents/sv-understanding.md|Code explanation, signal tracing
+agents|agents/sv-developer.md|Multi-file development and complex features
+agents|agents/sv-formal.md|Formal proofs and SVA properties
+agents|agents/sv-ip-scanner.md|Missing IP, stubs, and CDC scanning
+agents|agents/sv-orchestrator.md|Parallel component orchestration
+agents|agents/sv-pinmap.md|Pin assignments and constraints
 agents|agents/sv-planner.md|Architecture planning, design plans, diagrams
-agents|agents/sv-orchestrator.md|Parallel component orchestration, multi-module builds
 agents|agents/sv-refactor.md|Lint fixes, cleanup, optimization
-agents|agents/sv-developer.md|Multi-file development, complex features
+agents|agents/sv-synth.md|Yosys synthesis optimization
+agents|agents/sv-testbench.md|Testbench creation, stimulus, self-checking
 agents|agents/sv-tutor.md|SV tutoring and concept explanations
-agents|agents/sv-viz.md|Terminal visualization, hierarchy diagrams, FSM rendering
+agents|agents/sv-understanding.md|Code explanation and signal tracing
+agents|agents/sv-verification.md|SVA assertions, coverage, formal
+agents|agents/sv-viz.md|Terminal visualization and diagrams
+agents|agents/vhdl-codegen.md|VHDL-2008 generation
+agents|agents/vhdl-testbench.md|VHDL testbenches
 
 hooks|hooks/hooks.json|Automation hooks configuration
+hooks|hooks/scripts/check-dependencies.sh|Session dependency check
+hooks|hooks/scripts/session-tracker.py|Session tracking
+hooks|hooks/scripts/userpromptsubmit-sv-nudge.py|SystemVerilog prompt nudges
+hooks|hooks/scripts/pretooluse-bash-guard.py|Bash safety guard
+hooks|hooks/scripts/posttooluse-sv-lint-nudge.py|Post-edit lint reminder
+hooks|hooks/scripts/stop-hook.sh|Session-end verification reminder
 
-reference|CLAUDE.md#external-references|Spear/Tumbush SV Verification 3rd ed (ch 1-12)
+ip|ip/axi4lite_slave/block.yaml|AXI4-Lite register slave metadata
+ip|ip/cdc_2ff/block.yaml|Two-flop synchronizer metadata
+ip|ip/cdc_handshake/block.yaml|Multi-bit CDC handshake metadata
+ip|ip/debouncer/block.yaml|Button debouncer metadata
+ip|ip/fifo_async/block.yaml|Asynchronous FIFO metadata
+ip|ip/fifo_sync/block.yaml|Synchronous FIFO metadata
+ip|ip/spi_master/block.yaml|SPI master metadata
+ip|ip/uart/block.yaml|UART TX/RX metadata
+
+boards|boards/arty-a7-35t/board.yaml|Digilent Arty A7-35T board definition
+boards|boards/basys3/board.yaml|Digilent Basys 3 board definition
+boards|boards/icebreaker/board.yaml|1BitSquared iCEBreaker board definition
+boards|boards/tang-nano-9k/board.yaml|Sipeed Tang Nano 9K board definition
+
+tools|tools/validate_gateflow.py|Release metadata and package wiring validator
+tools|tools/gateflow_tui.py|Local terminal console for GateFlow status and actions
+
+reference|CLAUDE.md#external-references|Spear/Tumbush SV Verification 3rd ed and SV for Design references

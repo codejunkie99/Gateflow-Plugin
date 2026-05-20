@@ -1,6 +1,6 @@
 # GateFlow
 
-**The open-source AI hardware platform.** Design, verify, synthesize, and deploy working RTL from natural language. 20 agents. 25 skills. 8 verified IP blocks. One command.
+**The open-source AI hardware platform.** Design, verify, synthesize, release, and deploy working RTL from natural language. 20 agents. 27 skills. 21 commands. 8 verified IP blocks.
 
 ```bash
 claude plugin add codejunkie99/Gateflow-Plugin
@@ -66,7 +66,7 @@ claude plugin add codejunkie99/Gateflow-Plugin
 | `gf-auditor` | Plugin health checks |
 | `gf-pluginfixer` | Auto-fix plugin issues |
 
-### 25 Skills
+### 27 Skills
 
 | Category | Skills |
 |----------|--------|
@@ -77,9 +77,11 @@ claude plugin add codejunkie99/Gateflow-Plugin
 | **Hardware** | `/gf-pcb`, `/gf-pnr`, `/gf-pinmap`, `/gf-fusesoc` |
 | **Learning** | `/gf-learn`, `/gf-learn-ctx` |
 | **Visualization** | `/gf-viz` |
+| **Terminal** | `/gf-tui` |
+| **Release** | `/gf-release` |
 | **Reference** | `tb-best-practices`, `/gf-build` |
 
-### 19 Commands
+### 21 Commands
 
 | Command | Description |
 |---------|-------------|
@@ -102,6 +104,8 @@ claude plugin add codejunkie99/Gateflow-Plugin
 | `/gf-fusesoc` | FuseSoC .core files |
 | `/gf-demo` | Interactive demo |
 | `/gf-audit` | Plugin health audit |
+| `/gf-tui` | Local terminal console |
+| `/gf-release` | Release readiness validation |
 
 ### 8 Verified IP Blocks
 
@@ -195,6 +199,12 @@ claude plugin add codejunkie99/Gateflow-Plugin
 
 # Target real hardware
 /gf-pnr synthesize and place for iCEBreaker
+
+# Prepare plugin release
+/gf-release --check-only
+
+# Open terminal console
+/gf-tui
 ```
 
 ---
