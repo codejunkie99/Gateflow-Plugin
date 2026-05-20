@@ -24,6 +24,9 @@ Launch a local terminal console for GateFlow.
 
 | Mode | Command | Use When |
 |---|---|---|
+| CLI | `python3 tools/gateflow_cli.py status` | You want a normal command surface |
+| Shell | `python3 tools/gateflow_cli.py shell` | You want a local `gateflow>` prompt |
+| Agent create | `python3 tools/gateflow_cli.py agents create "Name"` | You need a new custom agent |
 | Interactive | `python3 tools/gateflow_tui.py` | You are in a real TTY and want keyboard navigation |
 | Snapshot | `python3 tools/gateflow_tui.py --snapshot --plain` | Logs, CI, or non-interactive terminals |
 | JSON | `python3 tools/gateflow_tui.py --json` | Scripts need machine-readable state |
@@ -32,6 +35,8 @@ Launch a local terminal console for GateFlow.
 
 - Local workspace mode by default; no gateway is required.
 - TTY-aware styling with plain and JSON fallbacks.
+- Command-first local CLI for status and agent management.
+- Press `a` in the dashboard to create a new agent interactively.
 - Health/status surfaces are visible before action.
 - Commands are shown as operator shortcuts rather than hidden docs.
 - Release and config repair loops stay inside the terminal workflow.
@@ -44,6 +49,7 @@ Launch a local terminal console for GateFlow.
    Yosys, and SymbiYosys availability.
 4. **Actions** — launch points for doctor, map, viz, lint, sim, formal, and
    release workflows.
+5. **Agent creation** — `a` opens prompts for name, role, and description.
 
 ## Guardrails
 
@@ -59,6 +65,8 @@ Run:
 
 ```bash
 python3 -m unittest tests/test_gateflow_tui.py
+python3 -m unittest tests/test_gateflow_cli.py
+python3 tools/gateflow_cli.py --plain status
 python3 tools/gateflow_tui.py --snapshot --plain
 python3 tools/gateflow_tui.py --json
 ```
