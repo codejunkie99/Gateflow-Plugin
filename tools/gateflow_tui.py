@@ -51,8 +51,9 @@ def build_payload(root: Path) -> dict:
     root = root.resolve()
     validator = _load_validator()
     inventory = validator.discover_inventory(root)
-    release = validator.run_checks(root, expected_version="2.5.0")
     plugin = _read_json(root / "plugins" / "gateflow" / ".claude-plugin" / "plugin.json")
+    plugin_version = plugin.get("version", "unknown")
+    release = validator.run_checks(root, expected_version=plugin_version)
 
     health = {
         "doctor": "ready" if (root / "plugins/gateflow/commands/gf-doctor.md").exists() else "missing",
@@ -76,7 +77,7 @@ def build_payload(root: Path) -> dict:
     return {
         "mode": "OpenClaw-style local mode",
         "workspace": str(root),
-        "plugin": {"name": plugin.get("name", "gateflow"), "version": plugin.get("version", "unknown")},
+        "plugin": {"name": plugin.get("name", "gateflow"), "version": plugin_version},
         "inventory": {
             "agents": len(inventory.agents),
             "skills": len(inventory.skills),
@@ -101,6 +102,40 @@ def _status(value: str | dict, plain: bool) -> str:
     if value in {"missing", "unknown"} or "issues" in value:
         return _color(value, WARN, plain)
     return value
+
+
+def _hide_cursor(curses_module=curses) -> bool:
+    try:
+        curses_module.curs_set(0)
+    except curses_module.error:
+        return False
+    return True
+
+
+def _terminal_styles(curses_module=curses) -> dict[str, int]:
+    styles = {
+        "accent": getattr(curses_module, "A_BOLD", 0),
+        "ok": 0,
+        "warn": 0,
+        "muted": getattr(curses_module, "A_DIM", 0),
+        "footer": 0,
+    }
+    try:
+        curses_module.init_pair(1, curses_module.COLOR_RED, -1)
+        curses_module.init_pair(2, curses_module.COLOR_GREEN, -1)
+        curses_module.init_pair(3, curses_module.COLOR_YELLOW, -1)
+        curses_module.init_pair(4, curses_module.COLOR_CYAN, -1)
+        styles.update(
+            {
+                "accent": curses_module.color_pair(1) | getattr(curses_module, "A_BOLD", 0),
+                "ok": curses_module.color_pair(2),
+                "warn": curses_module.color_pair(3),
+                "footer": curses_module.color_pair(4),
+            }
+        )
+    except (curses_module.error, ValueError):
+        pass
+    return styles
 
 
 def render_snapshot(root: Path, plain: bool = False) -> str:
@@ -153,14 +188,11 @@ def _draw(stdscr, payload: dict, selected: int, message: str) -> None:
         if 0 <= y < height:
             stdscr.addnstr(y, x, text, max(0, width - x - 1), attr)
 
-    curses.init_pair(1, curses.COLOR_RED, -1)
-    curses.init_pair(2, curses.COLOR_GREEN, -1)
-    curses.init_pair(3, curses.COLOR_YELLOW, -1)
-    curses.init_pair(4, curses.COLOR_CYAN, -1)
-    accent = curses.color_pair(1) | curses.A_BOLD
-    ok = curses.color_pair(2)
-    warn = curses.color_pair(3)
-    muted = curses.A_DIM
+    styles = _terminal_styles()
+    accent = styles["accent"]
+    ok = styles["ok"]
+    warn = styles["warn"]
+    muted = styles["muted"]
 
     add(0, 0, " GateFlow Terminal ", accent)
     add(0, 20, payload["mode"], muted)
@@ -196,7 +228,7 @@ def _draw(stdscr, payload: dict, selected: int, message: str) -> None:
 
     footer = message or "↑/↓ select   Enter show command   r refresh   q quit"
     add(height - 2, 0, "─" * (width - 1), muted)
-    add(height - 1, 1, footer, curses.color_pair(4))
+    add(height - 1, 1, footer, styles["footer"])
     stdscr.refresh()
 
 
@@ -204,7 +236,7 @@ def run_interactive(root: Path) -> int:
     payload = build_payload(root)
 
     def wrapped(stdscr) -> None:
-        curses.curs_set(0)
+        _hide_cursor()
         stdscr.keypad(True)
         selected = 0
         message = ""
