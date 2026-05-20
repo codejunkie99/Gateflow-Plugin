@@ -151,6 +151,8 @@ Skills activate automatically based on context:
 | `/gf-scan` | Index project files |
 | `/gf-map` | Map codebase architecture |
 | `/gf-doctor` | Check environment and dependencies |
+| `/gf-tui` | Open the local GateFlow terminal console |
+| `/gf-release` | Validate plugin release readiness |
 
 ### Example Session
 
@@ -253,7 +255,7 @@ GateFlow watches your workflow and helps proactively:
 
 ## Components
 
-### Skills (26)
+### Skills (27)
 
 | Skill | Description | Source |
 |-------|-------------|--------|
@@ -282,8 +284,10 @@ GateFlow watches your workflow and helps proactively:
 | `gf-fusesoc` | FuseSoC build system integration | [SKILL.md](plugins/gateflow/skills/gf-fusesoc/SKILL.md) |
 | `gf-learn-ctx` | Contextual learning — micro-lessons in workflows | [SKILL.md](plugins/gateflow/skills/gf-learn-ctx/SKILL.md) |
 | `gf-ip-detect` | **Auto-detect IP blocks** — scan, match, auto-fill gaps | [SKILL.md](plugins/gateflow/skills/gf-ip-detect/SKILL.md) |
+| `gf-tui` | **Terminal console** — local OpenClaw-style GateFlow dashboard | [SKILL.md](plugins/gateflow/skills/gf-tui/SKILL.md) |
+| `gf-release` | **Release readiness** — validate manifests, docs, index, mirrors | [SKILL.md](plugins/gateflow/skills/gf-release/SKILL.md) |
 
-### Agents (18)
+### Agents (20)
 
 | Agent | Expertise | Source |
 |-------|-----------|--------|
@@ -305,8 +309,10 @@ GateFlow watches your workflow and helps proactively:
 | `vhdl-testbench` | **VHDL testbench** — GHDL-compatible verification | [vhdl-testbench.md](plugins/gateflow/agents/vhdl-testbench.md) |
 | `pcb-designer` | **KiCad PCB** — AI-verified schematics and layouts | [pcb-designer.md](plugins/gateflow/agents/pcb-designer.md) |
 | `sv-ip-scanner` | **IP scanner** — detect missing modules, auto-fill | [sv-ip-scanner.md](plugins/gateflow/agents/sv-ip-scanner.md) |
+| `gf-auditor` | **Plugin auditor** — find package gaps and stale docs | [gf-auditor.md](plugins/gateflow/agents/gf-auditor.md) |
+| `gf-pluginfixer` | **Plugin fixer** — repair audited plugin gaps | [gf-pluginfixer.md](plugins/gateflow/agents/gf-pluginfixer.md) |
 
-### Commands (18)
+### Commands (21)
 
 | Command | Description | Source |
 |---------|-------------|--------|
@@ -328,6 +334,9 @@ GateFlow watches your workflow and helps proactively:
 | `/gf-pinmap` | Generate pin constraint file for board | [gf-pinmap.md](plugins/gateflow/commands/gf-pinmap.md) |
 | `/gf-cocotb` | Generate Python testbench (Cocotb) | [gf-cocotb.md](plugins/gateflow/commands/gf-cocotb.md) |
 | `/gf-fusesoc` | Generate FuseSoC .core file | [gf-fusesoc.md](plugins/gateflow/commands/gf-fusesoc.md) |
+| `/gf-audit` | Audit plugin quality and optionally auto-fix issues | [gf-audit.md](plugins/gateflow/commands/gf-audit.md) |
+| `/gf-tui` | Open the local GateFlow terminal console | [gf-tui.md](plugins/gateflow/commands/gf-tui.md) |
+| `/gf-release` | Validate plugin release readiness | [gf-release.md](plugins/gateflow/commands/gf-release.md) |
 
 ### IP Library (8 verified blocks)
 
@@ -521,9 +530,9 @@ clock_freq: 100MHz
 Gateflow-Plugin/
 ├── plugins/gateflow/          # Main plugin source
 │   ├── .claude-plugin/        #   Plugin manifest
-│   ├── agents/                #   18 specialized AI agents
-│   ├── commands/              #   18 slash commands
-│   ├── skills/                #   26 auto-activating skills
+│   ├── agents/                #   20 specialized AI agents
+│   ├── commands/              #   21 slash commands
+│   ├── skills/                #   27 auto-activating skills
 │   ├── hooks/                 #   Automation hooks + session tracking
 │   ├── boards/                #   Curated FPGA board database (4 boards)
 │   ├── ip/                    #   Verified IP block library (8 blocks)
@@ -581,6 +590,13 @@ For detailed release notes, see [`releases.md`](releases.md).
 
 | Version | Date | What Changed |
 |---------|------|-------------|
+| **2.5.0** | 2026-05-21 | OpenClaw-style CLI/TUI, release readiness workflow, deterministic validators, synced marketplace/docs/index/mirrors |
+| **2.4.0** | 2026-04-11 | Deep skill enrichment across verification, synthesis, orchestration, architecture, learning, IP, and planning |
+| **2.3.0** | 2026-03-27 | Quality pass, expanded IP docs, new commands, and component reference fixes |
+| **2.2.1** | 2026-03-26 | IP auto-detection, auto-fill, CDC scanning, and `sv-ip-scanner` |
+| **2.2.0** | 2026-03-26 | Community guides, KiCad, Cocotb, FuseSoC, CI templates, and ecosystem integrations |
+| **2.1.0** | 2026-03-26 | VHDL, pin mapping, place and route, FPGA flash, and protocol scaffolding |
+| **2.0.0** | 2026-03-26 | Formal verification, synthesis, IP library, and board database |
 | **1.6.0** | 2026-03-26 | Version sync across plugin.json and marketplace.json; BSL-1.1 license confirmed |
 | **1.5.3** | 2026-02-18 | Replace prompt-based PostToolUse hook with deterministic Python script |
 | **1.5.2** | 2026-02-15 | Fix Stop hook JSON validation: replace prompt hook with deterministic command hook (non-blocking reminder) |

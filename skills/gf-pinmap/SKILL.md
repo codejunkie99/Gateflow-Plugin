@@ -1,0 +1,1 @@
+../../plugins/gateflow/skills/gf-pinmap/SKILL.md
