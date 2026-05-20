@@ -1,5 +1,17 @@
 # Releases
 
+## 2.5.1 (2026-05-21) — TUI Terminal Compatibility
+
+Patch release for the GateFlow terminal console.
+
+### Fixes
+- Made the interactive `/gf-tui` curses path tolerate terminals that reject
+  `curs_set(0)`.
+- Added color fallback handling for PTYs with no usable curses color pairs.
+- Added regression coverage for cursor and color capability failures.
+- Updated the release validator default and TUI release check to follow the
+  plugin manifest version.
+
 ## 2.5.0 (2026-05-21) — CLI/TUI + Release Readiness
 
 GateFlow now ships with a deterministic release-prep path so versioned plugin
