@@ -1,5 +1,33 @@
 # Releases
 
+## 2.5.0 (2026-05-21) — CLI/TUI + Release Readiness
+
+GateFlow now ships with a deterministic release-prep path so versioned plugin
+updates can be checked before tagging, plus a local terminal console for the
+same status-first workflow users expect from modern agent CLIs.
+
+### New Features
+- Added `/gf-tui` command for a local OpenClaw-style terminal console.
+- Added `gf-tui` skill covering interactive, snapshot, and JSON console modes.
+- Added `tools/gateflow_tui.py`, a stdlib Python TUI with TTY-aware rendering,
+  plain output, JSON output, component inventory, tool health, map readiness,
+  release readiness, and command shortcuts.
+- Added `/gf-release` command for release validation and version-prep workflow.
+- Added `gf-release` skill with semver guidance, required release checks, and
+  structured `GATEFLOW-RESULT` reporting.
+- Added `tools/validate_gateflow.py` to validate plugin/marketplace versions,
+  README counts, docs index coverage, root mirrors, and release notes.
+- Added focused unittest suites for the release validator and terminal console.
+
+### Package Consistency
+- Synced plugin and marketplace metadata to `2.5.0`.
+- Refreshed `docs/gateflow.index` so every current command, skill, agent, IP
+  block, board, hook, and release tool is discoverable.
+- Completed root-level mirrors for all 20 agents and all 27 skills so
+  cross-tool installs have the same entrypoint coverage as the Claude plugin.
+- Updated root and plugin READMEs to reflect 20 agents, 27 skills, 21 commands,
+  8 IP blocks, and 4 boards.
+
 ## 2.4.0 (2026-04-11) — Deep Skill Enrichment
 
 The biggest content update in GateFlow history. Every skill in the plugin has been enriched with research-backed reference material, actionable templates, and structured return formats. 37 files changed, +3,139 lines added.
@@ -166,4 +194,3 @@ The biggest content update in GateFlow history. Every skill in the plugin has be
 ## 1.5.1 (2025-02-12)
 
 - Prompt-based hooks: PreToolUse (SV file safety), PostToolUse (lint nudge), Stop (smart completion gate).
-

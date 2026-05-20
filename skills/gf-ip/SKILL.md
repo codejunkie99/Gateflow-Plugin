@@ -1,0 +1,1 @@
+../../plugins/gateflow/skills/gf-ip/SKILL.md
