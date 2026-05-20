@@ -1,5 +1,17 @@
 # Releases
 
+## 2.5.2 (2026-05-21) — Responsive TUI Layout
+
+Patch release for narrow terminal windows.
+
+### Fixes
+- Added a stacked interactive layout for terminals below 100 columns so the
+  actions list no longer overlaps workspace, inventory, or health panels.
+- Clamped action descriptions and other terminal text to their available
+  column width.
+- Added regression coverage for narrow terminal layout selection and text
+  ellipsizing.
+
 ## 2.5.1 (2026-05-21) — TUI Terminal Compatibility
 
 Patch release for the GateFlow terminal console.
