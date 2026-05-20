@@ -36,7 +36,7 @@ class GateFlowTuiTests(unittest.TestCase):
         payload = tui.build_payload(ROOT)
 
         self.assertEqual("gateflow", payload["plugin"]["name"])
-        self.assertEqual("2.5.0", payload["plugin"]["version"])
+        self.assertEqual("2.5.1", payload["plugin"]["version"])
         self.assertEqual(20, payload["inventory"]["agents"])
         self.assertEqual(27, payload["inventory"]["skills"])
         self.assertEqual(21, payload["inventory"]["commands"])
@@ -54,6 +54,46 @@ class GateFlowTuiTests(unittest.TestCase):
         self.assertEqual("", completed.stderr)
         self.assertEqual(0, completed.returncode)
         self.assertIn("GateFlow Terminal", completed.stdout)
+
+    def test_hide_cursor_ignores_unsupported_terminals(self):
+        tui = load_tui()
+
+        class FakeCurses:
+            error = RuntimeError
+
+            @staticmethod
+            def curs_set(_visibility):
+                raise RuntimeError("curs_set() returned ERR")
+
+        self.assertFalse(tui._hide_cursor(FakeCurses))
+
+    def test_terminal_styles_fall_back_without_color_pairs(self):
+        tui = load_tui()
+
+        class FakeCurses:
+            error = RuntimeError
+            COLOR_RED = 1
+            COLOR_GREEN = 2
+            COLOR_YELLOW = 3
+            COLOR_CYAN = 4
+            A_BOLD = 10
+            A_DIM = 20
+
+            @staticmethod
+            def init_pair(_pair, _foreground, _background):
+                raise ValueError("Color pair is greater than COLOR_PAIRS-1")
+
+            @staticmethod
+            def color_pair(_pair):
+                raise AssertionError("color_pair should not be used when init_pair fails")
+
+        styles = tui._terminal_styles(FakeCurses)
+
+        self.assertEqual(FakeCurses.A_BOLD, styles["accent"])
+        self.assertEqual(0, styles["ok"])
+        self.assertEqual(0, styles["warn"])
+        self.assertEqual(FakeCurses.A_DIM, styles["muted"])
+        self.assertEqual(0, styles["footer"])
 
 
 if __name__ == "__main__":

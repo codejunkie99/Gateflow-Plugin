@@ -132,7 +132,7 @@ def _check_symlink(path: Path, expected_target: str, errors: list[str]) -> None:
         errors.append(f"{path} points to {target}, expected {expected_target}")
 
 
-def run_checks(root: Path, expected_version: str = "2.5.0") -> ValidationResult:
+def run_checks(root: Path, expected_version: str = "2.5.1") -> ValidationResult:
     root = root.resolve()
     inventory = discover_inventory(root)
     errors: list[str] = []
@@ -148,7 +148,7 @@ def run_checks(root: Path, expected_version: str = "2.5.0") -> ValidationResult:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="Repository root")
-    parser.add_argument("--version", default="2.5.0", help="Expected release version")
+    parser.add_argument("--version", default="2.5.1", help="Expected release version")
     args = parser.parse_args(argv)
 
     result = run_checks(args.root, expected_version=args.version)
