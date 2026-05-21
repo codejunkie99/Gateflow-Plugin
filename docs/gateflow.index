@@ -6,6 +6,9 @@ primary|CLAUDE.md|SV patterns, always_ff/comb, FSM, CDC, lint fixes, Spear/Tumbu
 primary|README.md|Installation, usage, features, component inventory
 primary|plugins/gateflow/README.md|Plugin-local overview and quick start
 primary|releases.md|Release notes and version history
+tools|tools/gateflow_cli.py|Command-first local CLI with status, shell, TUI, and agent creation
+tools|tools/gateflow_tui.py|Keyboard dashboard with semantic color and interactive agent creation
+tools|tools/validate_gateflow.py|Release metadata and package wiring validator
 
 commands|commands/gf-audit.md|Audit plugin quality and optionally auto-fix issues
 commands|commands/gf-boards.md|List supported FPGA boards and query pinouts
