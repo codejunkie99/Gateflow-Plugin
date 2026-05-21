@@ -35,13 +35,13 @@ class GateFlowValidatorTests(unittest.TestCase):
     def test_repository_passes_release_checks(self):
         validator = load_validator()
 
-        result = validator.run_checks(ROOT, expected_version="2.5.2")
+        result = validator.run_checks(ROOT, expected_version="2.5.3")
 
         self.assertEqual([], result.errors)
 
     def test_cli_reports_success(self):
         completed = subprocess.run(
-            [sys.executable, str(VALIDATOR), "--version", "2.5.2"],
+            [sys.executable, str(VALIDATOR), "--version", "2.5.3"],
             cwd=ROOT,
             text=True,
             capture_output=True,

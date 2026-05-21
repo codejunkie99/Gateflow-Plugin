@@ -10,7 +10,7 @@
     {
       "name": "gateflow",
       "description": "AI-powered hardware development platform \u2014 design, verify, synthesize, release, and deploy working RTL with natural language. 20 agents, 27 skills, 8 IP blocks.",
-      "version": "2.5.2",
+      "version": "2.5.3",
       "author": {
         "name": "codejunkie99",
         "github": "https://github.com/codejunkie99"

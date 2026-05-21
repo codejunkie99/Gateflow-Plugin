@@ -1,5 +1,22 @@
 # Releases
 
+## 2.5.3 (2026-05-21) — Command CLI + Agent Creation
+
+Patch release for making the local terminal surface behave like a real CLI.
+
+### New Features
+- Added `tools/gateflow_cli.py` with `status`, `tui`, `agents list`,
+  `agents create`, and `shell` subcommands.
+- Added local agent creation that writes Claude-compatible agent markdown under
+  `plugins/gateflow/agents/`.
+- Added `a` inside the TUI to create a new agent without leaving the dashboard.
+
+### Polish
+- Reworked terminal colors around semantic state: copper identity, cyan
+  headings/navigation, green ready states, amber warnings, and muted separators.
+- Added regression coverage for agent creation, CLI JSON status, shell help,
+  rich curses color-pair setup, and stacked health-row styles.
+
 ## 2.5.2 (2026-05-21) — Responsive TUI Layout
 
 Patch release for narrow terminal windows.

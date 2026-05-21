@@ -107,6 +107,21 @@ claude plugin add codejunkie99/Gateflow-Plugin
 | `/gf-tui` | Local terminal console |
 | `/gf-release` | Release readiness validation |
 
+### Local CLI
+
+From the repository root:
+
+```bash
+python3 tools/gateflow_cli.py status
+python3 tools/gateflow_cli.py agents list
+python3 tools/gateflow_cli.py agents create "CDC Reviewer" \
+  --role "clock-domain crossing reviewer" \
+  --description "Reviews synchronizers and CDC constraints"
+python3 tools/gateflow_cli.py shell
+```
+
+Inside the keyboard dashboard, press `a` to create a new agent.
+
 ### 8 Verified IP Blocks
 
 Every block ships with RTL + testbench + formal properties + docs.
@@ -205,6 +220,9 @@ claude plugin add codejunkie99/Gateflow-Plugin
 
 # Open terminal console
 /gf-tui
+
+# Use the local CLI
+python3 tools/gateflow_cli.py shell
 ```
 
 ---
